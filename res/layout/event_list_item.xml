@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout style="@style/ItemRowStyle" >
+
+        <TextView
+            android:id="@+id/event_name"
+            style="@style/LabelTextStyle"
+            android:singleLine="true" />
+    </RelativeLayout>
+
+    <RelativeLayout style="@style/ItemRowStyle" >
+
+        <TextView
+            android:id="@+id/event_appointment_date"
+            style="@style/LabelTextStyle"
+            android:layout_toLeftOf="@+id/event_begin_time"
+            android:paddingRight="10dp" />
+
+        <TextView
+            android:id="@+id/event_begin_time"
+            style="@style/LabelTextStyle"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</LinearLayout>
