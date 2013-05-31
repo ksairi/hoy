@@ -12,9 +12,8 @@ import java.util.UUID;
  * To track installations, we use a UUID as an identifier.<br>
  * We create a new one the first time an app runs after installation. <br>
  * Fuente: {@link http://android-developers.blogspot.com.ar/2011/03/identifying-app-installations.html}<br>
- * 
+ *
  * @author LDicesaro
- * 
  */
 public class InstallationUtils {
 	private static String sID = null;

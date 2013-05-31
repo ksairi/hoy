@@ -1,7 +1,10 @@
 package com.hoy.dto;
 
 import android.content.res.Configuration;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.utilities.DateUtils;
 import com.hoy.utilities.MilongaCollectionUtils;
 
 import java.io.Serializable;
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * @author LDicesaro
  */
-public class EventDTO implements Serializable {
+public class EventDTO implements Parcelable {
 
 	private static final long serialVersionUID = 8758142710877401485L;
 
@@ -30,8 +33,8 @@ public class EventDTO implements Serializable {
 	private String emailContact;
 	private String website;
 	private String phones;
-	private Boolean reservationAdvicedFlag;
-	private Boolean offersClassFlag;
+	private String reservationAdvicedFlag;
+	private String offersClassFlag;
 	private String firstClassStarts;
 	private String lastClassEnds;
 	private String classContentAndPricingDetails;
@@ -59,7 +62,7 @@ public class EventDTO implements Serializable {
 	private String more;
 	private String areaID;
 	private String timeZone;
-	private Boolean eventCancelledFlag;
+	private String eventCancelledFlag;
 
 	public Integer getPk() {
 		return pk;
@@ -103,23 +106,19 @@ public class EventDTO implements Serializable {
 
 	public String getStartTime() {
 
-		if(startTime != null && startTime.length() == MilongaHoyConstants.TIME_WITH_SECONDS_LENGTH){
-			return startTime.substring(0,startTime.length()-3);
-		}
+		return DateUtils.getTimeFromTimeString(startTime);
 
-		return startTime;
 	}
+
 
 	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
 	public String getEndTime() {
-		if(endTime != null && endDateTime.length() == MilongaHoyConstants.TIME_WITH_SECONDS_LENGTH){
-			return endTime.substring(0,endTime.length()-3);
-		}
 
-		return endTime;
+		return DateUtils.getTimeFromTimeString(endTime);
+
 	}
 
 	public void setEndTime(String endTime) {
@@ -190,24 +189,25 @@ public class EventDTO implements Serializable {
 		this.phones = phones;
 	}
 
-	public Boolean getReservationAdvicedFlag() {
+	public String getReservationAdvicedFlag() {
 		return reservationAdvicedFlag;
 	}
 
-	public void setReservationAdvicedFlag(Boolean reservationAdvicedFlag) {
+	public void setReservationAdvicedFlag(String reservationAdvicedFlag) {
 		this.reservationAdvicedFlag = reservationAdvicedFlag;
 	}
 
-	public Boolean getOffersClassFlag() {
+	public String getOffersClassFlag() {
 		return offersClassFlag;
 	}
 
-	public void setOffersClassFlag(Boolean offersClassFlag) {
+	public void setOffersClassFlag(String offersClassFlag) {
 		this.offersClassFlag = offersClassFlag;
 	}
 
 	public String getFirstClassStarts() {
-		return firstClassStarts;
+
+		return DateUtils.getTimeFromTimeString(firstClassStarts);
 	}
 
 	public void setFirstClassStarts(String firstClassStarts) {
@@ -215,7 +215,7 @@ public class EventDTO implements Serializable {
 	}
 
 	public String getLastClassEnds() {
-		return lastClassEnds;
+		return DateUtils.getTimeFromTimeString(lastClassEnds);
 	}
 
 	public void setLastClassEnds(String lastClassEnds) {
@@ -319,9 +319,9 @@ public class EventDTO implements Serializable {
 	}
 
 	public String getLastClassEndsDateTime() {
-		return lastClassEndsDateTime;
-	}
 
+		return DateUtils.getTimeFromTimeString(lastClassEndsDateTime);
+	}
 	public void setLastClassEndsDateTime(String lastClassEndsDateTime) {
 		this.lastClassEndsDateTime = lastClassEndsDateTime;
 	}
@@ -422,12 +422,125 @@ public class EventDTO implements Serializable {
 		this.timeZone = timeZone;
 	}
 
-	public Boolean getEventCancelledFlag() {
+	public String getEventCancelledFlag() {
 		return eventCancelledFlag;
 	}
 
-	public void setEventCancelledFlag(Boolean eventCancelledFlag) {
+	public void setEventCancelledFlag(String eventCancelledFlag) {
 		this.eventCancelledFlag = eventCancelledFlag;
 	}
 
+	public int describeContents() {
+		return this.hashCode();
+	}
+
+	public void writeToParcel(Parcel parcel, int i) {
+
+		parcel.writeInt(pk);
+		parcel.writeString(name);
+		parcel.writeString(genre);
+		parcel.writeString(daysOfTheWeek);
+		parcel.writeString(occurrencesInMonth);
+		parcel.writeString(startTime);
+		parcel.writeString(endTime);
+		parcel.writeString(price);
+		parcel.writeString(currency);
+		parcel.writeString(organizersNames);
+		parcel.writeString(profile);
+		parcel.writeString(details);
+		parcel.writeString(emailContact);
+		parcel.writeString(website);
+		parcel.writeString(phones);
+		parcel.writeString(offersClassFlag);
+		parcel.writeString(reservationAdvicedFlag);
+		parcel.writeString(firstClassStarts);
+		parcel.writeString(lastClassEnds);
+		parcel.writeString(classContentAndPricingDetails);
+		parcel.writeString(specialEventFlag);
+		parcel.writeString(photoOLogoThumbnailURL);
+		parcel.writeString(rating);
+		parcel.writeString(infoSource);
+		parcel.writeString(lastUpdated);
+		parcel.writeString(date);
+		parcel.writeString(commentsOfTheDay);
+		parcel.writeString(ratingOfTheDay);
+		parcel.writeString(startDateTime);
+		parcel.writeString(endDateTime);
+		parcel.writeString(firstClassStartsDateTime);
+		parcel.writeString(lastClassEndsDateTime);
+		parcel.writeString(nameOfPlace);
+		parcel.writeString(streetLine1);
+		parcel.writeString(streetLine2);
+		parcel.writeString(familiarNameOfArea);
+		parcel.writeString(city);
+		parcel.writeString(country);
+		parcel.writeString(latitude);
+		parcel.writeString(longitude);
+		parcel.writeString(howToGetThere);
+		parcel.writeString(more);
+		parcel.writeString(areaID);
+		parcel.writeString(timeZone);
+		parcel.writeString(eventCancelledFlag);
+
+	}
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+		public EventDTO createFromParcel(Parcel in) {
+			return new EventDTO(in);
+		}
+
+		public EventDTO[] newArray(int size) {
+			return new EventDTO[size];
+		}
+	};
+
+
+	public EventDTO(Parcel parcel) {
+
+		pk = parcel.readInt();
+		name = parcel.readString();
+		genre = parcel.readString();
+		daysOfTheWeek = parcel.readString();
+		occurrencesInMonth = parcel.readString();
+		startTime = parcel.readString();
+		endTime = parcel.readString();
+		price = parcel.readString();
+		currency = parcel.readString();
+		organizersNames = parcel.readString();
+		profile = parcel.readString();
+		details = parcel.readString();
+		emailContact = parcel.readString();
+		website = parcel.readString();
+		phones = parcel.readString();
+		offersClassFlag = parcel.readString();
+		reservationAdvicedFlag = parcel.readString();
+		firstClassStarts = parcel.readString();
+		lastClassEnds = parcel.readString();
+		classContentAndPricingDetails = parcel.readString();
+		specialEventFlag = parcel.readString();
+		photoOLogoThumbnailURL = parcel.readString();
+		rating = parcel.readString();
+		infoSource = parcel.readString();
+		lastUpdated = parcel.readString();
+		date = parcel.readString();
+		commentsOfTheDay = parcel.readString();
+		ratingOfTheDay = parcel.readString();
+		startDateTime = parcel.readString();
+		endDateTime = parcel.readString();
+		firstClassStartsDateTime = parcel.readString();
+		lastClassEndsDateTime = parcel.readString();
+		nameOfPlace = parcel.readString();
+		streetLine1 = parcel.readString();
+		streetLine2 = parcel.readString();
+		familiarNameOfArea = parcel.readString();
+		city = parcel.readString();
+		country = parcel.readString();
+		latitude = parcel.readString();
+		longitude = parcel.readString();
+		howToGetThere = parcel.readString();
+		more = parcel.readString();
+		areaID = parcel.readString();
+		timeZone = parcel.readString();
+		eventCancelledFlag = parcel.readString();
+	}
 }

@@ -53,8 +53,7 @@ public class ProxyUtils {
 						if (hostParts.length >= 2) {
 							hostResult = hostParts[0];
 						}
-					}
-					else {
+					} else {
 						hostResult = host;
 					}
 				}

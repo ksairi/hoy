@@ -1,11 +1,8 @@
 package com.hoy.model;
 
 
-
 /**
- * 
  * @author LDicesaro
- *
  */
 public class MainMenuItem<T> {
 

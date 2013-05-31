@@ -11,6 +11,10 @@ public class FilterParams {
 
 	private String date;
 
+	public FilterParams(String date) {
+		this.date = date;
+	}
+
 	public String getDate() {
 		return date;
 	}

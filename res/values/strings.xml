@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Milonga Hoy</string>
+	<string name="app_name">Milonga Hoy</string>
 	<string name="connection_errors">We are currently experiencing connection issues</string>
 	<string name="news_on_events_title">There has been news on some events. Check them out!</string>
 	<string name="news_on_events">News on events</string>
-	<string name="today_list_events_label">Today\'s Events</string>
-	<string name="list_events_label">Future Events</string>
+	<string name="today_list_events_label">Today</string>
+	<string name="list_events_label">All</string>
 	<string name="login_confirm_exit_app">Are you sure you want to close the app?</string>
 	<string name="answer_no">No</string>
 	<string name="answer_yes">Yes</string>
-	<string name="update_manually">Update Events</string>
+	<string name="update_manually">Refresh</string>
 	<string name="events_updated_succ">Events updated!</string>
 	<string name="no_events_to_show">No events to show!</string>
 	<string name="event_cancelled">EVENT CANCELLED</string>
 	<string name="event_date_label">Date</string>
 	<string name="start_time_label">From</string>
 	<string name="end_time_label">to</string>
-	<string name="event_genre_label">Genre</string>
+	<string name="event_genre_label">Genere</string>
 	<string name="name_of_place_label">Place</string>
 	<string name="event_organizers_label">Organizers</string>
 	<string name="event_address_label">Address</string>
 	<string name="phone_number_label">Phone</string>
 	<string name="email_address_label">E-mail</string>
-	<string name="no_available">N/A</string>
 	<string name="event_details_label">Details</string>
 	<string name="event_price_label">Price</string>
+	<string name="event_has_classes">Has Class</string>
+	<string name="event_special_event">Special Event</string>
+	<string name="too_many_update_manually">Try in a couple of minutes</string>
+	<string name="loading_text">Loading&#8230;</string>
+	<string name="classes_available">Class</string>
+	<string name="special_event">Special Event</string>
+	<string name="website_label">Website</string>
+	<string name="reservation_advised_label">Reservation Recommended</string>
+	<string name="classes_details_label">Class Details</string>
+	<string name="first_class_time_label">First Class Time</string>
+	<string name="how_to_get_there_label">How to get</string>
 </resources>

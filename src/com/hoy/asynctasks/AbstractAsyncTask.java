@@ -43,7 +43,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 		MessageDTO<T> messageDTO = getMessageDTO();
 		messageDTO.setBodyDTO(getBodyDTO());
 		String jsonString = GsonHelper.parseEntityToJson(messageDTO);
-		return RestClient.executeHttpPostRequest(MilongaHoyConstants.HOST + getUrl(), jsonString);
+		return RestClient.executeHttpPostRequest(getUrl(), jsonString);
 	}
 
 	// Ejemplo de como mandarlo por GET.
@@ -54,7 +54,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 	protected void onPostExecute(String jsonString) {
 		String resultData;
-		resultData = parseResponse(jsonString);
+		resultData = GsonHelper.parseResponse(jsonString);
 		if (resultData != null) {
 			doOnSuccess(resultData);
 		} else {
@@ -75,24 +75,6 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 	protected abstract void doOnError();
 
-	private String parseResponse(String jsonString) {
-
-		String resultData = null;
-		try{
-			JSONObject jsonObject = new JSONObject(jsonString);
-
-			JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
-			Integer errorNumber = resultSummary.getInt("errorNumber");
-			if(errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)){
-				resultData = jsonObject.getString("resultData");
-			}
-		}catch (JSONException e){
-			resultData = null;
-				}
-
-		return resultData;
-
-	}
 
 	protected MessageDTO<T> getMessageDTO() {
 
@@ -105,6 +87,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 	/**
 	 * This will return whatever strings.xml uniquely identifies the device (IMEI on GSM, MEID for CDMA).
+	 *
 	 * @return
 	 */
 	protected String getDeviceID() {
@@ -126,7 +109,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	 * Checks if the top running activity on the device belongs to application,
 	 * by comparing package names.
 	 * Fuente: http://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo
-	 * 
+	 *
 	 * @return
 	 */
 	private boolean isApplicationBroughtToBackground() {

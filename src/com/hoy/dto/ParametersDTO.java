@@ -30,15 +30,15 @@ public class ParametersDTO {
 	}
 
 	public String getSelValue() {
-			return SYNC_EVENTS_SEL_PARAM_NAME;
-		}
+		return SYNC_EVENTS_SEL_PARAM_NAME;
+	}
 
 	public String getFromValue() {
-			return SYNC_EVENTS_FROM_PARAM_NAME;
-		}
+		return SYNC_EVENTS_FROM_PARAM_NAME;
+	}
 
 	public String getWhereValue() {
-			return SYNC_EVENTS_DATE_PARAM_NAME;
-		}
+		return SYNC_EVENTS_DATE_PARAM_NAME;
+	}
 
 }

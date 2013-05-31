@@ -21,7 +21,7 @@ public class SharedPreferencesHelper {
 	 * Preferences. Si el parametro <code>loggedUserId</code> es nulo, se
 	 * considera que es una entrada en Shared Preferencesk, comun para todos los
 	 * usuarios.
-	 * 
+	 *
 	 * @param context
 	 * @param key
 	 * @return
@@ -34,7 +34,7 @@ public class SharedPreferencesHelper {
 	 * Se setea un valor en Shared Preferences. Si el parametro
 	 * <code>loggedUserId</code> es nulo, el valor sera comun para todos los
 	 * usuarios.
-	 * 
+	 *
 	 * @param context
 	 * @param key
 	 * @param value
@@ -50,7 +50,7 @@ public class SharedPreferencesHelper {
 	 * Preferences. Si el parametro <code>loggedUserId</code> es nulo, se
 	 * considera que era una entrada en Shared Preferencesk, comun para todos los
 	 * usuarios.
-	 * 
+	 *
 	 * @param context
 	 * @param key
 	 */

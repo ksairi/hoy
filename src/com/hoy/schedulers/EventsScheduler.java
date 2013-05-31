@@ -1,8 +1,6 @@
 package com.hoy.schedulers;
 
 import android.content.Context;
-import android.util.Log;
-import com.hoy.timer_task.SyncEventsDailyTimerTask;
 import com.hoy.timer_task.SyncEventsHourlyTimerTask;
 import com.hoy.timer_task.SyncEventsTimerTask;
 
@@ -17,8 +15,6 @@ public class EventsScheduler {
 
 	private static Timer scheduleTasksTimer;
 	public static final int ONE_DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
-	public static final int ONE_HOUR_IN_MILLISECONDS = 1000 * 60 * 60;
-
 
 	public static void startSyncEventsTasks(final Context context, Integer initDelay) {
 
@@ -28,10 +24,9 @@ public class EventsScheduler {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.HOUR, initDelay);
 
-		scheduleTask(new SyncEventsDailyTimerTask(context), calendar.getTime(), ONE_HOUR_IN_MILLISECONDS);
 		//Schedule the hourly timer task one hour after the daily timer task because the latter one includes the first one.
 		calendar.add(Calendar.HOUR, 1 + initDelay);
-		scheduleTask(new SyncEventsHourlyTimerTask(context),calendar.getTime(), ONE_DAY_IN_MILLISECONDS);
+		scheduleTask(new SyncEventsHourlyTimerTask(context), calendar.getTime(), ONE_DAY_IN_MILLISECONDS);
 
 	}
 
@@ -47,8 +42,8 @@ public class EventsScheduler {
 	}
 
 	public static void rescheduleEventsSyncTask(SyncEventsTimerTask syncEventsTimerTask, Integer delay, Integer period) {
-			if (scheduleTasksTimer != null) {
-				scheduleTasksTimer.schedule(syncEventsTimerTask, delay, period);
-			}
+		if (scheduleTasksTimer != null) {
+			scheduleTasksTimer.schedule(syncEventsTimerTask, delay, period);
 		}
+	}
 }

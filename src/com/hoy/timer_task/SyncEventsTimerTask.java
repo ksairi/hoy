@@ -17,6 +17,8 @@ public abstract class SyncEventsTimerTask extends TimerTask {
 
 	@Override
 	public abstract void run();
+
 	protected abstract String getParams();
+
 	protected abstract String getUrl();
 }

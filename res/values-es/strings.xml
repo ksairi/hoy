@@ -3,11 +3,11 @@
 	<string name="connection_errors">En este momento, existen problemas de conexión</string>
 	<string name="news_on_events_title">Novedades en los eventos</string>
 	<string name="news_on_events">Han habido modificaciones en algunos eventos. Miralos!</string>
-	<string name="today_list_events_label">Eventos de Hoy</string>
-	<string name="list_events_label">Próximos Eventos</string>
+	<string name="today_list_events_label">Hoy</string>
+	<string name="list_events_label">Todas</string>
 	<string name="login_confirm_exit_app">¿Estás seguro que deseas salir de la aplicación?</string>
 	<string name="answer_yes">Sí</string>
-	<string name="update_manually">Actualizar Eventos</string>
+	<string name="update_manually">Actualizar</string>
 	<string name="events_updated_succ">Eventos actualizados!</string>
 	<string name="no_events_to_show">No existen eventos para mostrar!</string>
 	<string name="event_cancelled">EVENTO CANCELADO</string>
@@ -20,9 +20,19 @@
 	<string name="event_organizers_label">Organizadores</string>
 	<string name="event_address_label">Dirección</string>
 	<string name="phone_number_label">Teléfono</string>
-	<string name="no_available">No Disponible</string>
 	<string name="event_details_label">Detalles</string>
 	<string name="event_price_label">Precio</string>
+	<string name="event_has_classes">Tiene Clase</string>
+	<string name="event_special_event">Evento Especial</string>
+	<string name="too_many_update_manually">Intente en unos minutos</string>
+	<string name="loading_text">Cargando&#8230;</string>
+	<string name="classes_available">Clase</string>
+	<string name="special_event">Evento Especial</string>
+	<string name="website_label">Sitio Web</string>
+	<string name="reservation_advised_label">Sugerencia de Reserva</string>
+	<string name="classes_details_label">Detalles de Clase</string>
+	<string name="how_to_get_there_label">Como llegar</string>
+
 
 
 </resources>

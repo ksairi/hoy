@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<ScrollView
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+
+		<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_paper"
+				android:orientation="vertical">
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_name_title"
+						style="@style/HeaderMainMenuTextStyle"/>
+				<TextView
+						android:id="@+id/event_cancelled"
+						style="@style/HeaderMainMenuTextStyle"/>
+
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<ImageView
+						android:id="@+id/special_event_icon"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:contentDescription="@string/answer_no"
+					android:background="@drawable/special_event_icon"/>
+
+				<ImageView
+					android:id="@+id/class_icon"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:contentDescription="@string/answer_no"
+					android:layout_marginLeft="10dp"
+					android:background="@drawable/class_icon"/>
+
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_details_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/event_details_label"/>
+
+
+				<TextView
+						android:id="@+id/event_details"
+						style="@style/ValueTextStyle"/>
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_date_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/event_date_label"/>
+
+
+				<TextView
+						android:id="@+id/event_date"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/start_time_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/start_time_label"/>
+
+
+				<TextView
+						android:id="@+id/start_time"
+						style="@style/ValueTextStyle"/>
+
+				<TextView
+						android:id="@+id/end_time_label"
+						style="@style/ValueTextStyle"
+						android:text="@string/end_time_label"/>
+
+
+				<TextView
+						android:id="@+id/end_time"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_genre_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/event_genre_label"/>
+
+
+				<TextView
+						android:id="@+id/event_genre"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_address_label"
+						android:text="@string/event_address_label"
+						style="@style/LabelTextStyle"/>
+
+				<TextView
+						android:id="@+id/event_address"
+						style="@style/ValueTextStyle"/>
+
+				<TextView
+						android:id="@+id/event_area"
+						style="@style/ValueTextStyle"/>
+			</LinearLayout>
+
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/name_of_place_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/name_of_place_label"/>
+
+				<TextView
+						android:id="@+id/name_of_place"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_price_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/event_price_label"/>
+
+				<TextView
+						android:id="@+id/event_price"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+					android:id="@+id/class_details"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:orientation="vertical">
+
+				<TextView
+						style="@style/SubtitleTextStyle"
+						android:text="@string/classes_details_label"/>
+
+				<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+						<TextView
+							style="@style/LabelTextStyle"
+							android:text="@string/start_time_label"/>
+
+						<TextView
+							android:id="@+id/first_class_start_time"
+							style="@style/ValueTextStyle"/>
+
+						<TextView
+							style="@style/ValueTextStyle"
+							android:text="@string/end_time_label"/>
+
+						<TextView
+							android:id="@+id/last_class_end_time"
+							style="@style/ValueTextStyle"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+					<TextView
+							android:id="@+id/class_details_and_pricing"
+							style="@style/LabelTextStyle"/>
+
+				</LinearLayout>
+
+
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+				<TextView
+					android:id="@+id/how_to_get_there_label"
+					style="@style/LabelTextStyle"
+					android:text="@string/how_to_get_there_label"/>
+
+				<TextView
+						android:id="@+id/how_to_get_there"
+						style="@style/ValueTextStyle"/>
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/event_organizers_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/event_organizers_label"/>
+
+
+				<TextView
+						android:id="@+id/event_organizers"
+						style="@style/ValueTextStyle"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/phone_number_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/phone_number_label"/>
+
+				<TextView
+						android:id="@+id/phone_number"
+						style="@style/ValueTextStyle"
+						android:text="@string/phone_number_label"/>
+
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/email_address_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/email_address_label"/>
+
+				<TextView
+						android:id="@+id/email_address"
+						style="@style/ValueTextStyle"/>
+			</LinearLayout>
+
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/website_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/website_label"/>
+
+				<TextView
+						android:id="@+id/website"
+						style="@style/ValueTextStyle"/>
+			</LinearLayout>
+			<LinearLayout style="@style/HorizontalComponentStyle">
+
+				<TextView
+						android:id="@+id/reservation_advised_label"
+						style="@style/LabelTextStyle"
+						android:text="@string/reservation_advised_label"/>
+
+				<ImageView
+						android:id="@+id/reservation_advised"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"/>
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</ScrollView>

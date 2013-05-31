@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 /**
  * Se utiliza como estructura generica de mensaje para el envio de datos al servidor.
- * 
+ *
  * @author LDicesaro
- * 
  */
 public class MessageDTO<T> implements Serializable {
 

@@ -2,7 +2,8 @@ package com.hoy.asynctasks;
 
 import android.content.Context;
 import com.google.gson.reflect.TypeToken;
-import com.hoy.asynctasks.interfaces.GenericListHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.ParametersDTO;
@@ -17,10 +18,17 @@ import java.util.List;
  * Time: 4:33 AM
  * To change this template use File | Settings | File Templates.
  */
-public class SyncEventsAsyncTask extends AbstractGenericListAsyncTask<ParametersDTO,EventDTO> {
+public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO, EventDTO> {
 
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericListHandleable<EventDTO> genericListHandleable) {
-		super(uiContext, paramEntity, genericListHandleable);
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessHandleable genericHandleable) {
+		super(uiContext, paramEntity, genericHandleable);
+	}
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessListHandleable genericSuccessListHandleable) {
+			super(uiContext, paramEntity, genericSuccessListHandleable);
+		}
+	@Override
+	protected String getUrl() {
+		return MilongaHoyConstants.SYNC_EVENTS_URL;
 	}
 
 	@Override
@@ -29,9 +37,4 @@ public class SyncEventsAsyncTask extends AbstractGenericListAsyncTask<Parameters
 			}.getType();
 			return listType;
 		}
-
-	@Override
-	protected String getUrl() {
-		return MilongaHoyConstants.SYNC_EVENTS_URL;
-	}
 }
