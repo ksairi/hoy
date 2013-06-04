@@ -23,7 +23,7 @@ public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T
 	private static final String TAG = AbstractGenericAsyncTask.class.getSimpleName();
 
 	protected GenericSuccessHandleable genericSuccessHandleable;
-	protected GenericSuccessListHandleable genericSuccessListHandleable;
+	protected GenericSuccessListHandleable<S> genericSuccessListHandleable;
 
 	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, GenericSuccessHandleable genericSuccessHandleable) {
 		this.uiContext = uiContext;
@@ -31,7 +31,7 @@ public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T
 		this.genericSuccessHandleable = genericSuccessHandleable;
 	}
 
-	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, GenericSuccessListHandleable genericSuccessListHandleable) {
+	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, GenericSuccessListHandleable<S> genericSuccessListHandleable) {
 			this.uiContext = uiContext;
 			this.paramEntity = paramEntity;
 			this.genericSuccessListHandleable = genericSuccessListHandleable;
@@ -43,7 +43,7 @@ public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T
 		if(genericSuccessHandleable != null){
 			genericSuccessHandleable.handleSuccessCallBack();
 		}else{
-			List<EventDTO> eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonString, getType());
+			List<S> eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonString, getType());
 			genericSuccessListHandleable.handleSuccessCallBack(eventDTOs);
 		}
 	}

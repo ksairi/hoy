@@ -32,7 +32,7 @@ public class SyncEventsHourlyTimerTask extends SyncEventsTimerTask {
 
 		// Create Notifcation
 
-		Notification notification = new Notification(R.drawable.launch_logo, context.getResources().getText(R.string.news_on_events)
+		Notification notification = new Notification(R.drawable.launch_icon, context.getResources().getText(R.string.news_on_events)
 				, System.currentTimeMillis());
 
 		// Cancel the notification after its selected
@@ -57,8 +57,7 @@ public class SyncEventsHourlyTimerTask extends SyncEventsTimerTask {
 		String params = getParams();
 		if (params != null) {
 
-			EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params, new TypeToken<List<EventDTO>>() {
-			}.getType()); //{
+			EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params); //{
 
 		} else {
 			Log.i(TAG, "Error al obtener los parametros");

@@ -15,25 +15,27 @@ import com.hoy.fragments.ProgressDialogFragment;
 public class FragmentHelper {
 
 	protected static ProgressDialogFragment progressDialogFragment;
-
 	public static void changeProgressDialogState(FragmentManager fragmentManager, Boolean show){
 
-			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
+
 			progressDialogFragment = getProgressDialogFragment();
+
 			if(show){
-				fragmentTransaction.add(progressDialogFragment,"");
+				progressDialogFragment.show(fragmentManager,"");
+
 			}
 			else{
-				fragmentTransaction.remove(progressDialogFragment);
+				progressDialogFragment.dismiss();
+
 			}
-			fragmentTransaction.commit();
+
 		}
 
 	protected static ProgressDialogFragment getProgressDialogFragment(){
 
 			if(progressDialogFragment == null){
 
-				progressDialogFragment = ProgressDialogFragment.newInstance();
+				progressDialogFragment = new ProgressDialogFragment();
 			}
 
 			return progressDialogFragment;

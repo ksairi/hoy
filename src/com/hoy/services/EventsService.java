@@ -140,66 +140,53 @@ public class EventsService {
 	}
 
 
-	public <T> List<T> synchronizeEventsFromServer(Context uiContext, String url, String params, Type type) {
+	public void synchronizeEventsFromServer(Context uiContext, String url, String params) {
 
 		String stringResult = RestClient.executeHttpPostRequest(url, params);
-		if(!stringResult.equals(MilongaHoyConstants.EMPTY_STRING)){
+		if(stringResult!= null && !stringResult.equals(MilongaHoyConstants.EMPTY_STRING)){
 			getMilongaDataSource(uiContext).open();
 				getMilongaDataSource(uiContext).createData(stringResult);
 			getMilongaDataSource(uiContext).close();
-
 		}
-		stringResult = GsonHelper.parseResponse(stringResult);
-		return GsonHelper.parseJsonToArrayListEntity(stringResult, type);
-
 	}
 
 
 	protected synchronized void populateEventsFromDatabase(final Context uiContext) {
 
-			//String jsonString = SharedPreferencesHelper.getValueInSharedPreferences(uiContext, getSharedPreferencesKey());
-			getMilongaDataSource(uiContext).open();
-				String jsonString =getMilongaDataSource(uiContext).getAllMilongas();
-			getMilongaDataSource(uiContext).close();
-			if (!jsonString.equals(MilongaHoyConstants.EMPTY_STRING)) {
-				Type listType = new TypeToken<List<EventDTO>>() {
-				}.getType();
-				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonString, listType);
-			}
+		getMilongaDataSource(uiContext).open();
+		String jsonString =getMilongaDataSource(uiContext).getAllMilongas();
+		getMilongaDataSource(uiContext).close();
+		if (!jsonString.equals(MilongaHoyConstants.EMPTY_STRING)) {
+			Type listType = new TypeToken<List<EventDTO>>() {
+			}.getType();
+
+			eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonString, listType);
+		}
 
 		if (eventDTOs == null) {
 			eventDTOs = new ArrayList<EventDTO>();
 		}
 	}
 
-	public static Boolean hasLocalData(Context context) {
 
-		getMilongaDataSource(context).open();
-		String jsonString = getMilongaDataSource(context).getAllMilongas();
-		getMilongaDataSource(context).close();
-
-		return !jsonString.equals(MilongaHoyConstants.EMPTY_STRING);
-
-	}
-
-		public static boolean hasRecentlyManuallyUpdated(Context context) {
-			Boolean result = false;
-			try {
-				String strLastManuallyUpdatedDate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE);
-				if (!strLastManuallyUpdatedDate.equals(MilongaHoyConstants.EMPTY_STRING)) {
-					Date lastManuallyUpdatedDate = DateUtils.getDateAndTimeFromString(strLastManuallyUpdatedDate);
-					Calendar lastManuallyUpdatedCalendar = Calendar.getInstance();
-					lastManuallyUpdatedCalendar.setTime(lastManuallyUpdatedDate);
-					lastManuallyUpdatedCalendar.add(Calendar.HOUR, MilongaHoyConstants.MANUALLY_UPDATE_PERIOD);
-					Calendar nowCalendar = Calendar.getInstance();
-					result = lastManuallyUpdatedCalendar.before(nowCalendar);
-				}
-			} catch (ParseException e) {
-				return result;
+	public static boolean hasRecentlyManuallyUpdated(Context context) {
+		Boolean result = false;
+		try {
+			String strLastManuallyUpdatedDate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE);
+			if (!strLastManuallyUpdatedDate.equals(MilongaHoyConstants.EMPTY_STRING)) {
+				Date lastManuallyUpdatedDate = DateUtils.getDateAndTimeFromString(strLastManuallyUpdatedDate);
+				Calendar lastManuallyUpdatedCalendar = Calendar.getInstance();
+				lastManuallyUpdatedCalendar.setTime(lastManuallyUpdatedDate);
+				lastManuallyUpdatedCalendar.add(Calendar.HOUR, MilongaHoyConstants.MANUALLY_UPDATE_PERIOD);
+				Calendar nowCalendar = Calendar.getInstance();
+				result = lastManuallyUpdatedCalendar.before(nowCalendar);
 			}
-
+		} catch (ParseException e) {
 			return result;
 		}
+
+		return result;
+	}
 
 	private static MilongaDataSource getMilongaDataSource(Context uiContext){
 		if(milongaDataSource == null){

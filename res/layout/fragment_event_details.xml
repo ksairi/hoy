@@ -9,7 +9,6 @@
 		<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:background="@drawable/bg_paper"
 				android:orientation="vertical">
 
 			<LinearLayout style="@style/HorizontalComponentStyle">
@@ -17,20 +16,32 @@
 				<TextView
 						android:id="@+id/event_name_title"
 						style="@style/HeaderMainMenuTextStyle"/>
-				<TextView
-						android:id="@+id/event_cancelled"
-						style="@style/HeaderMainMenuTextStyle"/>
 
-			</LinearLayout>
-
-			<LinearLayout style="@style/HorizontalComponentStyle">
-
-				<ImageView
-						android:id="@+id/special_event_icon"
+				<ImageButton
+					android:id="@+id/google_map"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
 					android:contentDescription="@string/answer_no"
-					android:background="@drawable/special_event_icon"/>
+					android:background="@drawable/google_map"/>
+
+				<TextView
+						android:id="@+id/event_cancelled"
+						style="@style/EventCancelledTextStyle"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					android:layout_gravity="right"
+					style="@style/HorizontalComponentStyle">
+
+
+				<ImageView
+						android:id="@+id/special_event_icon"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:contentDescription="@string/answer_no"
+						android:background="@drawable/special_event_icon"/>
 
 				<ImageView
 					android:id="@+id/class_icon"
@@ -51,8 +62,9 @@
 
 
 				<TextView
-						android:id="@+id/event_details"
+						android:id="@+id/event_details_value"
 						style="@style/ValueTextStyle"/>
+
 			</LinearLayout>
 
 			<LinearLayout style="@style/HorizontalComponentStyle">
@@ -161,11 +173,17 @@
 					android:id="@+id/class_details"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
+					android:background="@drawable/border_box"
 					android:orientation="vertical">
 
-				<TextView
+				<LinearLayout
+					style="@style/HorizontalComponentStyle">
+
+					<TextView
 						style="@style/SubtitleTextStyle"
 						android:text="@string/classes_details_label"/>
+
+				</LinearLayout>
 
 				<LinearLayout
 					style="@style/HorizontalComponentStyle">
@@ -193,14 +211,10 @@
 
 					<TextView
 							android:id="@+id/class_details_and_pricing"
-							style="@style/LabelTextStyle"/>
+							style="@style/ValueLabelTextStyle"/>
 
 				</LinearLayout>
-
-
-
 			</LinearLayout>
-
 
 			<LinearLayout
 					style="@style/HorizontalComponentStyle">
@@ -267,17 +281,14 @@
 						android:id="@+id/website"
 						style="@style/ValueTextStyle"/>
 			</LinearLayout>
-			<LinearLayout style="@style/HorizontalComponentStyle">
+			<LinearLayout style="@style/HorizontalComponentStyle"
+						  android:visibility="gone">
 
 				<TextView
-						android:id="@+id/reservation_advised_label"
-						style="@style/LabelTextStyle"
-						android:text="@string/reservation_advised_label"/>
-
-				<ImageView
 						android:id="@+id/reservation_advised"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"/>
+						android:text="@string/reservation_advised"
+						style="@style/ValueLabelTextStyle"/>
+
 			</LinearLayout>
 
 		</LinearLayout>

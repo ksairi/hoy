@@ -10,7 +10,7 @@
 	<string name="update_manually">Actualizar</string>
 	<string name="events_updated_succ">Eventos actualizados!</string>
 	<string name="no_events_to_show">No existen eventos para mostrar!</string>
-	<string name="event_cancelled">EVENTO CANCELADO</string>
+	<string name="event_cancelled">CANCELADO</string>
 	<string name="yes">Sí</string>
 	<string name="event_date_label">Fecha</string>
 	<string name="start_time_label">de</string>
@@ -29,9 +29,13 @@
 	<string name="classes_available">Clase</string>
 	<string name="special_event">Evento Especial</string>
 	<string name="website_label">Sitio Web</string>
-	<string name="reservation_advised_label">Sugerencia de Reserva</string>
-	<string name="classes_details_label">Detalles de Clase</string>
+	<string name="reservation_advised">Se sugiere reservar</string>
+	<string name="classes_details_label"><u>Detalles de Clase</u></string>
 	<string name="how_to_get_there_label">Como llegar</string>
+	<string name="you_are_here">Ud. está aquí</string>
+	<string name="event_map">Mapa de Milonga</string>
+	<string name="most_recent_google_play_services_needed">Debe tener la ultima versión de Google Play para proseguir</string>
+	<string name="install">Instalar</string>
 
 
 

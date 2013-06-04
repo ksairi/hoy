@@ -1,12 +1,17 @@
 package com.hoy.activities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import com.hoy.R;
+import com.hoy.asynctasks.RetrivePromoImgAysncTask;
+import com.hoy.asynctasks.interfaces.GenericSuccessImgHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
@@ -21,19 +26,23 @@ import com.hoy.fragments.EventListFragment;
  */
 public class HomeActivity extends GenericActivity implements EventListFragment.OnItemSelectedListener {
 
+	Boolean mDualPane;
+	ViewGroup detailsWrapper;
+	Integer position;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		retrievePromoImg();
+		detailsWrapper = (ViewGroup) findViewById(R.id.event_details_wrapper);
+		mDualPane = detailsWrapper != null && detailsWrapper.getVisibility() == View.VISIBLE;
 	}
 
-	public void onItemSelected(EventDTO eventDTO) {
-		ViewGroup detailsWrapper = (ViewGroup) findViewById(R.id.event_details_wrapper);
-		Boolean mDualPane = detailsWrapper != null && detailsWrapper.getVisibility() == View.VISIBLE;
+	public void onItemSelected(EventDTO eventDTO, Integer position) {
 
 		if (mDualPane) {
-
+			this.position = position;
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 				EventDetailFragment eventDetailFragment = new EventDetailFragment();
@@ -49,6 +58,40 @@ public class HomeActivity extends GenericActivity implements EventListFragment.O
 		} else {
 			genericStartActivity(EventDetailsActivity.class, MilongaHoyConstants.EVENT_DTO, eventDTO, false);
 
+		}
+	}
+
+	public void onMenuOptionSelected(MenuItem item) {
+		if(item.getItemId() == R.id.refresh_btn){
+
+			if(mDualPane){
+
+				EventDetailFragment eventDetailFragment = (EventDetailFragment)getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
+				if(eventDetailFragment != null){
+					EventListFragment eventListFragment = (EventListFragment)getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
+					detailsWrapper.removeAllViewsInLayout();
+					eventListFragment.updateManually();
+				}
+			}
+		}
+	}
+
+	private void retrievePromoImg(){
+
+		new RetrivePromoImgAysncTask(MilongaHoyConstants.PROMO_IMG_URL,new GenericSuccessImgHandleable() {
+			public void handleSuccessCallBack(Bitmap bitmap) {
+				((ImageView)findViewById(R.id.promo_img)).setImageBitmap(bitmap);
+			}
+
+			public void handleErrorResult() {
+				//To change body of implemented methods use File | Settings | File Templates.
+			}
+		}).execute();
+	}
+
+	public void onDateOptionChanged() {
+		if(mDualPane){
+			detailsWrapper.removeAllViewsInLayout();
 		}
 	}
 

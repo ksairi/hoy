@@ -45,7 +45,7 @@ public class SyncLocalEventsAsyncTask extends AsyncTask<String, Void, String> {
 
 	protected String doInBackground(String... urls) {
 		eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
-		if(!eventDTOs.isEmpty()){
+		if(eventDTOs != null){
 			return RESULT_OK;
 		}
 		return null;

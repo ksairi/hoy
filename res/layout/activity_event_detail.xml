@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:layout_width="fill_parent"
-			  android:layout_height="fill_parent">
+			  style="@style/background_paper">
 
 	<fragment android:name="com.hoy.fragments.EventDetailFragment"
-			  android:id="@+id/event_details"
+			  android:id="@+id/event_details_fragment"
 			  android:layout_weight="1"
 			  android:layout_width="0dp"
 			  android:layout_height="wrap_content"/>

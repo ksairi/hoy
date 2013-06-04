@@ -17,9 +17,9 @@ import com.hoy.R;
  */
 public class ProgressDialogFragment extends DialogFragment {
 
-	public static ProgressDialogFragment newInstance() {
+	public ProgressDialogFragment() {
 
-		return new ProgressDialogFragment();
+
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO,
 	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessHandleable genericHandleable) {
 		super(uiContext, paramEntity, genericHandleable);
 	}
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessListHandleable genericSuccessListHandleable) {
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
 			super(uiContext, paramEntity, genericSuccessListHandleable);
 		}
 	@Override

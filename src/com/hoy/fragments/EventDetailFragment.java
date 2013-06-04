@@ -1,15 +1,16 @@
 package com.hoy.fragments;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import com.hoy.R;
+import com.hoy.activities.GoogleMapActivity;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 
@@ -22,6 +23,8 @@ import com.hoy.dto.EventDTO;
  */
 public class EventDetailFragment extends Fragment {
 
+	private EventDTO eventDTO;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_event_details, container, false);
@@ -30,18 +33,30 @@ public class EventDetailFragment extends Fragment {
 
 	public void setEventProperties(EventDTO eventDTO) {
 
+		View specialIcon = null;
+		View classIcon = null;
+		this.eventDTO = eventDTO;
+
 		if(eventDTO.getName() != null){
 			TextView eventName = (TextView) getActivity().findViewById(R.id.event_name_title);
 			eventName.setText(eventDTO.getName());
 		}
 		else{
-			getActivity().findViewById(R.id.event_name_title).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.event_name_title).getParent()).setVisibility(View.GONE);
 		}
 
 		if (eventDTO.getEventCancelledFlag().equals(MilongaHoyConstants.TRUE)) {
 			TextView eventCancelled = (TextView) getActivity().findViewById(R.id.event_cancelled);
 			eventCancelled.setText(R.string.event_cancelled);
-			eventCancelled.setTextColor(Color.RED);
+		}
+
+		if(eventDTO.getDetails() != null){
+
+			TextView eventDetails = (TextView) getActivity().findViewById(R.id.event_details_value);
+			eventDetails.setText(eventDTO.getDetails());
+		}
+		else{
+			((View)getActivity().findViewById(R.id.event_details_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getDate() != null){
@@ -49,7 +64,7 @@ public class EventDetailFragment extends Fragment {
 			eventDate.setText(eventDTO.getDate());
 		}
 		else{
-			getActivity().findViewById(R.id.event_date_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.event_date_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getStartTime() != null){
@@ -57,21 +72,21 @@ public class EventDetailFragment extends Fragment {
 			startTime.setText(eventDTO.getStartTime());
 		}
 		else{
-			getActivity().findViewById(R.id.start_time_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.start_time_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getEndTime() != null){
 			TextView endTime = (TextView) getActivity().findViewById(R.id.end_time);
 			endTime.setText(eventDTO.getEndTime());
 		}else{
-			getActivity().findViewById(R.id.end_time_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.end_time_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getGenre() != null){
 			TextView eventGenre = (TextView) getActivity().findViewById(R.id.event_genre);
 			eventGenre.setText(eventDTO.getGenre());
 		}else{
-			getActivity().findViewById(R.id.event_genre_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.event_genre_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getFamiliarNameOfArea() != null){
@@ -80,7 +95,7 @@ public class EventDetailFragment extends Fragment {
 			eventArea.setText(eventDTO.getFamiliarNameOfArea());
 		}
 		else{
-			getActivity().findViewById(R.id.event_address_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.event_address_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getStreetLine1() != null){
@@ -93,14 +108,31 @@ public class EventDetailFragment extends Fragment {
 			TextView nameOfPlace = (TextView) getActivity().findViewById(R.id.name_of_place);
 			nameOfPlace.setText(eventDTO.getNameOfPlace());
 		}else{
-			getActivity().findViewById(R.id.name_of_place_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.name_of_place_label).getParent()).setVisibility(View.GONE);
 		}
+
+		if(eventDTO.getPrice() != null){
+
+			TextView eventPrice = (TextView) getActivity().findViewById(R.id.event_price);
+			eventPrice.setText(eventDTO.getPrice());
+
+		}else{
+				((View)getActivity().findViewById(R.id.event_price_label).getParent()).setVisibility(View.GONE);
+			}
 
 		if(eventDTO.getHowToGetThere() != null){
 			TextView howToGetThere = (TextView) getActivity().findViewById(R.id.how_to_get_there);
 			howToGetThere.setText(eventDTO.getHowToGetThere());
 		}else{
-			getActivity().findViewById(R.id.how_to_get_there_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.how_to_get_there_label).getParent()).setVisibility(View.GONE);
+		}
+
+		if(eventDTO.getOrganizersNames() != null){
+			TextView organizersName = (TextView) getActivity().findViewById(R.id.event_organizers);
+			organizersName.setText(eventDTO.getOrganizersNames());
+
+		}else{
+			((View)getActivity().findViewById(R.id.event_organizers_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getPhones() != null){
@@ -114,14 +146,14 @@ public class EventDetailFragment extends Fragment {
 			TextView emailAddress = (TextView) getActivity().findViewById(R.id.email_address);
 			emailAddress.setText(eventDTO.getEmailContact());
 		}else{
-			getActivity().findViewById(R.id.email_address_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.email_address_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getWebsite() != null){
 			TextView website = (TextView) getActivity().findViewById(R.id.website);
 			website.setText(eventDTO.getWebsite());
 		}else{
-			getActivity().findViewById(R.id.website_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.website_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getOffersClassFlag().equals(MilongaHoyConstants.TRUE)){
@@ -134,12 +166,24 @@ public class EventDetailFragment extends Fragment {
 			classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails());
 		}
 		else{
-			getActivity().findViewById(R.id.class_details).setVisibility(View.GONE);
-			getActivity().findViewById(R.id.class_icon).setVisibility(View.GONE);
-		}
+				getActivity().findViewById(R.id.class_details).setVisibility(View.GONE);
+				classIcon = getActivity().findViewById(R.id.class_icon);
+				classIcon.setVisibility(View.GONE);
+			}
 
 		if(eventDTO.getSpecialEventFlag().equals(MilongaHoyConstants.FALSE)){
-			getActivity().findViewById(R.id.special_event_icon).setVisibility(View.GONE);
+			specialIcon =  getActivity().findViewById(R.id.special_event_icon);
+			specialIcon.setVisibility(View.GONE);
+		}
+
+		if(eventDTO.getReservationAdvicedFlag().equals(MilongaHoyConstants.TRUE)){
+			TextView reservationAdvised =  (TextView)getActivity().findViewById(R.id.reservation_advised);
+			((View)reservationAdvised.getParent()).setVisibility(View.VISIBLE);
+		}
+
+		if(specialIcon != null && specialIcon.getVisibility() == View.GONE && classIcon != null && classIcon.getVisibility() == View.GONE){
+
+			((View)specialIcon.getParent()).setVisibility(View.GONE);
 		}
 
 	}
@@ -149,9 +193,26 @@ public class EventDetailFragment extends Fragment {
 
 		super.onActivityCreated(savedInstanceState);
 		Bundle arguments = getArguments();
+		ImageButton googleMap = (ImageButton)getActivity().findViewById(R.id.google_map);
+		googleMap.setOnClickListener(googleMapOnClickListener);
 		if (arguments != null) {
 			EventDTO eventDTO = arguments.getParcelable(MilongaHoyConstants.EVENT_DTO);
 			setEventProperties(eventDTO);
 		}
 	}
+
+	private View.OnClickListener googleMapOnClickListener = new View.OnClickListener() {
+		public void onClick(View view) {
+
+			Intent intent = new Intent(getActivity(),GoogleMapActivity.class);
+			intent.putExtra(MilongaHoyConstants.EVENT_NAME,eventDTO.getName());
+			intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE,eventDTO.getLatitude());
+			intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE,eventDTO.getLongitude());
+			String eventAddress = eventDTO.getStreetLine1();
+			eventAddress = eventAddress.concat("-").concat(eventDTO.getFamiliarNameOfArea());
+			intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS,eventAddress);
+			getActivity().startActivity(intent);
+
+		}
+	};
 }

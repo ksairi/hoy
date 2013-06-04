@@ -47,12 +47,10 @@ public class EventListFragment extends ListFragment {
 	protected List<EventDTO> eventDTOs;
 	protected OnItemSelectedListener listener;
 	protected RadioButton todayEvents;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
-		setRetainInstance(true);
-	}
+	public static String RESTARTED = "restarted";
+	public static String EVENT_POSITION ="eventPosition";
+	private static Integer INIT_POSITION = -1;
+	private int eventDTOPositionSelected = INIT_POSITION;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,36 +65,59 @@ public class EventListFragment extends ListFragment {
 
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
-		//we initialize with today's events
-		todayEvents.setChecked(true);
+
+		if(bundle != null && bundle.containsKey(RESTARTED)){
+
+			onRadioButtonChange(bundle);
+		}
+		else{
+			//we initialize with today's events if it is not restarted
+			todayEvents.setChecked(true);
+		}
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-
-		listener.onItemSelected(eventDTOs.get(position));
+		if(this.eventDTOPositionSelected != position){
+			this.eventDTOPositionSelected = position;
+			listener.onItemSelected(eventDTOs.get(position),position);
+		}
 	}
 
-	protected void syncEventList() {
+	protected void syncEventList(final Bundle bundle) {
 
 		FragmentHelper.changeProgressDialogState(getFragmentManager(),true);
 		new SyncLocalEventsAsyncTask(getActivity(),getFilterParams(),new GenericSuccessListHandleable<EventDTO>(){
 			public void handleSuccessCallBack(List<EventDTO> localEventDTOs) {
 				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
 				updateAdapter(localEventDTOs);
+				if(!localEventDTOs.isEmpty()){
+					getActivity().findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
+					Integer position = bundle != null? bundle.getInt(EVENT_POSITION):null;
+
+					if(position != null){
+						// if it was showing an event, we should it again
+						listener.onItemSelected(eventDTOs.get(position),position);
+					}
+				}
+				else{
+					getActivity().findViewById(R.id.list_view_labels).setVisibility(View.GONE);
+					Toast.makeText(getActivity(), R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+				}
 			}
 
 			public void handleErrorResult() {
 				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
-				updateAdapter(new ArrayList<EventDTO>());
-				Toast.makeText(getActivity(), R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), R.string.connection_errors, Toast.LENGTH_LONG).show();
 			}
 		}).execute();
 	}
 
 	public interface OnItemSelectedListener {
 
-		public void onItemSelected(EventDTO eventDTO);
+		public void onItemSelected(EventDTO eventDTO, Integer index);
+		public void onMenuOptionSelected(MenuItem item);
+		public void onDateOptionChanged();
 	}
 
 	@Override
@@ -118,8 +139,7 @@ public class EventListFragment extends ListFragment {
 
 	private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
 		public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-			syncEventList();
+			onRadioButtonChange(null);
 
 		}
 	};
@@ -132,42 +152,40 @@ public class EventListFragment extends ListFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.refresh_btn){
-			updateManually();
-		}
+		listener.onMenuOptionSelected(item);
 		return false;
-
 	}
 
-		private void updateManually(){
+	public void updateManually(){
 
-			//if (EventsService.hasRecentlyManuallyUpdated(getActivity().getBaseContext())) {
+		if (EventsService.hasRecentlyManuallyUpdated(getActivity().getBaseContext())) {
 
-				FragmentHelper.changeProgressDialogState(getFragmentManager(), true);
-				EventsService.getInstance().synchronizeEventsFromServer(getActivity().getBaseContext(), new GenericSuccessListHandleable<EventDTO>() {
-					public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
-						updateAdapter(remoteEventDTOs);
-						FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
-						Toast.makeText(getActivity().getBaseContext(), R.string.events_updated_succ, Toast.LENGTH_SHORT);
-					}
+			FragmentHelper.changeProgressDialogState(getFragmentManager(), true);
+			EventsService.getInstance().synchronizeEventsFromServer(getActivity().getBaseContext(), new GenericSuccessListHandleable<EventDTO>() {
+				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
+					updateAdapter(remoteEventDTOs);
+					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
+					Toast.makeText(getActivity().getBaseContext(), R.string.events_updated_succ, Toast.LENGTH_SHORT);
+				}
 
-					public void handleErrorResult() {
-						FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
-						Toast.makeText(getActivity().getBaseContext(), R.string.connection_errors, Toast.LENGTH_SHORT);
+				public void handleErrorResult() {
+					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
+					Toast.makeText(getActivity().getBaseContext(), R.string.connection_errors, Toast.LENGTH_SHORT);
 
-					}
-				});
-			/*}
-			else{
-				Toast.makeText(getActivity().getBaseContext(), R.string.too_many_update_manually, Toast.LENGTH_SHORT);
-			} */
-
+				}
+			});
 		}
+		else{
+			Toast.makeText(getActivity().getBaseContext(), R.string.too_many_update_manually, Toast.LENGTH_SHORT);
+		}
+
+	}
 
 	private void updateAdapter(List<EventDTO> eventDTOs){
 		this.eventDTOs = eventDTOs;
 		ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(getActivity(), eventDTOs, todayEvents.isChecked());
 		getListView().setAdapter(arrayAdapter);
+		listener.onDateOptionChanged();
 
 	}
 
@@ -181,7 +199,19 @@ public class EventListFragment extends ListFragment {
 
 	}
 
+	private void onRadioButtonChange(Bundle bundle){
+		listener.onDateOptionChanged();
+		syncEventList(bundle);
+	}
 
-
-
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if(!todayEvents.isChecked()){
+			outState.putString(EventListFragment.RESTARTED,EventListFragment.RESTARTED);
+		}
+		if(eventDTOPositionSelected != INIT_POSITION){
+			outState.putInt(EventListFragment.EVENT_POSITION,eventDTOPositionSelected);
+		}
+	}
 }

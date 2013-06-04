@@ -66,16 +66,18 @@ public class GsonHelper {
 
 		String resultData = null;
 		try {
-			JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonString != null){
+					JSONObject jsonObject = new JSONObject(jsonString);
 
-			JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
-			Integer errorNumber = resultSummary.getInt("errorNumber");
-			if (errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)) {
-				resultData = adaptJson(jsonObject);
+					JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
+					Integer errorNumber = resultSummary.getInt("errorNumber");
+					if (errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)) {
+						resultData = adaptJson(jsonObject);
+					}
+				}
+			}catch (JSONException e) {
+				resultData = null;
 			}
-		} catch (JSONException e) {
-			resultData = null;
-		}
 
 		return resultData;
 

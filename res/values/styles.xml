@@ -60,14 +60,17 @@
 		<item name="android:textStyle">bold</item>
 	</style>
 
-	<style name="SubtitleTextStyle" parent="BasicMainMenuTextStyle">
+	<style name="SubtitleTextStyle" parent="LabelTextStyle">
 			<item name="android:textSize">15sp</item>
 			<item name="android:textStyle">bold</item>
+			<item name="android:text"></item>
 	</style>
-
-
-
-
+	<style name="EventCancelledTextStyle" parent="BasicMainMenuTextStyle">
+			<item name="android:textSize">12sp</item>
+			<item name="android:textStyle">bold</item>
+			<item name="android:layout_marginLeft">5dp</item>
+			<item name="android:textColor">#ff0000</item>
+		</style>
 
 
 	<style name="BasicComponentStyle">
@@ -91,7 +94,6 @@
 
 	<style name="ComponentStyle" parent="BasicComponentStyle">
 		<item name="android:padding">5dp</item>
-		<item name="android:background">@drawable/bg_paper</item>
 	</style>
 
 	<style name="ItemRowStyle" parent="BasicComponentStyle">
@@ -104,6 +106,14 @@
 		<item name="android:paddingLeft">5dp</item>
 		<item name="android:paddingBottom">0dp</item>
 	</style>
+
+	<style name="background_paper">
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:background">@drawable/bg_paper</item>
+		<item name="android:orientation">horizontal</item>
+	</style>
+
 
 
 
@@ -124,6 +134,12 @@
 	<style name="ValueTextStyle" parent="LabelTextStyle">
 		<item name="android:paddingLeft">10dp</item>
 		<item name="android:textStyle">bold</item>
+		<item name="android:layout_centerHorizontal">true</item>
+
+	</style>
+
+	<style name="ValueLabelTextStyle" parent="ValueTextStyle">
+		<item name="android:paddingLeft">0dp</item>
 	</style>
 
 

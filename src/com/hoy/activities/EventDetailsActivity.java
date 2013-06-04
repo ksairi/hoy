@@ -28,7 +28,7 @@ public class EventDetailsActivity extends GenericActivity {
 		setContentView(R.layout.activity_event_detail);
 		EventDTO eventDTO = getIntent().getExtras().getParcelable(MilongaHoyConstants.EVENT_DTO);
 		getIntent().getExtras().remove(MilongaHoyConstants.EVENT_DTO);
-		EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details);
+		EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
 		eventDetailFragment.setEventProperties(eventDTO);
 	}
 

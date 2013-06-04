@@ -8,15 +8,17 @@
 			android:layout_width="fill_parent"
 			android:orientation="horizontal">
 
-				<RadioButton
-						android:id="@+id/future_events"
-						android:layout_weight="1"
-						style="@style/LabelTextStyle"
-						android:text="@string/list_events_label"/>
-				<RadioButton
-						android:id="@+id/today_events"
-						style="@style/LabelTextStyle"
-						android:text="@string/today_list_events_label"/>
+			<RadioButton
+				android:id="@+id/today_events"
+				style="@style/LabelTextStyle"
+				android:layout_weight="1"
+				android:text="@string/today_list_events_label"/>
+
+			<RadioButton
+				android:id="@+id/future_events"
+				style="@style/LabelTextStyle"
+				android:text="@string/list_events_label"/>
+
 		</RadioGroup>
 
 
@@ -27,9 +29,11 @@
 				android:layout_height="wrap_content">
 
 			<LinearLayout
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_alignParentRight="true">
+				android:id="@+id/list_view_labels"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"
+				android:layout_alignParentRight="true">
 
 					<TextView
 						style="@style/LabelTextStyle"
