@@ -30,6 +30,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		public ImageView specialEvent;
 		public ImageView hasClasses;
 		public TextView eventCancelled;
+		public TextView eventNeighbourhood;
 	}
 
 	public EventListAdapter(Context context, List<EventDTO> eventsDTO, Boolean todayEvents) {
@@ -55,6 +56,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 			viewHolder.eventCancelled = (TextView) rowView.findViewById(R.id.event_cancelled);
 			viewHolder.specialEvent = (ImageView) rowView.findViewById(R.id.event_special_event);
 			viewHolder.hasClasses = (ImageView) rowView.findViewById(R.id.event_has_classes);
+			viewHolder.eventNeighbourhood = (TextView) rowView.findViewById(R.id.event_neighbourhood);
 
 			rowView.setTag(viewHolder);
 
@@ -67,6 +69,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		String offersClasses ="";
 		String specialEvents ="";
 		String eventCancelled = "";
+		String eventNeighbourhood = "";
 
 		if (eventsDTO != null && !eventsDTO.isEmpty()) {
 			eventName = eventsDTO.get(position).getName();
@@ -74,6 +77,10 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 			offersClasses = eventsDTO.get(position).getOffersClassFlag();
 			specialEvents = eventsDTO.get(position).getSpecialEventFlag();
 			eventCancelled = eventsDTO.get(position).getEventCancelledFlag();
+			eventNeighbourhood = eventsDTO.get(position).getFamiliarNameOfArea();
+			if(eventNeighbourhood.contains("-")){
+				eventNeighbourhood = eventNeighbourhood.substring(eventNeighbourhood.indexOf("-")+1,eventNeighbourhood.length());
+			}
 			if (todayEvents != null && !todayEvents) {
 				appointmentDate = eventsDTO.get(position).getDate();
 			}else{
@@ -84,6 +91,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		holder.eventName.setText(eventName);
 		holder.appointmentDate.setText(appointmentDate);
 		holder.beginTime.setText(beginTime);
+		holder.eventNeighbourhood.setText(eventNeighbourhood);
 		holder.hasClasses.setVisibility(offersClasses.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
 		holder.specialEvent.setVisibility(specialEvents.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
 		holder.eventCancelled.setVisibility(eventCancelled.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.GONE);

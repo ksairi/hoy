@@ -10,6 +10,12 @@
 				android:id="@+id/event_name"
 				style="@style/LabelTextStyle"
 				android:singleLine="true"/>
+		<TextView
+						android:id="@+id/event_neighbourhood"
+						style="@style/LabelTextStyle"
+						android:layout_toRightOf="@id/event_name"
+						android:layout_marginLeft="20dp"
+						android:singleLine="true"/>
 	</RelativeLayout>
 
 	<RelativeLayout style="@style/ItemRowStyle">

@@ -283,6 +283,7 @@
 				<TextView
 						android:id="@+id/phone_number"
 						style="@style/ValueTextStyle"
+						android:autoLink="phone"
 						android:text="@string/phone_number_label"/>
 
 			</LinearLayout>
@@ -308,7 +309,8 @@
 
 				<TextView
 						android:id="@+id/website"
-						style="@style/ValueTextStyle"/>
+						style="@style/ValueTextStyle"
+						android:autoLink="web"/>
 			</LinearLayout>
 			<LinearLayout style="@style/HorizontalComponentStyle"
 						  android:visibility="gone">

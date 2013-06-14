@@ -142,7 +142,7 @@ public class EventDetailFragment extends Fragment {
 			getActivity().findViewById(R.id.phone_number_label).setVisibility(View.GONE);
 		}
 
-		if(eventDTO.getEmailContact() != null && eventDTO.getEmailContact().equals(MilongaHoyConstants.EMPTY_STRING)){
+		if(eventDTO.getEmailContact() != null && !eventDTO.getEmailContact().equals(MilongaHoyConstants.EMPTY_STRING)){
 			TextView emailAddress = (TextView) getActivity().findViewById(R.id.email_address);
 			emailAddress.setText(eventDTO.getEmailContact());
 		}else{
