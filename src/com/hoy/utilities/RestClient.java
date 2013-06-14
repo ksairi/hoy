@@ -142,7 +142,7 @@ public class RestClient {
 
 			// convert content stream to a String
 			resultString = convertStreamToString(instream);
-			Log.d(TAG, resultString);
+			//Log.d(TAG, resultString);
 
 			instream.close();
 		}
