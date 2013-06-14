@@ -1,5 +1,11 @@
 package com.hoy.dto;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.helpers.SharedPreferencesHelper;
+import com.hoy.utilities.MilongaCollectionUtils;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ksairi
@@ -11,34 +17,29 @@ public class ParametersDTO {
 
 	private static final String SYNC_EVENTS_SEL_PARAM_NAME = "sel";
 	private static final String SYNC_EVENTS_FROM_PARAM_NAME = "from";
-	private static final String SYNC_EVENTS_DATE_PARAM_NAME = "date";
+	private static final String SYNC_EVENTS_DATE_PARAM_NAME = "where";
 
-	private String sel = null;
-	private String from = "MEventFull";
-	private String where = "date = CURDATE() AND areaId = 1";
+	private static String sel = "*,now() as ".concat(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+	private static String from = "MEventFull";
+	private static String where = "date between CURDATE() AND ADDDATE(CURDATE(),7) AND areaId=1";
 
-	public String getSelName() {
-		return sel;
+
+
+
+	public static String getDailyRefreshParameters(){
+
+		return ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(where);
 	}
 
-	public String getFromName() {
-		return from;
-	}
+	public static String getHourlyRefreshParameters(Context context){
 
-	public String getWhereName() {
-		return where;
-	}
+		String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+		String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(where);
+		if(!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)){
+			result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
+		}
+		return result;
 
-	public String getSelValue() {
-		return SYNC_EVENTS_SEL_PARAM_NAME;
-	}
-
-	public String getFromValue() {
-		return SYNC_EVENTS_FROM_PARAM_NAME;
-	}
-
-	public String getWhereValue() {
-		return SYNC_EVENTS_DATE_PARAM_NAME;
 	}
 
 }

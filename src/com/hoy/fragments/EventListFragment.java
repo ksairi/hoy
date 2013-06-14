@@ -1,38 +1,38 @@
 package com.hoy.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ListFragment;
-import android.text.BoringLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
-import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
+import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.helpers.FragmentHelper;
+import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.FilterParams;
+import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.EventsService;
 import com.hoy.utilities.DateUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,86 +45,91 @@ import java.util.List;
 public class EventListFragment extends ListFragment {
 
 	protected List<EventDTO> eventDTOs;
-	protected OnItemSelectedListener listener;
-	protected RadioButton todayEvents;
-	public static String RESTARTED = "restarted";
-	public static String EVENT_POSITION ="eventPosition";
-	private static Integer INIT_POSITION = -1;
-	private int eventDTOPositionSelected = INIT_POSITION;
+	protected EventListFragmentListener listener;
+	protected CheckBox todayEvents;
+	private Activity activityAttached;
+	private TextView syncLocalEvents;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
+		setRetainInstance(true);
 		return inflater.inflate(R.layout.fragment_events_list_menu, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle bundle) {
 		super.onActivityCreated(bundle);
-		todayEvents = (RadioButton)getActivity().findViewById(R.id.today_events);
+
+		todayEvents = (CheckBox)activityAttached.findViewById(R.id.today_events);
+
+		syncEventList();
 
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
+		TextView todaysMap = (TextView)getActivity().findViewById(R.id.today_events_map);
 
-		if(bundle != null && bundle.containsKey(RESTARTED)){
+		todaysMap.setOnClickListener(onClickTodaysMap);
 
-			onRadioButtonChange(bundle);
+		syncLocalEvents = (TextView)getActivity().findViewById(R.id.sync_local_events);
+		syncLocalEvents.setOnClickListener(syncLocalEventsOnClick);
+
+		Bundle extras = getActivity().getIntent().getExtras();
+		if(extras != null){
+			eventDTOs = extras.getParcelableArrayList(MilongaHoyConstants.EVENT_DTOS);
+			updateAdapter(eventDTOs);
 		}
-		else{
-			//we initialize with today's events if it is not restarted
-			todayEvents.setChecked(true);
-		}
+
+		EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
+		EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
+
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		if(this.eventDTOPositionSelected != position){
-			this.eventDTOPositionSelected = position;
-			listener.onItemSelected(eventDTOs.get(position),position);
-		}
+		super.onListItemClick(l, v, position, id);
+		listener.onItemSelected(eventDTOs.get(position),position);
 	}
 
-	protected void syncEventList(final Bundle bundle) {
+	private View.OnClickListener syncLocalEventsOnClick = new View.OnClickListener(){
+		public void onClick(View view) {
+			syncEventList();
+
+		}
+	};
+
+	protected void syncEventList() {
 
 		FragmentHelper.changeProgressDialogState(getFragmentManager(),true);
-		new SyncLocalEventsAsyncTask(getActivity(),getFilterParams(),new GenericSuccessListHandleable<EventDTO>(){
+		new SyncLocalEventsAsyncTask(activityAttached,getFilterParams(),new GenericSuccessListHandleable<EventDTO>(){
 			public void handleSuccessCallBack(List<EventDTO> localEventDTOs) {
-				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
 				updateAdapter(localEventDTOs);
-				if(!localEventDTOs.isEmpty()){
-					getActivity().findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
-					Integer position = bundle != null? bundle.getInt(EVENT_POSITION):null;
-
-					if(position != null){
-						// if it was showing an event, we should it again
-						listener.onItemSelected(eventDTOs.get(position),position);
-					}
-				}
-				else{
-					getActivity().findViewById(R.id.list_view_labels).setVisibility(View.GONE);
-					Toast.makeText(getActivity(), R.string.no_events_to_show, Toast.LENGTH_LONG).show();
-				}
+				syncLocalEvents.setVisibility(View.GONE);
+				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
 			}
 
 			public void handleErrorResult() {
 				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
-				Toast.makeText(getActivity(), R.string.connection_errors, Toast.LENGTH_LONG).show();
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_LONG).show();
 			}
 		}).execute();
+
 	}
 
-	public interface OnItemSelectedListener {
+	public interface EventListFragmentListener {
 
 		public void onItemSelected(EventDTO eventDTO, Integer index);
 		public void onMenuOptionSelected(MenuItem item);
 		public void onDateOptionChanged();
+		public void onClickTodaysMap();
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (activity instanceof OnItemSelectedListener) {
-			listener = (OnItemSelectedListener) activity;
+		if (activity instanceof EventListFragmentListener) {
+			listener = (EventListFragmentListener) activity;
+			activityAttached = activity;
 		} else {
 			throw new ClassCastException(activity.toString()
 					+ " must implemenet EventListFragment.OnItemSelectedListener");
@@ -135,12 +140,26 @@ public class EventListFragment extends ListFragment {
 	public void onDetach() {
 		super.onDetach();
 		listener = null;
+		activityAttached = null;
 	}
 
 	private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
 		public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-			onRadioButtonChange(null);
+			listener.onDateOptionChanged();
+			syncEventList();
 
+		}
+	};
+
+	private View.OnClickListener onClickTodaysMap = new View.OnClickListener() {
+		public void onClick(View view) {
+			if(!eventDTOs.isEmpty()){
+
+				listener.onClickTodaysMap();
+			}
+			else {
+				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+			}
 		}
 	};
 
@@ -158,34 +177,47 @@ public class EventListFragment extends ListFragment {
 
 	public void updateManually(){
 
-		if (EventsService.hasRecentlyManuallyUpdated(getActivity().getBaseContext())) {
+		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
 			FragmentHelper.changeProgressDialogState(getFragmentManager(), true);
-			EventsService.getInstance().synchronizeEventsFromServer(getActivity().getBaseContext(), new GenericSuccessListHandleable<EventDTO>() {
+			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, new GenericSuccessListHandleable<EventDTO>() {
 				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 					updateAdapter(remoteEventDTOs);
 					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
-					Toast.makeText(getActivity().getBaseContext(), R.string.events_updated_succ, Toast.LENGTH_SHORT);
+					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
+					syncLocalEvents.setVisibility(View.GONE);
+					Toast.makeText(activityAttached, R.string.events_updated_succ, Toast.LENGTH_SHORT).show();
 				}
 
 				public void handleErrorResult() {
 					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
-					Toast.makeText(getActivity().getBaseContext(), R.string.connection_errors, Toast.LENGTH_SHORT);
+					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
 				}
 			});
 		}
 		else{
-			Toast.makeText(getActivity().getBaseContext(), R.string.too_many_update_manually, Toast.LENGTH_SHORT);
+			Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
 	private void updateAdapter(List<EventDTO> eventDTOs){
-		this.eventDTOs = eventDTOs;
-		ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(getActivity(), eventDTOs, todayEvents.isChecked());
-		getListView().setAdapter(arrayAdapter);
-		listener.onDateOptionChanged();
+		if(activityAttached != null){
+			this.eventDTOs = eventDTOs;
+			ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(activityAttached, eventDTOs, todayEvents.isChecked());
+			getListView().setAdapter(arrayAdapter);
+			listener.onDateOptionChanged();
+		}
+		if(!eventDTOs.isEmpty() && activityAttached != null){
+			activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
+		}
+		else{
+				if(activityAttached != null){
+					activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
+					Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+				}
+			}
 
 	}
 
@@ -199,19 +231,18 @@ public class EventListFragment extends ListFragment {
 
 	}
 
-	private void onRadioButtonChange(Bundle bundle){
-		listener.onDateOptionChanged();
-		syncEventList(bundle);
-	}
+	private Handler syncEventsHandler = new Handler(){
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		if(!todayEvents.isChecked()){
-			outState.putString(EventListFragment.RESTARTED,EventListFragment.RESTARTED);
-		}
-		if(eventDTOPositionSelected != INIT_POSITION){
-			outState.putInt(EventListFragment.EVENT_POSITION,eventDTOPositionSelected);
-		}
-	}
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				if((msg != null) && msg.getData().containsKey(MilongaHoyConstants.NEW_MILONGAS_UPDATES)){
+					syncLocalEvents.setVisibility(View.VISIBLE);
+
+				}
+				else{
+					Toast.makeText(getActivity(),R.string.cant_sync_new_events,Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
 }

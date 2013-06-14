@@ -1,20 +1,15 @@
 package com.hoy.dto;
 
-import android.content.res.Configuration;
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.utilities.DateUtils;
-import com.hoy.utilities.MilongaCollectionUtils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
 
 /**
  * @author LDicesaro
  */
-public class EventDTO implements Parcelable {
+public class EventDTO implements Parcelable, Comparable<EventDTO> {
 
 	private static final long serialVersionUID = 8758142710877401485L;
 
@@ -63,6 +58,7 @@ public class EventDTO implements Parcelable {
 	private String areaID;
 	private String timeZone;
 	private String eventCancelledFlag;
+	private String serverLastUpdateTime;
 
 	public Integer getPk() {
 		return pk;
@@ -434,6 +430,14 @@ public class EventDTO implements Parcelable {
 		return this.hashCode();
 	}
 
+	public String getServerLastUpdateTime() {
+		return serverLastUpdateTime;
+	}
+
+	public void setServerLastUpdateTime(String serverLastUpdateTime) {
+		this.serverLastUpdateTime = serverLastUpdateTime;
+	}
+
 	public void writeToParcel(Parcel parcel, int i) {
 
 		parcel.writeInt(pk);
@@ -481,6 +485,7 @@ public class EventDTO implements Parcelable {
 		parcel.writeString(areaID);
 		parcel.writeString(timeZone);
 		parcel.writeString(eventCancelledFlag);
+		parcel.writeString(serverLastUpdateTime);
 
 	}
 
@@ -542,5 +547,33 @@ public class EventDTO implements Parcelable {
 		areaID = parcel.readString();
 		timeZone = parcel.readString();
 		eventCancelledFlag = parcel.readString();
+		serverLastUpdateTime = parcel.readString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		EventDTO eventDTO = (EventDTO) o;
+
+		if (pk != null ? !pk.equals(eventDTO.pk) : eventDTO.pk != null) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return pk != null ? pk.hashCode() : 0;
+	}
+
+	public int compareTo(EventDTO compareEventDTO) {
+
+			//ascending order
+			return this.getStartDateTime().compareTo(compareEventDTO.getStartDateTime());
+
+			//descending order
+			//return compareEventDTO - this.getDate();
+
 	}
 }

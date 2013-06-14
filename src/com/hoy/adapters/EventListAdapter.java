@@ -1,8 +1,6 @@
 package com.hoy.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
-import com.hoy.utilities.DateUtils;
 
 import java.util.List;
 
@@ -32,6 +29,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		public TextView beginTime;
 		public ImageView specialEvent;
 		public ImageView hasClasses;
+		public TextView eventCancelled;
 	}
 
 	public EventListAdapter(Context context, List<EventDTO> eventsDTO, Boolean todayEvents) {
@@ -54,6 +52,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 			viewHolder.eventName = (TextView) rowView.findViewById(R.id.event_name);
 			viewHolder.appointmentDate = (TextView) rowView.findViewById(R.id.event_appointment_date);
 			viewHolder.beginTime = (TextView) rowView.findViewById(R.id.event_begin_time);
+			viewHolder.eventCancelled = (TextView) rowView.findViewById(R.id.event_cancelled);
 			viewHolder.specialEvent = (ImageView) rowView.findViewById(R.id.event_special_event);
 			viewHolder.hasClasses = (ImageView) rowView.findViewById(R.id.event_has_classes);
 
@@ -65,10 +64,16 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		String eventName = "";
 		String appointmentDate = "";
 		String beginTime = "";
+		String offersClasses ="";
+		String specialEvents ="";
+		String eventCancelled = "";
 
 		if (eventsDTO != null && !eventsDTO.isEmpty()) {
 			eventName = eventsDTO.get(position).getName();
 			beginTime = eventsDTO.get(position).getStartTime();
+			offersClasses = eventsDTO.get(position).getOffersClassFlag();
+			specialEvents = eventsDTO.get(position).getSpecialEventFlag();
+			eventCancelled = eventsDTO.get(position).getEventCancelledFlag();
 			if (todayEvents != null && !todayEvents) {
 				appointmentDate = eventsDTO.get(position).getDate();
 			}else{
@@ -79,8 +84,9 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		holder.eventName.setText(eventName);
 		holder.appointmentDate.setText(appointmentDate);
 		holder.beginTime.setText(beginTime);
-		holder.hasClasses.setVisibility(eventsDTO.get(position).getOffersClassFlag().equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.GONE);
-		holder.specialEvent.setVisibility(eventsDTO.get(position).getSpecialEventFlag().equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.GONE);
+		holder.hasClasses.setVisibility(offersClasses.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
+		holder.specialEvent.setVisibility(specialEvents.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
+		holder.eventCancelled.setVisibility(eventCancelled.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.GONE);
 
 
 		return rowView;

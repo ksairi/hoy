@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 
 /**
  * http://hc.apache.org/httpclient-3.x/preference-api.html
@@ -52,6 +53,9 @@ public class RestClient {
 
 			// Prepare a request object 
 			// Las urls GET deben ser del tipo http://hostname/app/action?param1=value1&param2=value2
+
+			url = url.replace(" ","%20").replace(">","%3E");
+
 			HttpGet httpGet = new HttpGet(url);
 
 			httpGet.setHeader("Accept", "application/json");

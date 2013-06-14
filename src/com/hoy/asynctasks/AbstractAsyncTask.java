@@ -9,21 +9,17 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.Toast;
+import com.google.gson.reflect.TypeToken;
 import com.hoy.R;
-import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
-import com.hoy.dto.message.HeaderDTO;
 import com.hoy.dto.message.MessageDTO;
 import com.hoy.helpers.GsonHelper;
-import com.hoy.utilities.InstallationUtils;
+import com.hoy.services.EventsService;
 import com.hoy.utilities.RestClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Encargada de generalizar todo el comportamiento que prepara los datos para enviar al servicio remoto y recibir su respuesta.
@@ -38,12 +34,22 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 	protected Context uiContext;
 	protected T paramEntity;
+	protected List<EventDTO> eventDTOs;
+	protected final String SUCCESS = "success";
 
 	protected String doInBackground(String... urls) {
-		MessageDTO<T> messageDTO = getMessageDTO();
-		messageDTO.setBodyDTO(getBodyDTO());
-		String jsonString = GsonHelper.parseEntityToJson(messageDTO);
-		return RestClient.executeHttpPostRequest(getUrl(), jsonString);
+		String jsonResult = RestClient.executeHttpGetRequest(getUrl());
+		jsonResult = GsonHelper.parseResponse(jsonResult);
+		if(jsonResult != null){
+			jsonResult = EventsService.getInstance().sortList(jsonResult);
+			EventsService.saveMilongasData(uiContext, jsonResult);
+			eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonResult,getType());
+			return SUCCESS;
+		}
+		else{
+			return null;
+		}
+
 	}
 
 	// Ejemplo de como mandarlo por GET.
@@ -52,11 +58,10 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 //		return RestClient.executeHttpGetRequest(RestaUnoConstants.HOST + RestaUnoUrlProtocol.LOGIN_URL + params, null);
 //	}
 
-	protected void onPostExecute(String jsonString) {
-		String resultData;
-		resultData = GsonHelper.parseResponse(jsonString);
-		if (resultData != null) {
-			doOnSuccess(resultData);
+	protected void onPostExecute(String result) {
+
+		if (result != null && result.equals(SUCCESS)) {
+			doOnSuccess();
 		} else {
 			if (!isApplicationBroughtToBackground()) {
 				Toast.makeText(uiContext, R.string.connection_errors, Toast.LENGTH_LONG).show();
@@ -71,7 +76,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 	protected abstract String getUrl();
 
-	protected abstract void doOnSuccess(final String jsonString);
+	protected abstract void doOnSuccess();
 
 	protected abstract void doOnError();
 
@@ -124,6 +129,13 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 
 		return false;
 	}
+
+
+			protected Type getType() {
+				Type listType = new TypeToken<List<EventDTO>>() {
+				}.getType();
+				return listType;
+			}
 
 /*
 	String jsonString = GsonHelper.parseEntityToJson(messageDTO);

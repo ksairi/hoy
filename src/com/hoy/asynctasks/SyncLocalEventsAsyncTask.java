@@ -1,23 +1,11 @@
 package com.hoy.asynctasks;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.ComponentName;
 import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
-import android.widget.Toast;
-import com.hoy.R;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.dto.EventDTO;
-import com.hoy.dto.message.MessageDTO;
-import com.hoy.helpers.GsonHelper;
 import com.hoy.model.FilterParams;
 import com.hoy.services.EventsService;
-import com.hoy.utilities.RestClient;
 
 import java.util.List;
 

@@ -67,10 +67,11 @@ public class GsonHelper {
 		String resultData = null;
 		try {
 				if(jsonString != null){
+					jsonString = jsonString.replace(MilongaHoyConstants.JSON_PREFIX_SUFIX,MilongaHoyConstants.EMPTY_STRING);
 					JSONObject jsonObject = new JSONObject(jsonString);
 
 					JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
-					Integer errorNumber = resultSummary.getInt("errorNumber");
+					String errorNumber = resultSummary.getString("errorNumber");
 					if (errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)) {
 						resultData = adaptJson(jsonObject);
 					}

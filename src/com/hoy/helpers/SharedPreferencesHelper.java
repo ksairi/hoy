@@ -13,7 +13,7 @@ import java.util.Map;
 public class SharedPreferencesHelper {
 
 	public static Map<String, ?> getAll(Context context) {
-		return context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_WORLD_READABLE).getAll();
+		return context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_PRIVATE).getAll();
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class SharedPreferencesHelper {
 	 * @return
 	 */
 	public static String getValueInSharedPreferences(Context context, String key) {
-		return context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_WORLD_READABLE).getString(key, MilongaHoyConstants.EMPTY_STRING);
+		return context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_PRIVATE).getString(key, MilongaHoyConstants.EMPTY_STRING);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class SharedPreferencesHelper {
 	 */
 	public synchronized static void setValueSharedPreferences(Context context, String key, String value) {
 
-		SharedPreferences sp = context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_WORLD_READABLE);
+		SharedPreferences sp = context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 		sp.edit().putString(key, value).commit();
 	}
 
@@ -56,7 +56,7 @@ public class SharedPreferencesHelper {
 	 */
 	public synchronized static void removeValueSharedPreferences(Context context, String key) {
 
-		SharedPreferences sp = context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_WORLD_READABLE);
+		SharedPreferences sp = context.getSharedPreferences(MilongaHoyConstants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 		sp.edit().remove(key).commit();
 	}
 }

@@ -11,21 +11,22 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 
-			<LinearLayout style="@style/HorizontalComponentStyle">
+			<LinearLayout
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:layout_marginTop="3dp"
+					android:paddingTop="5dp"
+					android:layout_marginLeft="3dp"
+					android:paddingLeft="5dp">
 
 				<TextView
 						android:id="@+id/event_name_title"
 						style="@style/HeaderMainMenuTextStyle"/>
 
-				<ImageButton
-					android:id="@+id/google_map"
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:contentDescription="@string/answer_no"
-					android:background="@drawable/google_map"/>
-
 				<TextView
-						android:id="@+id/event_cancelled"
+						android:id="@+id/event_cancelled_detail"
+						android:visibility="gone"
+						android:text="@string/event_cancelled"
 						style="@style/EventCancelledTextStyle"/>
 
 			</LinearLayout>
@@ -33,7 +34,9 @@
 
 			<LinearLayout
 					android:layout_gravity="right"
-					style="@style/HorizontalComponentStyle">
+					android:layout_height="wrap_content"
+					android:paddingRight="5dp"
+					android:layout_width="wrap_content">
 
 
 				<ImageView
@@ -53,7 +56,13 @@
 
 			</LinearLayout>
 
-			<LinearLayout style="@style/HorizontalComponentStyle">
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_marginBottom="3dp"
+				android:layout_marginLeft="3dp"
+				android:paddingBottom="5dp"
+				android:paddingLeft="5dp">
 
 				<TextView
 						android:id="@+id/event_details_label"
@@ -131,18 +140,34 @@
 						android:text="@string/event_address_label"
 						style="@style/LabelTextStyle"/>
 
+				<ImageButton
+					android:id="@+id/google_map"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:contentDescription="@string/answer_no"
+					android:layout_marginLeft="10dp"
+					android:background="@drawable/google_map"/>
+
 				<TextView
 						android:id="@+id/event_address"
+						android:ellipsize="marquee"
 						style="@style/ValueTextStyle"/>
 
 				<TextView
 						android:id="@+id/event_area"
 						style="@style/ValueTextStyle"/>
+
 			</LinearLayout>
 
 
 			<LinearLayout
-					style="@style/HorizontalComponentStyle">
+
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:layout_marginLeft="3dp"
+					android:layout_marginBottom="3dp"
+					android:paddingLeft="5dp"
+					android:paddingBottom="5dp">
 
 				<TextView
 						android:id="@+id/name_of_place_label"
@@ -173,7 +198,11 @@
 					android:id="@+id/class_details"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
-					android:background="@drawable/border_box"
+					android:background="@drawable/box_border"
+					android:layout_marginTop="10dp"
+					android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp"
+					android:layout_marginBottom="10dp"
 					android:orientation="vertical">
 
 				<LinearLayout

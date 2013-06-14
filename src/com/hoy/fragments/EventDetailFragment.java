@@ -1,9 +1,9 @@
 package com.hoy.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import com.hoy.R;
 import com.hoy.activities.GoogleMapActivity;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
+import com.hoy.helpers.AddressHelper;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,8 +47,7 @@ public class EventDetailFragment extends Fragment {
 		}
 
 		if (eventDTO.getEventCancelledFlag().equals(MilongaHoyConstants.TRUE)) {
-			TextView eventCancelled = (TextView) getActivity().findViewById(R.id.event_cancelled);
-			eventCancelled.setText(R.string.event_cancelled);
+			getActivity().findViewById(R.id.event_cancelled_detail).setVisibility(View.VISIBLE);
 		}
 
 		if(eventDTO.getDetails() != null){
@@ -142,7 +142,7 @@ public class EventDetailFragment extends Fragment {
 			getActivity().findViewById(R.id.phone_number_label).setVisibility(View.GONE);
 		}
 
-		if(eventDTO.getEmailContact() != null){
+		if(eventDTO.getEmailContact() != null && eventDTO.getEmailContact().equals(MilongaHoyConstants.EMPTY_STRING)){
 			TextView emailAddress = (TextView) getActivity().findViewById(R.id.email_address);
 			emailAddress.setText(eventDTO.getEmailContact());
 		}else{
@@ -208,8 +208,7 @@ public class EventDetailFragment extends Fragment {
 			intent.putExtra(MilongaHoyConstants.EVENT_NAME,eventDTO.getName());
 			intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE,eventDTO.getLatitude());
 			intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE,eventDTO.getLongitude());
-			String eventAddress = eventDTO.getStreetLine1();
-			eventAddress = eventAddress.concat("-").concat(eventDTO.getFamiliarNameOfArea());
+			String eventAddress = AddressHelper.getEventAddress(eventDTO);
 			intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS,eventAddress);
 			getActivity().startActivity(intent);
 

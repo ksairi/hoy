@@ -28,13 +28,13 @@ public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO,
 		}
 	@Override
 	protected String getUrl() {
-		return MilongaHoyConstants.SYNC_EVENTS_URL;
+		return MilongaHoyConstants.SYNC_EVENTS_URL.concat(ParametersDTO.getDailyRefreshParameters());
 	}
 
-	@Override
+	/*//@Override
 		protected Type getType() {
 			Type listType = new TypeToken<List<EventDTO>>() {
 			}.getType();
 			return listType;
-		}
+		}*/
 }

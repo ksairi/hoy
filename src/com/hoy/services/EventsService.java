@@ -1,27 +1,32 @@
 package com.hoy.services;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.hoy.asynctasks.SyncEventsAsyncTask;
 import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.datasources.MilongaDataSource;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.ParametersDTO;
 import com.hoy.helpers.GsonHelper;
-import com.hoy.helpers.MilongaDataSource;
 import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.FilterParams;
 import com.hoy.utilities.DateUtils;
 import com.hoy.utilities.MilongaCollectionUtils;
 import com.hoy.utilities.RestClient;
 import com.hoy.utilities.RestaunoPredicate;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +37,6 @@ public class EventsService {
 
 	private static final String TAG = EventsService.class.getSimpleName();
 	private static EventsService eventService;
-	protected List<EventDTO> eventDTOs;
 	protected static MilongaDataSource milongaDataSource;
 
 	private EventsService() {
@@ -53,35 +57,29 @@ public class EventsService {
 	 * Se destruye el Singleton.
 	 */
 	public void destroyInstance() {
-		eventDTOs = null;
+
 		eventService = null;
 	}
 
-
-	/**
-	 * Se obtienen los eventos del servidor y se sincronizan con los eventos locales.
-	 *
-	 * @param //context
-	 * @param //genericListServiceable
-	 */
 	public void synchronizeEventsFromServer(final Context context, final GenericSuccessHandleable genericSuccessHandleable) {
 
-		new SyncEventsAsyncTask(context, new ParametersDTO(), new GenericSuccessHandleable() {
+				new SyncEventsAsyncTask(context, new ParametersDTO(), new GenericSuccessHandleable() {
 
-			public void handleSuccessCallBack() {
+					public void handleSuccessCallBack() {
 
-				genericSuccessHandleable.handleSuccessCallBack();
+						genericSuccessHandleable.handleSuccessCallBack();
 
-			}
+					}
 
-			public void handleErrorResult() {
-				Log.i(TAG, "Error al sincronizar los eventos");
-				genericSuccessHandleable.handleErrorResult();
-			}
-		}).execute();
+					public void handleErrorResult() {
+						Log.i(TAG, "Error al sincronizar los eventos");
+						genericSuccessHandleable.handleErrorResult();
+					}
+				}).execute();
 	}
 
-	public void synchronizeEventsFromServer(final Context context, final GenericSuccessListHandleable genericSuccessHandleable) {
+
+	public void synchronizeEventsFromServer(final Context context, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
 
 			new SyncEventsAsyncTask(context, new ParametersDTO(), new GenericSuccessListHandleable<EventDTO>() {
 
@@ -118,44 +116,103 @@ public class EventsService {
 		return atLeastOneChanged;
 	}*/
 
-	public static synchronized void saveDataInDB(final Context uiContext, String jsonString) {
+	public static synchronized void saveMilongasData(final Context uiContext, String jsonString) {
 
 		getMilongaDataSource(uiContext).open();
-			MilongaDataSource milongaDataSource = getMilongaDataSource(uiContext);
-			milongaDataSource.createData(jsonString);
-		getMilongaDataSource(uiContext).close();
+				getMilongaDataSource(uiContext).createData(jsonString);
+			getMilongaDataSource(uiContext).close();
+		try{
+			JSONArray jsonArray = new JSONArray(jsonString);
+
+			//we save the time of the server of each query
+			JSONObject jsonObject = jsonArray.getJSONObject(0);
+			String serverLastUpdateTime = (String)jsonObject.get(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+			SharedPreferencesHelper.setValueSharedPreferences(uiContext,MilongaHoyConstants.SERVER_LAST_UPDATE_TIME,serverLastUpdateTime);
+
+		}catch (JSONException e){
+
+		}
 	}
 
 	public synchronized List<EventDTO> getFilteredEventDTOs(final Context uiContext, final FilterParams filterParams) {
 
-		populateEventsFromDatabase(uiContext);
+		List<EventDTO> eventDTOs = populateEventsFromDatabase(uiContext);
 		if (filterParams != null) {
 			return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
 				public boolean evaluate(EventDTO eventDTO) {
-					return filterParams != null && filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
+					return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
 				}
 			});
 		}
-		return eventDTOs;
+		else{
+				return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
+						public boolean evaluate(EventDTO eventDTO) {
+
+							return !DateUtils.getTodayString().equals(eventDTO.getDate());
+						}
+				});
+
+			}
 	}
 
 
-	public void synchronizeEventsFromServer(Context uiContext, String url, String params) {
+	public String synchronizeEventsFromServer(Context uiContext, String url, String params, Boolean deltaUpdate) {
 
-		String stringResult = RestClient.executeHttpPostRequest(url, params);
-		if(stringResult!= null && !stringResult.equals(MilongaHoyConstants.EMPTY_STRING)){
-			getMilongaDataSource(uiContext).open();
-				getMilongaDataSource(uiContext).createData(stringResult);
-			getMilongaDataSource(uiContext).close();
+		String eventsToSave;
+		String remoteEvents = RestClient.executeHttpGetRequest(url.concat(params));
+		remoteEvents = GsonHelper.parseResponse(remoteEvents);
+
+		if(remoteEvents != null && !remoteEvents.equals(MilongaHoyConstants.EMPTY_STRING)){
+			try{
+				if(deltaUpdate){
+
+					List<EventDTO> localEventDTOs = populateEventsFromDatabase(uiContext);
+					eventsToSave = updateLocalEvents(localEventDTOs, remoteEvents);
+				}
+				else{
+					eventsToSave = remoteEvents;
+				}
+
+				if( eventsToSave != null && !eventsToSave.equals(MilongaHoyConstants.EMPTY_STRING)){
+					saveMilongasData(uiContext,eventsToSave);
+				}
+
+			}catch (SQLException e){
+				return null;
+			}
+			return MilongaHoyConstants.SAVE_MILONGAS_SUCCESS;
 		}
+		return null;
+	}
+
+	private String updateLocalEvents(List<EventDTO> localEventsDTO, String remoteEvents) {
+
+
+		List<EventDTO> remoteEventsDTOs =GsonHelper.parseJsonToArrayListEntity(remoteEvents, new TypeToken<List<EventDTO>>() {}.getType());
+		String resultLocalEvents = MilongaHoyConstants.EMPTY_STRING;
+
+		if(remoteEventsDTOs != null && localEventsDTO != null){
+			for(EventDTO remoteEventDTO : remoteEventsDTOs){
+				int index = localEventsDTO.indexOf(remoteEventDTO);
+				if(index!= -1){
+					localEventsDTO.set(index,remoteEventDTO);
+				}
+				else{
+					localEventsDTO.add(remoteEventDTO);
+				}
+			}
+			sortList(remoteEvents);
+			resultLocalEvents = GsonHelper.parseEntityToJson(localEventsDTO);
+		}
+
+		return resultLocalEvents;
 	}
 
 
-	protected synchronized void populateEventsFromDatabase(final Context uiContext) {
+	protected synchronized List<EventDTO> populateEventsFromDatabase(final Context uiContext) {
 
-		getMilongaDataSource(uiContext).open();
-		String jsonString =getMilongaDataSource(uiContext).getAllMilongas();
-		getMilongaDataSource(uiContext).close();
+		List<EventDTO> eventDTOs = null;
+		String jsonString = getAllMilongas(uiContext);
 		if (!jsonString.equals(MilongaHoyConstants.EMPTY_STRING)) {
 			Type listType = new TypeToken<List<EventDTO>>() {
 			}.getType();
@@ -166,6 +223,7 @@ public class EventsService {
 		if (eventDTOs == null) {
 			eventDTOs = new ArrayList<EventDTO>();
 		}
+		return eventDTOs;
 	}
 
 
@@ -177,7 +235,7 @@ public class EventsService {
 				Date lastManuallyUpdatedDate = DateUtils.getDateAndTimeFromString(strLastManuallyUpdatedDate);
 				Calendar lastManuallyUpdatedCalendar = Calendar.getInstance();
 				lastManuallyUpdatedCalendar.setTime(lastManuallyUpdatedDate);
-				lastManuallyUpdatedCalendar.add(Calendar.HOUR, MilongaHoyConstants.MANUALLY_UPDATE_PERIOD);
+				lastManuallyUpdatedCalendar.add(Calendar.MINUTE, MilongaHoyConstants.MANUALLY_UPDATE_PERIOD);
 				Calendar nowCalendar = Calendar.getInstance();
 				result = lastManuallyUpdatedCalendar.before(nowCalendar);
 			}
@@ -193,7 +251,23 @@ public class EventsService {
 			milongaDataSource = new MilongaDataSource(uiContext);
 		}
 		return milongaDataSource;
+	}
 
+	public void sortList(List<EventDTO> eventDTOs){
+		Collections.sort(eventDTOs);
+	}
 
+	public String sortList(String jsonString){
+		List<EventDTO> eventDTOs =GsonHelper.parseJsonToArrayListEntity(jsonString, new TypeToken<List<EventDTO>>() {}.getType());
+		Collections.sort(eventDTOs);
+		return GsonHelper.parseEntityToJson(eventDTOs);
+	}
+
+	private String getAllMilongas(Context uiContext){
+		getMilongaDataSource(uiContext).open();
+				String jsonString =getMilongaDataSource(uiContext).getAllMilongas();
+		getMilongaDataSource(uiContext).close();
+
+		return jsonString;
 	}
 }

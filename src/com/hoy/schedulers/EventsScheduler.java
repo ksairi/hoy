@@ -1,49 +1,96 @@
 package com.hoy.schedulers;
 
 import android.content.Context;
-import com.hoy.timer_task.SyncEventsHourlyTimerTask;
-import com.hoy.timer_task.SyncEventsTimerTask;
+import android.os.Handler;
+import com.hoy.model.PromoImg;
+import com.hoy.timer_task.AbstractRunnable;
+import com.hoy.timer_task.ChangePromoImgRunnable;
+import com.hoy.timer_task.RetrievePromoImgRunnable;
+import com.hoy.timer_task.SyncEventsDailyRunnable;
+import com.hoy.timer_task.SyncEventsHourlyRunnable;
 
+import java.awt.font.NumericShaper;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ksairi
  */
 public class EventsScheduler {
 
-	private static Timer scheduleTasksTimer;
-	public static final int ONE_DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+	private static final int ONE_HOUR_IN_MILLISECONDS = 1000 * 60 * 60;
+	private static final int ONE_HOUR_AND_HALF_IN_MILLISECONDS = 1000 * 60 * 90;
+	private static final int ONE_DAY_IN_MILLISECONDS = ONE_HOUR_AND_HALF_IN_MILLISECONDS * 24;
+	private static final int FIVE_MINUTES_IN_MILLISECONDS = 1000 * 60 * 5;
+	private static ScheduledExecutorService scheduledExecutorService;
 
-	public static void startSyncEventsTasks(final Context context, Integer initDelay) {
+	public static ScheduledFuture startSyncEventsHourly(final Context context, Handler handler, Integer initDelay) {
+
+		Calendar now = Calendar.getInstance();
+
+		//Schedule the hourly timer task with one hour delay because it has just updated from the server
+		Calendar oneHourFuture = Calendar.getInstance();
+		oneHourFuture.add(Calendar.HOUR, initDelay);
+		Long oneHourDelay = oneHourFuture.getTimeInMillis() - now.getTimeInMillis();
 
 
-		scheduleTasksTimer = new Timer();
+		return scheduleTask(new SyncEventsHourlyRunnable(context,handler), oneHourDelay, ONE_HOUR_IN_MILLISECONDS);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR, initDelay);
-
-		//Schedule the hourly timer task one hour after the daily timer task because the latter one includes the first one.
-		calendar.add(Calendar.HOUR, 1 + initDelay);
-		scheduleTask(new SyncEventsHourlyTimerTask(context), calendar.getTime(), ONE_DAY_IN_MILLISECONDS);
 
 	}
 
+	public static ScheduledFuture startSyncEventsDaily(final Context context, Handler handler, Integer initDelay) {
 
-	private static void scheduleTask(SyncEventsTimerTask syncEventsTimerTask, Date when, Integer period) {
-		scheduleTasksTimer.schedule(syncEventsTimerTask, when, period);
+		Calendar now = Calendar.getInstance();
+		Calendar oneDayFuture = Calendar.getInstance();
+		oneDayFuture.add(Calendar.DAY_OF_MONTH, initDelay);
+
+		Long oneDayDelay = oneDayFuture.getTimeInMillis() - now.getTimeInMillis();
+
+
+		return scheduleTask(new SyncEventsDailyRunnable(context,handler), oneDayDelay, ONE_DAY_IN_MILLISECONDS);
+
 	}
 
-	public static void stopEventsSyncTasks() {
-		if (scheduleTasksTimer != null) {
-			scheduleTasksTimer.cancel();
+	public static ScheduledFuture startRetrievePromoImgTask(Context context, PromoImg promoImg){
+
+		Calendar now = Calendar.getInstance();
+		Calendar future = Calendar.getInstance();
+
+		// We delay 1 day we have just updated the image
+		future.add(Calendar.DAY_OF_MONTH,1);
+		long delay = future.getTimeInMillis() - now.getTimeInMillis();
+
+		return scheduleTask(new RetrievePromoImgRunnable(context,promoImg), delay, ONE_DAY_IN_MILLISECONDS);
+	}
+
+	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler){
+
+		return scheduleTask(new ChangePromoImgRunnable(context,handler), 0, FIVE_MINUTES_IN_MILLISECONDS);
+	}
+
+
+	private static ScheduledFuture scheduleTask(AbstractRunnable syncEventsRunnable, long initialDelay, Integer period) {
+
+		scheduledExecutorService = getScheduledExecutorService();
+
+		return scheduledExecutorService.scheduleWithFixedDelay(syncEventsRunnable, initialDelay, period, TimeUnit.MILLISECONDS);
+	}
+
+	public static void cancelScheduledExecutorService() {
+		if (scheduledExecutorService != null) {
+			scheduledExecutorService.shutdown();
 		}
 	}
 
-	public static void rescheduleEventsSyncTask(SyncEventsTimerTask syncEventsTimerTask, Integer delay, Integer period) {
-		if (scheduleTasksTimer != null) {
-			scheduleTasksTimer.schedule(syncEventsTimerTask, delay, period);
+	private static ScheduledExecutorService getScheduledExecutorService(){
+		if(scheduledExecutorService == null){
+			scheduledExecutorService = Executors.newScheduledThreadPool(3);
 		}
+		return scheduledExecutorService;
 	}
 }

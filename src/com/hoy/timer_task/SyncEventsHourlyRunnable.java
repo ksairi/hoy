@@ -1,31 +1,32 @@
 package com.hoy.timer_task;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-import com.google.gson.reflect.TypeToken;
-import com.hoy.R;
-import com.hoy.activities.HomeActivity;
+import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.ParametersDTO;
 import com.hoy.helpers.GsonHelper;
+import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.services.EventsService;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SyncEventsHourlyTimerTask extends SyncEventsTimerTask {
+public class SyncEventsHourlyRunnable extends AbstractRunnable {
 
-	private static final String TAG = SyncEventsHourlyTimerTask.class.getSimpleName();
+	private static final String TAG = SyncEventsHourlyRunnable.class.getSimpleName();
 
-	public SyncEventsHourlyTimerTask(Context context) {
+	public SyncEventsHourlyRunnable(Context context, Handler handler) {
 		this.context = context;
+		this.handler = handler;
 	}
 
-	protected void createNotification() {
+	/*protected void createNotification() {
 
 		NotificationManager notificationManager = (NotificationManager)
 				context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -50,14 +51,22 @@ public class SyncEventsHourlyTimerTask extends SyncEventsTimerTask {
 				context.getResources().getText(R.string.news_on_events), activity);
 
 		notificationManager.notify((int) (Math.random() * 1000) + 1, notification);
-	}
+	}*/
 
 	@Override
 	public void run() {
 		String params = getParams();
 		if (params != null) {
 
-			EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params); //{
+			if(EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params,true).equals(MilongaHoyConstants.SAVE_MILONGAS_SUCCESS)){
+
+				Bundle bundle = new Bundle();
+				bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+				Message message = new Message();
+				message.setData(bundle);
+				handler.sendMessage(message);
+			}
+
 
 		} else {
 			Log.i(TAG, "Error al obtener los parametros");
@@ -66,7 +75,7 @@ public class SyncEventsHourlyTimerTask extends SyncEventsTimerTask {
 
 	protected String getParams() {
 
-		return GsonHelper.parseEntityToJson(new ParametersDTO());
+		return ParametersDTO.getHourlyRefreshParameters(context);
 	}
 
 	protected String getUrl() {

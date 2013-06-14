@@ -3,8 +3,7 @@
 	<string name="connection_errors">En este momento, existen problemas de conexión</string>
 	<string name="news_on_events_title">Novedades en los eventos</string>
 	<string name="news_on_events">Han habido modificaciones en algunos eventos. Miralos!</string>
-	<string name="today_list_events_label">Hoy</string>
-	<string name="list_events_label">Todas</string>
+	<string name="today_list_events_label">Milongas de Hoy</string>
 	<string name="login_confirm_exit_app">¿Estás seguro que deseas salir de la aplicación?</string>
 	<string name="answer_yes">Sí</string>
 	<string name="update_manually">Actualizar</string>
@@ -36,6 +35,9 @@
 	<string name="event_map">Mapa de Milonga</string>
 	<string name="most_recent_google_play_services_needed">Debe tener la ultima versión de Google Play para proseguir</string>
 	<string name="install">Instalar</string>
+	<string name="today_events_map">El mapa de Hoy</string>
+	<string name="cant_sync_new_events">No se pueden obtener novedades en las milongas. Chequea tu conexión a internet</string>
+	<string name="sync_local_events">Novedades recientes</string>
 
 
 

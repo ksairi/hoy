@@ -1,6 +1,7 @@
 package com.hoy.timer_task;
 
 import android.content.Context;
+import android.os.Handler;
 
 import java.util.TimerTask;
 
@@ -11,11 +12,11 @@ import java.util.TimerTask;
  * Time: 3:09 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class SyncEventsTimerTask extends TimerTask {
+public abstract class AbstractRunnable implements Runnable {
 
 	protected Context context;
+	protected Handler handler;
 
-	@Override
 	public abstract void run();
 
 	protected abstract String getParams();

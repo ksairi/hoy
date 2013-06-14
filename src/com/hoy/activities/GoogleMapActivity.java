@@ -1,30 +1,33 @@
 package com.hoy.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Toast;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import android.view.View;
+import android.widget.ImageView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.dto.EventDTO;
+import com.hoy.helpers.AddressHelper;
+import com.hoy.model.FilterParams;
+import com.hoy.services.EventsService;
+import com.hoy.utilities.DateUtils;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,61 +48,110 @@ public class GoogleMapActivity extends GenericActivity{
 
 			int connectionResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
-			if(ConnectionResult.SUCCESS == connectionResult){
+	//		if(ConnectionResult.SUCCESS == connectionResult){
 
 				if(isGoogleMapsInstalled()){
 					setContentView(R.layout.google_map);
 					map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
-					Double eventLatitude = Double.valueOf((String)getIntent().getExtras().get(MilongaHoyConstants.EVENT_LATITUDE));
-					Double eventLongitude = Double.valueOf((String)getIntent().getExtras().get(MilongaHoyConstants.EVENT_LONGITUDE));
-					String eventName = getIntent().getExtras().getString(MilongaHoyConstants.EVENT_NAME);
-					String eventAddress = getIntent().getExtras().getString(MilongaHoyConstants.EVENT_ADDRESS);
-					getIntent().getExtras().remove(MilongaHoyConstants.EVENT_LATITUDE);
-					getIntent().getExtras().remove(MilongaHoyConstants.EVENT_LONGITUDE);
-					getIntent().getExtras().remove(MilongaHoyConstants.EVENT_NAME);
-					getIntent().getExtras().remove(MilongaHoyConstants.EVENT_ADDRESS);
+					Bundle extras = getIntent().getExtras();
 
-					LatLng  milongaLocation = new LatLng(eventLatitude,eventLongitude);
-
-					map.addMarker(new MarkerOptions()
-							.position(milongaLocation)
-							.title(eventName)
-							.snippet(eventAddress)
-							.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_bubble)));
-
-					//add user's location
-
-					LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-					Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-					if(location != null){
-						Double userLatitude = location.getLatitude();
-						Double userLongitude = location.getLongitude();
-
-						LatLng userLocation = new LatLng(userLatitude,userLongitude);
-						map.addMarker(new MarkerOptions()
-									   .position(userLocation)
-										.title(getResources().getString(R.string.you_are_here)));
-
+					if(extras != null){
+						//coming from DetailFragment, show only the event selected
+						Double eventLatitude = Double.valueOf((String)extras.get(MilongaHoyConstants.EVENT_LATITUDE));
+						Double  eventLongitude = Double.valueOf((String)extras.get(MilongaHoyConstants.EVENT_LONGITUDE));
+						String eventName = extras.getString(MilongaHoyConstants.EVENT_NAME);
+						String eventAddress = extras.getString(MilongaHoyConstants.EVENT_ADDRESS);
+						extras.remove(MilongaHoyConstants.EVENT_LATITUDE);
+						extras.remove(MilongaHoyConstants.EVENT_LONGITUDE);
+						extras.remove(MilongaHoyConstants.EVENT_NAME);
+						extras.remove(MilongaHoyConstants.EVENT_ADDRESS);
+						addElementsInMap(eventName,eventAddress,eventLatitude,eventLongitude);
+					}
+					else{
+						//coming from EventListFragment, showing today's events
+						List<EventDTO> eventDTOs = EventsService.getInstance().getFilteredEventDTOs(getContext(),new FilterParams(DateUtils.getTodayString()));
+						addElementsInMap(eventDTOs);
 					}
 
-					 // Move the camera instantly to milongaLocation with a zoom of 15.
-					map.moveCamera(CameraUpdateFactory.newLatLngZoom(milongaLocation, 15));
-
-					// Zoom in, animating the camera.
-					//map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
 				}
 				else{
 					redirectToMarket();
 				}
-			}
-			else{
-				redirectToMarket();
-			}
+	//		}
+	//		else{
+	//			redirectToMarket();
+	//		}
 		}
 
+
+	}
+
+	private void addElementsInMap(String eventName, String address, Double latitude, Double longitude){
+
+		LatLng  milongaLocation = new LatLng(latitude,longitude);
+
+		addMarker(milongaLocation,eventName,address);
+
+		addUserLocation();
+
+		// Move the camera instantly to milongaLocation with a zoom of 15.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(milongaLocation, 15));
+
+		// Zoom in, animating the camera.
+		//map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+	}
+
+	private void addElementsInMap(List<EventDTO> eventDTOs){
+
+		LatLng  milongaLocation = null;
+		for(EventDTO eventDTO : eventDTOs){
+
+			milongaLocation = new LatLng(Double.parseDouble(eventDTO.getLatitude()),Double.parseDouble(eventDTO.getLongitude()));
+
+			addMarker(milongaLocation,eventDTO.getName(), AddressHelper.getEventAddress(eventDTO));
+		}
+
+		addUserLocation();
+
+		if(milongaLocation != null){
+			// Move the camera instantly to milongaLocation with a zoom of 13.
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(milongaLocation, 13));
+		}
+
+			// Zoom in, animating the camera.
+			//map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+		}
+
+	private void addMarker(LatLng milongaLocation, String eventName, String address){
+
+		map.addMarker(new MarkerOptions()
+						.position(milongaLocation)
+						.title(eventName)
+						.snippet(address)
+						.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_bubble)));
+	}
+
+	private void addUserLocation(){
+
+		//add user's location
+
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+		if(location != null){
+			Double userLatitude = location.getLatitude();
+			Double userLongitude = location.getLongitude();
+
+			LatLng userLocation = new LatLng(userLatitude,userLongitude);
+			map.addMarker(new MarkerOptions()
+						   .position(userLocation)
+							.title(getResources().getString(R.string.you_are_here)));
+
+		}
 
 	}
 

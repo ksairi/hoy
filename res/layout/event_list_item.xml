@@ -24,6 +24,15 @@
 				android:id="@+id/event_begin_time"
 				style="@style/LabelTextStyle"
 				android:layout_toRightOf="@id/event_appointment_date"/>
+		<TextView
+			android:id="@+id/event_cancelled"
+			style="@style/LabelTextStyle"
+			android:layout_toRightOf="@id/event_begin_time"
+			android:textColor="#ff0000"
+			android:layout_marginLeft="10dp"
+			android:visibility="gone"
+			android:text="@string/event_cancelled"/>
+
 		<ImageView
 			android:id="@+id/event_has_classes"
 			android:layout_height="wrap_content"

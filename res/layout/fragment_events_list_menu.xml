@@ -2,27 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  style="@style/ComponentStyle">
 
+			<TextView
+				android:id="@+id/today_events_map"
+				style="@style/LabelTextStyle"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginTop="10dp"
+				android:drawableTop="@drawable/google_map"
+				android:text="@string/today_events_map"/>
 
-		<RadioGroup
+
+		<RelativeLayout
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
-			android:orientation="horizontal">
+			android:layout_marginTop="5dp">
 
-			<RadioButton
+			<CheckBox
 				android:id="@+id/today_events"
 				style="@style/LabelTextStyle"
-				android:layout_weight="1"
+				android:checked="true"
+				android:layout_alignParentLeft="true"
 				android:text="@string/today_list_events_label"/>
 
-			<RadioButton
-				android:id="@+id/future_events"
-				style="@style/LabelTextStyle"
-				android:text="@string/list_events_label"/>
+			<TextView
+				android:id="@+id/sync_local_events"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:visibility="gone"
+				android:layout_alignParentRight="true"
+				android:text="@string/sync_local_events"
+				android:drawableBottom="@drawable/refresh_local_events"/>
 
-		</RadioGroup>
-
-
-
+		</RelativeLayout>
 
 		<RelativeLayout
 				android:layout_width="wrap_content"
@@ -32,6 +42,7 @@
 				android:id="@+id/list_view_labels"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="5dp"
 				android:visibility="gone"
 				android:layout_alignParentRight="true">
 
@@ -49,7 +60,11 @@
 			<ListView
 					android:id="@android:id/list"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"/>
+					android:layout_height="wrap_content"
+					android:layout_marginTop="25dp"
+					android:divider="@color/black"
+					android:cacheColorHint="#00000000"
+					android:dividerHeight="1dp"/>
 		</RelativeLayout>
 
 </LinearLayout>

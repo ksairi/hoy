@@ -1,8 +1,6 @@
 package com.hoy.helpers;
 
-import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import com.hoy.fragments.ProgressDialogFragment;
 
 /**
@@ -21,7 +19,7 @@ public class FragmentHelper {
 			progressDialogFragment = getProgressDialogFragment();
 
 			if(show){
-				progressDialogFragment.show(fragmentManager,"");
+				progressDialogFragment.show(fragmentManager,"progress");
 
 			}
 			else{

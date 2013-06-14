@@ -1,23 +1,30 @@
 package com.hoy.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import com.hoy.R;
+import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.dto.EventDTO;
+import com.hoy.helpers.ImageHelper;
+import com.hoy.timer_task.AbstractRunnable;
 
-import java.util.HashMap;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,8 +37,8 @@ public abstract class GenericActivity extends FragmentActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = GenericActivity.class.getSimpleName();
-	protected Map<String, Integer> serverErrors = new HashMap<String, Integer>();
 	protected String languageCode = Locale.getDefault().getLanguage();
+	protected ScheduledFuture changePromoImgtask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +49,12 @@ public abstract class GenericActivity extends FragmentActivity {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Para hacer desaparecer la progress bar iniciada en las Activities invocadoras.
-		//changeProgressBarVisibility(View.GONE);
+
 	}
 
 	protected void genericStartActivity(Class<?> clazz, Map<String, String> paramsMap, Boolean finish) {
 
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
+
 		Intent intent = new Intent(this, clazz);
 		if (paramsMap != null) {
 			Set<String> keySet = paramsMap.keySet();
@@ -61,8 +66,7 @@ public abstract class GenericActivity extends FragmentActivity {
 	}
 
 	protected void genericStartActivity(Class<?> clazz, String extrasName, String extras, Boolean finish) {
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
+
 		Intent intent = new Intent(this, clazz);
 		if (extras != null) {
 			intent.putExtra(extrasName, extras);
@@ -72,8 +76,8 @@ public abstract class GenericActivity extends FragmentActivity {
 	}
 
 	protected void genericStartActivity(Class<?> clazz, String extrasName, Parcelable extras, Boolean finish) {
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
+
+
 		Intent intent = new Intent(this, clazz);
 		if (extras != null) {
 			intent.putExtra(extrasName, extras);
@@ -81,6 +85,17 @@ public abstract class GenericActivity extends FragmentActivity {
 
 		customStartActivity(intent, finish);
 	}
+
+	protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<EventDTO> extras, Boolean finish) {
+
+
+			Intent intent = new Intent(this, clazz);
+			if (extras != null) {
+				intent.putParcelableArrayListExtra(extrasName, extras);
+			}
+
+			customStartActivity(intent, finish);
+		}
 
 	protected void customStartActivity(Intent intent, Boolean finish) {
 
@@ -91,8 +106,8 @@ public abstract class GenericActivity extends FragmentActivity {
 	}
 
 	protected void genericStartActivity(Class<?> clazz) {
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
+
+
 		Intent intent = new Intent(this, clazz);
 		startActivity(intent);
 		finish();
@@ -119,7 +134,11 @@ public abstract class GenericActivity extends FragmentActivity {
 		finish();
 	}
 
-	protected abstract Context getContext();
+	protected Context getContext(){
+
+		return this;
+
+	}
 
 
 	@Override
@@ -139,5 +158,25 @@ public abstract class GenericActivity extends FragmentActivity {
 
 		}
 	}
-}
 
+	protected Handler changePromoImgHandler = new Handler(){
+
+			ImageView promoImageView;
+			Bundle bundle;
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				bundle = msg.getData();
+				promoImageView = (ImageView)findViewById(R.id.promo_img);
+				String promoImgBase64 = bundle.getString(MilongaHoyConstants.BASE_64_STRING);
+				Animation myFadeInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+				promoImageView.startAnimation(myFadeInAnimation); //Set animation to your ImageView
+				promoImageView.setImageBitmap(ImageHelper.getBitMap(promoImgBase64));
+
+			}
+
+
+};
+
+
+}

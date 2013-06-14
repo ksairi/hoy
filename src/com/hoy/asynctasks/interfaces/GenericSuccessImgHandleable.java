@@ -1,7 +1,5 @@
 package com.hoy.asynctasks.interfaces;
 
-import android.graphics.Bitmap;
-
 /**
  * Created with IntelliJ IDEA.
  * User: ksairi
@@ -11,5 +9,5 @@ import android.graphics.Bitmap;
  */
 public interface GenericSuccessImgHandleable extends GenericErrorHandleable{
 
-	public void handleSuccessCallBack(Bitmap bitmap);
+	public void handleSuccessCallBack(String base64String);
 }

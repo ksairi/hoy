@@ -5,7 +5,7 @@
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_margin">3dp</item>
-		<item name="android:textColor">#ffffff</item>
+		<item name="android:textColor">@color/white</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:shadowColor">#000000</item>
 		<item name="android:shadowDx">1</item>
@@ -49,7 +49,7 @@
 	<style name="BasicMainMenuTextStyle">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textColor">#333333</item>
+		<item name="android:textColor">@color/grey</item>
 		<item name="android:shadowDx">1</item>
 		<item name="android:shadowDy">1</item>
 		<item name="android:shadowRadius">2</item>
@@ -63,13 +63,13 @@
 	<style name="SubtitleTextStyle" parent="LabelTextStyle">
 			<item name="android:textSize">15sp</item>
 			<item name="android:textStyle">bold</item>
-			<item name="android:text"></item>
+
 	</style>
 	<style name="EventCancelledTextStyle" parent="BasicMainMenuTextStyle">
 			<item name="android:textSize">12sp</item>
 			<item name="android:textStyle">bold</item>
 			<item name="android:layout_marginLeft">5dp</item>
-			<item name="android:textColor">#ff0000</item>
+			<item name="android:textColor">@color/red</item>
 		</style>
 
 
@@ -78,7 +78,7 @@
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:orientation">vertical</item>
 		<item name="android:layout_margin">3dp</item>
-		<item name="android:textColor">#333333</item>
+		<item name="android:textColor">@color/grey</item>
 	</style>
 
 	<style name="HorizontalBasicComponentStyle">
@@ -111,8 +111,13 @@
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:background">@drawable/bg_paper</item>
-		<item name="android:orientation">horizontal</item>
+		<item name="android:orientation">vertical</item>
 	</style>
+	<style name="fragment_wrapper">
+			<item name="android:layout_height">fill_parent</item>
+			<item name="android:layout_width">fill_parent</item>
+			<item name="android:orientation">horizontal</item>
+		</style>
 
 
 
@@ -121,7 +126,7 @@
 	<style name="LabelTextStyle">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textColor">#333333</item>
+		<item name="android:textColor">@color/grey</item>
 		<item name="android:shadowDx">1</item>
 		<item name="android:shadowDy">1</item>
 		<item name="android:shadowRadius">2</item>

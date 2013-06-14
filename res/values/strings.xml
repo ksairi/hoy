@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Milonga Hoy</string>
+	<string name="app_name">Hoy Milonga</string>
 	<string name="connection_errors">We are currently experiencing connection issues</string>
 	<string name="news_on_events_title">There has been news on some events. Check them out!</string>
 	<string name="news_on_events">News on events</string>
-	<string name="today_list_events_label">Today</string>
-	<string name="list_events_label">All</string>
+	<string name="today_list_events_label">Today\'s Milongas</string>
 	<string name="login_confirm_exit_app">Are you sure you want to close the app?</string>
 	<string name="answer_no">No</string>
 	<string name="answer_yes">Yes</string>
@@ -26,7 +25,7 @@
 	<string name="event_price_label">Price</string>
 	<string name="event_has_classes">Has Class</string>
 	<string name="event_special_event">Special Event</string>
-	<string name="too_many_update_manually">Try in a couple of minutes</string>
+	<string name="too_many_update_manually">Try again in a couple of minutes</string>
 	<string name="loading_text">Loading&#8230;</string>
 	<string name="classes_available">Class</string>
 	<string name="special_event">Special Event</string>
@@ -39,4 +38,8 @@
 	<string name="event_map">Milonga Map</string>
 	<string name="most_recent_google_play_services_needed">You must have the most recent Google Play version to continue</string>
 	<string name="install">Install</string>
+	<string name="today_events_map">Today\'s map</string>
+	<string name="cant_sync_new_events">Can\'t get updates in milongas. Check your internet connection</string>
+	<string name="sync_local_events">Newest updates</string>
+
 </resources>
