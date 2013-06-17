@@ -82,7 +82,7 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 				eventNeighbourhood = eventNeighbourhood.substring(eventNeighbourhood.indexOf("-")+1,eventNeighbourhood.length());
 			}
 			if (todayEvents != null && !todayEvents) {
-				appointmentDate = eventsDTO.get(position).getDate();
+				appointmentDate = eventsDTO.get(position).getDateToShow();
 			}else{
 				holder.appointmentDate.setVisibility(View.GONE);
 			}

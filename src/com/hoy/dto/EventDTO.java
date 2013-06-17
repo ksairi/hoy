@@ -12,8 +12,9 @@ import java.text.ParseException;
 public class EventDTO implements Parcelable, Comparable<EventDTO> {
 
 	private static final long serialVersionUID = 8758142710877401485L;
+	public static final String DATE_TO_SHOW = "dateToShow";
 
-	private Integer pk;
+	private String pk;
 	private String name;
 	private String genre;
 	private String daysOfTheWeek;
@@ -59,12 +60,14 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 	private String timeZone;
 	private String eventCancelledFlag;
 	private String serverLastUpdateTime;
+	private String dateToShow;
+	private String milongaID;
 
-	public Integer getPk() {
+	public String getPk() {
 		return pk;
 	}
 
-	public void setPk(Integer pk) {
+	public void setPk(String pk) {
 		this.pk = pk;
 	}
 
@@ -438,9 +441,17 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 		this.serverLastUpdateTime = serverLastUpdateTime;
 	}
 
+	public String getDateToShow() {
+		return dateToShow;
+	}
+
+	public void setDateToShow(String dateToShow) {
+		this.dateToShow = dateToShow;
+	}
+
 	public void writeToParcel(Parcel parcel, int i) {
 
-		parcel.writeInt(pk);
+		parcel.writeString(pk);
 		parcel.writeString(name);
 		parcel.writeString(genre);
 		parcel.writeString(daysOfTheWeek);
@@ -486,6 +497,8 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 		parcel.writeString(timeZone);
 		parcel.writeString(eventCancelledFlag);
 		parcel.writeString(serverLastUpdateTime);
+		parcel.writeString(dateToShow);
+		parcel.writeString(milongaID);
 
 	}
 
@@ -502,7 +515,7 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 
 	public EventDTO(Parcel parcel) {
 
-		pk = parcel.readInt();
+		pk = parcel.readString();
 		name = parcel.readString();
 		genre = parcel.readString();
 		daysOfTheWeek = parcel.readString();
@@ -548,6 +561,8 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 		timeZone = parcel.readString();
 		eventCancelledFlag = parcel.readString();
 		serverLastUpdateTime = parcel.readString();
+		dateToShow = parcel.readString();
+		milongaID = parcel.readString();
 	}
 
 	@Override

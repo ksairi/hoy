@@ -4,6 +4,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.dto.EventDTO;
 import com.hoy.utilities.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,7 +92,7 @@ public class GsonHelper {
 			jsonArray = jsonObject.getJSONArray("resultData");
 			for(Integer i = 0;i< jsonArray.length();i++){
 				JSONObject aux = (JSONObject)jsonArray.get(i);
-				aux.put("date", DateUtils.changeDateFormat(aux.getString("date")));
+				aux.put(EventDTO.DATE_TO_SHOW, DateUtils.getDateToShow(aux.getString("date")));
 			}
 		}catch (JSONException e){
 			return null;

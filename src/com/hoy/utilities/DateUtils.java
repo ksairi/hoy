@@ -15,13 +15,15 @@ import java.util.Date;
  */
 public class DateUtils {
 
-	public static final String DD_MM_PATTERN = "dd/MM";
 	public static final String YYYY_MM_DD_PATTERN = "yyyy-MM-dd";
 	public static final String TIME_PATTERN = "HH:mm";
 	public static final String DATE_AND_TIME_PATTERN = "dd/MM/yyyy HH:mm";
+	public static final String FULL_NAME_OF_DAY_PATTERN = "EEEE";
+	public static final String SHORT_NAME_OF_DAY_PATTERN = "EE";
+	public static final String SHORT_NAME_OF_MONTH_PATTERN = "MMM";
 
 	public static String getDateStringFromDate(Date date) {
-		DateFormat formatter = new SimpleDateFormat(DD_MM_PATTERN);
+		DateFormat formatter = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
 		String format = formatter.format(date);
 		return format;
 	}
@@ -39,7 +41,7 @@ public class DateUtils {
 	}
 
 	public static Date getDateFromString(String string) throws ParseException {
-		DateFormat formatter = new SimpleDateFormat(DD_MM_PATTERN);
+		DateFormat formatter = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
 		Date date = formatter.parse(string);
 		return date;
 	}
@@ -114,7 +116,7 @@ public class DateUtils {
 		return calendar;
 	}
 
-	public static String changeDateFormat(String string){
+	/*public static String changeDateFormat(String string){
 
 		String result = null;
 		try{
@@ -129,7 +131,7 @@ public class DateUtils {
 		}
 
 		return result;
-	}
+	}*/
 
 	public static String getTimeFromTimeString(String time){
 
@@ -138,5 +140,29 @@ public class DateUtils {
 				}
 
 		return time;
+	}
+
+	public static String getDateToShow(String dateString){
+
+		String result = null;
+			try{
+				DateFormat nameDayFormatter = new SimpleDateFormat(SHORT_NAME_OF_DAY_PATTERN);
+				DateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
+				DateFormat nameMonthFormat = new SimpleDateFormat(SHORT_NAME_OF_MONTH_PATTERN);
+
+				Date date = dateFormat.parse(dateString);
+				Calendar dateToShow = Calendar.getInstance();
+				dateToShow.setTime(date);
+				String monthName = nameMonthFormat.format(date);
+
+				result = nameDayFormatter.format(date);
+				result = result.concat(" ").concat(String.valueOf(dateToShow.get(Calendar.DAY_OF_MONTH))).concat(" ").concat(monthName);
+
+			}catch (ParseException e){
+				return result;
+
+			}
+
+		return result;
 	}
 }

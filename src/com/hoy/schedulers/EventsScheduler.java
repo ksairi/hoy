@@ -25,7 +25,7 @@ public class EventsScheduler {
 	private static final int ONE_HOUR_IN_MILLISECONDS = 1000 * 60 * 60;
 	private static final int ONE_HOUR_AND_HALF_IN_MILLISECONDS = 1000 * 60 * 90;
 	private static final int ONE_DAY_IN_MILLISECONDS = ONE_HOUR_AND_HALF_IN_MILLISECONDS * 24;
-	private static final int FIVE_MINUTES_IN_MILLISECONDS = 1000 * 60 * 5;
+	private static final int TWO_MINUTES_IN_MILLISECONDS = 1000 * 60 * 2;
 	private static ScheduledExecutorService scheduledExecutorService;
 
 	public static ScheduledFuture startSyncEventsHourly(final Context context, Handler handler, Integer initDelay) {
@@ -70,7 +70,7 @@ public class EventsScheduler {
 
 	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler){
 
-		return scheduleTask(new ChangePromoImgRunnable(context,handler), 0, FIVE_MINUTES_IN_MILLISECONDS);
+		return scheduleTask(new ChangePromoImgRunnable(context,handler), 0, TWO_MINUTES_IN_MILLISECONDS);
 	}
 
 
