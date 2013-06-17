@@ -119,11 +119,6 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 	}
 
 	@Override
-	public void onBackPressed() {
-		return;
-	}
-
-	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		if(changePromoImgtask != null){

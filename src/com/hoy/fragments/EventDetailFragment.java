@@ -120,7 +120,7 @@ public class EventDetailFragment extends Fragment {
 			TextView howToGetThere = (TextView) getActivity().findViewById(R.id.how_to_get_there);
 			howToGetThere.setText(eventDTO.getHowToGetThere());
 		}else{
-			((View)getActivity().findViewById(R.id.how_to_get_there_label).getParent()).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.how_to_get_there).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getOrganizersNames() != null && !eventDTO.getOrganizersNames().equals(MilongaHoyConstants.EMPTY_STRING)){

@@ -89,7 +89,7 @@
 	</style>
 
 	<style name="HorizontalComponentStyle" parent="HorizontalBasicComponentStyle">
-		<item name="android:padding">5dp</item>
+		<item name="android:padding">3dp</item>
 	</style>
 
 	<style name="ComponentStyle" parent="BasicComponentStyle">
@@ -145,6 +145,71 @@
 
 	<style name="ValueLabelTextStyle" parent="ValueTextStyle">
 		<item name="android:paddingLeft">0dp</item>
+	</style>
+
+	<style name="ClassDetailsWrapper">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:background">@drawable/box_border</item>
+		<item name="android:layout_marginTop">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginRight">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:orientation">vertical</item>
+	</style>
+
+	<style name="EventDetailsWrapper">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_marginBottom">3dp</item>
+		<item name="android:layout_marginLeft">3dp</item>
+		<item name="android:layout_marginRight">3dp</item>
+		<item name="android:layout_marginTop">5dp</item>
+		<item name="android:paddingTop">5dp</item>
+		<item name="android:paddingBottom">3dp</item>
+		<item name="android:paddingRight">5dp</item>
+		<item name="android:paddingLeft">5dp</item>
+	</style>
+
+	<style name="NameOfPlaceWrapper">
+
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_marginLeft">3dp</item>
+		<item name="android:layout_marginRight">3dp</item>
+		<item name="android:layout_marginBottom">3dp</item>
+		<item name="android:paddingLeft">5dp</item>
+		<item name="android:paddingRight">5dp</item>
+		<item name="android:paddingBottom">5dp</item>
+	</style>
+
+	<style name="EventNameWrapper">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_marginTop">3dp</item>
+		<item name="android:paddingTop">5dp</item>
+		<item name="android:layout_marginLeft">3dp</item>
+		<item name="android:layout_marginRight">3dp</item>
+		<item name="android:paddingRight">5dp</item>
+		<item name="android:paddingLeft">5dp</item>
+
+	</style>
+
+	<style name="EventIcons">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_gravity">right</item>
+		<item name="android:paddingRight">10dp</item>
+	</style>
+
+	<style name="GoogleMap">
+
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:contentDescription">@string/answer_no</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:background">@drawable/google_map</item>
+
 	</style>
 
 

@@ -15,7 +15,7 @@
 	<string name="event_date_label">Date</string>
 	<string name="start_time_label">From</string>
 	<string name="end_time_label">to</string>
-	<string name="event_genre_label">Genere</string>
+	<string name="event_genre_label">Genre</string>
 	<string name="name_of_place_label">Place</string>
 	<string name="event_organizers_label">Organizers</string>
 	<string name="event_address_label">Address</string>
