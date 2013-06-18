@@ -261,6 +261,7 @@
 
 				<TextView
 						android:id="@+id/email_address"
+						android:autoLink="email"
 						style="@style/ValueTextStyle"/>
 			</LinearLayout>
 

@@ -135,7 +135,7 @@ public class EventDetailFragment extends Fragment {
 			TextView phoneNumber = (TextView) getActivity().findViewById(R.id.phone_number);
 			phoneNumber.setText(eventDTO.getPhones());
 		}else{
-			getActivity().findViewById(R.id.phone_number_label).setVisibility(View.GONE);
+			((View)getActivity().findViewById(R.id.phone_number_label).getParent()).setVisibility(View.GONE);
 		}
 
 		if(eventDTO.getEmailContact() != null && !eventDTO.getEmailContact().equals(MilongaHoyConstants.EMPTY_STRING)){

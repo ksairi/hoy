@@ -44,7 +44,7 @@ public class SyncPromoImgsAysncTask extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String responseString) {
-		super.onPostExecute(responseString);    //To change body of overridden methods use File | Settings | File Templates.
+		super.onPostExecute(responseString);
 		if(responseString!= null && responseString.equals(SUCCESS)){
 
 			genericSuccessHandleable.handleSuccessCallBack();
