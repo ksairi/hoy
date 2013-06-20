@@ -13,6 +13,7 @@ public class PromoImg {
 	private String base64l;
 	private Integer width;
 	private Integer height;
+	private String urlDestination;
 
 	public String getBase64p() {
 		return base64p;
@@ -44,5 +45,13 @@ public class PromoImg {
 
 	public void setHeight(Integer height) {
 		this.height = height;
+	}
+
+	public String getUrlDestination() {
+		return urlDestination;
+	}
+
+	public void setUrlDestination(String urlDestination) {
+		this.urlDestination = urlDestination;
 	}
 }

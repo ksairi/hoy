@@ -33,9 +33,11 @@ public class MilongaHoyConstants {
 	public static final String SAVE_MILONGAS_SUCCESS = "saveMilongasSuccess";
 	public static final String PROMO_IMG_UPDATED = "promoImgUpdated";
 	public static final String CURRENT_IMG_PROMO_INDEX = "currentImgPromoIndex";
-	public static final String BASE_64_STRING = "base64String";
+	public static final String PROMO_IMG_DATA = "promoImgData";
 	public static final String JSON_PREFIX_SUFIX = ">>>HMPACKAGE<<<";
 	public static final String EVENT_DTOS = "eventDTOs";
 	public static final String NEW_MILONGAS_UPDATES = "newMilongasUpdates";
 	public static final String SERVER_LAST_UPDATE_TIME = "serverLastUpdateTime";
+	public static final Integer PROMO_IMG_BASE_64_INDEX_POSITION = 0;
+	public static final Integer PROMO_IMG_URL_DESTINATION_INDEX_POSITION = 1;
 }

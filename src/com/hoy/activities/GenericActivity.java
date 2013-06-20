@@ -3,11 +3,13 @@ package com.hoy.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -168,10 +170,21 @@ public abstract class GenericActivity extends FragmentActivity {
 				super.handleMessage(msg);
 				bundle = msg.getData();
 				promoImageView = (ImageView)findViewById(R.id.promo_img);
-				String promoImgBase64 = bundle.getString(MilongaHoyConstants.BASE_64_STRING);
+				String[] promoImgData = bundle.getStringArray(MilongaHoyConstants.PROMO_IMG_DATA);
 				Animation myFadeInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
 				promoImageView.startAnimation(myFadeInAnimation); //Set animation to your ImageView
-				promoImageView.setImageBitmap(ImageHelper.getBitMap(promoImgBase64));
+				promoImageView.setImageBitmap(ImageHelper.getBitMap(promoImgData[MilongaHoyConstants.PROMO_IMG_BASE_64_INDEX_POSITION]));
+				final String promoImgUrlDestination = promoImgData[(MilongaHoyConstants.PROMO_IMG_URL_DESTINATION_INDEX_POSITION)];
+
+				promoImageView.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View view) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						if(promoImgUrlDestination != null && !promoImgUrlDestination.equals(MilongaHoyConstants.EMPTY_STRING)){
+							intent.setData(Uri.parse(promoImgUrlDestination));
+							startActivity(intent);
+						}
+					}
+				});
 
 			}
 

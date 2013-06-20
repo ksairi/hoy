@@ -39,7 +39,7 @@ public class ImageService {
 				getPromoImgDataSource(context).truncateImgPromoTable();
 
 			for(PromoImg promoImg : promoImgs){
-				getPromoImgDataSource(context).createData(promoImg.getBase64p(),promoImg.getWidth(),promoImg.getHeight());
+				getPromoImgDataSource(context).createData(promoImg.getBase64p(),promoImg.getUrlDestination(),promoImg.getWidth(),promoImg.getHeight());
 				//getPromoImgDataSource(context).createData(promoImg.getBase64l(),promoImg.getHeight(),promoImg.getWidth());
 			}
 			getPromoImgDataSource(context).close();
@@ -76,12 +76,12 @@ public class ImageService {
 
 	}
 
-	public static String getPromoImgBase64ByIndex(Context context, Integer index){
+	public static String[] getPromoImgBase64ByIndex(Context context, Integer index){
 
 		getPromoImgDataSource(context).open();
-					String promoImgBase64 = promoImgDataSource.getImgPromoBase64ByIndex(context,index);
+					String[] result = promoImgDataSource.getImgPromoBase64ByIndex(context,index);
 		getPromoImgDataSource(context).close();
-		return promoImgBase64;
+		return result;
 
 
 	}

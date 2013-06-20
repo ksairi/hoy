@@ -42,10 +42,10 @@ public class ChangePromoImgRunnable extends AbstractRunnable {
 
 					}
 
-					String base64String =  ImageService.getPromoImgBase64ByIndex(context, promoImgIndex);
+					String[] result =  ImageService.getPromoImgBase64ByIndex(context, promoImgIndex);
 					Message message = new Message();
 					Bundle bundle = new Bundle();
-					bundle.putString(MilongaHoyConstants.BASE_64_STRING,base64String);
+					bundle.putStringArray(MilongaHoyConstants.PROMO_IMG_DATA,result);
 					message.setData(bundle);
 					handler.sendMessage(message);
 

@@ -39,11 +39,13 @@ public class ImageHelper {
 					JSONObject jsonObject = new JSONObject(jsonArray.get(i).toString());
 					String base64Portrait = jsonObject.getString("base64p");
 					//String base64Landscape = jsonObject.getString("base64l");
+					String urlDestination = jsonObject.getString("url");
 					PromoImg newPromoImg = new PromoImg();
 					newPromoImg.setBase64p(base64Portrait);
 					newPromoImg.setHeight(promoImg.getHeight());
 					newPromoImg.setWidth(promoImg.getWidth());
 					//newPromoImg.setWidth(promoImg.getWidth());
+					newPromoImg.setUrlDestination(urlDestination);
 					promoImgs.add(newPromoImg);
 
 				}
