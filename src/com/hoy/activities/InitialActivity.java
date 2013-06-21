@@ -11,6 +11,7 @@ import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
+import com.hoy.fragments.ProgressDialogFragment;
 import com.hoy.helpers.FragmentHelper;
 import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.PromoImg;
@@ -41,7 +42,7 @@ public class InitialActivity extends GenericActivity{
 	private void prepareContent() {
 
 
-		FragmentHelper.changeProgressDialogState(getSupportFragmentManager(),true);
+		progressDialogFragment = FragmentHelper.showProgressDialog(getSupportFragmentManager());
 		EventsService.getInstance().synchronizeEventsFromServer(getContext(), new GenericSuccessHandleable() {
 			public void handleSuccessCallBack() {
 
@@ -51,7 +52,7 @@ public class InitialActivity extends GenericActivity{
 			}
 
 			public void handleErrorResult() {
-				FragmentHelper.changeProgressDialogState(getSupportFragmentManager(),false);
+				FragmentHelper.hideProgressDialog(progressDialogFragment);
 				retrieveImgsPromos();
 				Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
 			}
@@ -68,14 +69,14 @@ public class InitialActivity extends GenericActivity{
 		final PromoImg promoImg = ImageService.getPromoImg(getContext());
 		new SyncPromoImgsAysncTask(getContext(), ImageService.getPromoImg(getContext()),new GenericSuccessHandleable(){
 			public void handleSuccessCallBack() {
-				FragmentHelper.changeProgressDialogState(getSupportFragmentManager(),false);
+				FragmentHelper.hideProgressDialog(progressDialogFragment);
 				EventsScheduler.startRetrievePromoImgTask(getContext(),promoImg);
 				genericStartActivity(HomeActivity.class,true);
 
 			}
 
 			public void handleErrorResult() {
-				FragmentHelper.changeProgressDialogState(getSupportFragmentManager(),false);
+				FragmentHelper.hideProgressDialog(progressDialogFragment);
 				EventsScheduler.startRetrievePromoImgTask(getContext(),promoImg);
 				genericStartActivity(HomeActivity.class,true);
 			}

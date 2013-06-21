@@ -6,6 +6,7 @@ import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
+import com.hoy.fragments.PromoImgFragment;
 import com.hoy.schedulers.EventsScheduler;
 
 /**
@@ -15,14 +16,13 @@ import com.hoy.schedulers.EventsScheduler;
  * Time: 8:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EventDetailsActivity extends GenericActivity {
+public class EventDetailsActivity extends GenericActivity implements  PromoImgFragment.PromoImgFragmentInterface{
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
 		setContentView(R.layout.activity_event_detail);
-		setPromoImage();
 		EventDTO eventDTO = getIntent().getExtras().getParcelable(MilongaHoyConstants.EVENT_DTO);
 		getIntent().getExtras().remove(MilongaHoyConstants.EVENT_DTO);
 		EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
@@ -34,16 +34,12 @@ public class EventDetailsActivity extends GenericActivity {
 		return this;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
-	private void setPromoImage(){
-
-		changePromoImgtask = EventsScheduler.startChangePromoImgTask(this,changePromoImgHandler);
-	}
-
 	@Override
 	public void onBackPressed() {
-		if(changePromoImgHandler != null){
-			changePromoImgtask.cancel(true);
-		}
 		finish();
+	}
+
+	public Boolean getNextPromoImg() {
+		return false;
 	}
 }

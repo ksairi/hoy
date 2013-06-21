@@ -68,9 +68,9 @@ public class EventsScheduler {
 		return scheduleTask(new RetrievePromoImgRunnable(context,promoImg), delay, ONE_DAY_IN_MILLISECONDS);
 	}
 
-	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler){
+	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler, Boolean getNextPromoImg){
 
-		return scheduleTask(new ChangePromoImgRunnable(context,handler), 0, TWO_MINUTES_IN_MILLISECONDS);
+		return scheduleTask(new ChangePromoImgRunnable(context,handler,getNextPromoImg), 0, TWO_MINUTES_IN_MILLISECONDS);
 	}
 
 

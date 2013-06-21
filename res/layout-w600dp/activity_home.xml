@@ -4,7 +4,11 @@
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		style="@style/background_paper">
 
- 	<include layout="@layout/include_img_promo"/>
+	<fragment
+			android:name="com.hoy.fragments.PromoImgFragment"
+			android:id="@+id/promoImgFragment"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
 
 	<LinearLayout style="@style/fragment_wrapper">
 

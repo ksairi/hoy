@@ -21,12 +21,11 @@ import java.util.List;
  */
 public class ChangePromoImgRunnable extends AbstractRunnable {
 
-	public ChangePromoImgRunnable() {
-		}
-
-	public ChangePromoImgRunnable(Context context, Handler handler) {
+	protected Boolean getNextPromoImg;
+	public ChangePromoImgRunnable(Context context, Handler handler, Boolean getNextPromoImg) {
 		this.context = context;
 		this.handler = handler;
+		this.getNextPromoImg = getNextPromoImg;
 	}
 
 	@Override
@@ -34,20 +33,27 @@ public class ChangePromoImgRunnable extends AbstractRunnable {
 
 		//if(isActivityInForeGround()){
 
-					Integer promoImgIndex;
-					try{
-						promoImgIndex =  Integer.parseInt(SharedPreferencesHelper.getValueInSharedPreferences(context,MilongaHoyConstants.CURRENT_IMG_PROMO_INDEX));
-					}catch (NumberFormatException e){
-						promoImgIndex = 0;
+		Integer promoImgIndex;
+		try{
+			promoImgIndex =  Integer.parseInt(SharedPreferencesHelper.getValueInSharedPreferences(context,MilongaHoyConstants.CURRENT_IMG_PROMO_INDEX));
+		}catch (NumberFormatException e){
+			promoImgIndex = -1;
 
-					}
+		}
+		String[] result;
+		if(getNextPromoImg){
 
-					String[] result =  ImageService.getPromoImgBase64ByIndex(context, promoImgIndex);
-					Message message = new Message();
-					Bundle bundle = new Bundle();
-					bundle.putStringArray(MilongaHoyConstants.PROMO_IMG_DATA,result);
-					message.setData(bundle);
-					handler.sendMessage(message);
+			result =  ImageService.getNextPromoImgDataByIndex(context, promoImgIndex);
+		}else{
+			result =  ImageService.getPromoImgDataByIndex(context, promoImgIndex);
+		}
+
+		Message message = new Message();
+		Bundle bundle = new Bundle();
+		bundle.putStringArray(MilongaHoyConstants.PROMO_IMG_DATA,result);
+		message.setData(bundle);
+		handler.sendMessage(message);
+
 
 	}
 		//}

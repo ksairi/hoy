@@ -58,7 +58,7 @@ public class PromoImgDataSource {
 		}
 
 	private String[] getImgPromo(Cursor cursor) {
-			String[] result = new String[2];
+		String[] result = new String[2];
 		result[MilongaHoyConstants.PROMO_IMG_BASE_64_INDEX_POSITION] = cursor.getString(MilongaHoyConstants.PROMO_IMG_BASE_64_INDEX_POSITION); //get the base_64 column
 		result[MilongaHoyConstants.PROMO_IMG_URL_DESTINATION_INDEX_POSITION] = cursor.getString(MilongaHoyConstants.PROMO_IMG_URL_DESTINATION_INDEX_POSITION); //get the url column
 		return result;
@@ -79,7 +79,7 @@ public class PromoImgDataSource {
 		return SQLiteMilongaHelper.COLUMN_DATA.concat("=?");
 	}
 
-	public String[] getImgPromoBase64ByIndex(Context context, Integer index) {
+	public String[] getNextPromoImgDataByIndex(Context context, Integer index) {
 
 		String[] result = null;
 
@@ -98,4 +98,22 @@ public class PromoImgDataSource {
 
 		return result;
 	}
+
+	public String[] getPromoImgDataByIndex(Integer index) {
+
+			String[] result = null;
+
+			Cursor cursor = database.query(SQLiteMilongaHelper.TABLE_PROMO_IMG,
+			allColumns,null , null , null, null, null);
+
+			Integer cursorCount = cursor.getCount();
+			if(cursorCount > 0 &&  index >= 0 && index <= cursorCount-1){
+				cursor.moveToPosition(index);
+				result = getImgPromo(cursor);
+			}
+			// Make sure to close the cursor
+			cursor.close();
+
+			return result;
+		}
 }

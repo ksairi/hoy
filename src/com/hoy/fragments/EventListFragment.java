@@ -49,6 +49,7 @@ public class EventListFragment extends ListFragment {
 	protected CheckBox todayEvents;
 	private Activity activityAttached;
 	private TextView syncLocalEvents;
+	private ProgressDialogFragment progressDialogFragment;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,16 +101,16 @@ public class EventListFragment extends ListFragment {
 
 	protected void syncEventList() {
 
-		FragmentHelper.changeProgressDialogState(getFragmentManager(),true);
+		progressDialogFragment = FragmentHelper.showProgressDialog(getFragmentManager());
 		new SyncLocalEventsAsyncTask(activityAttached,getFilterParams(),new GenericSuccessListHandleable<EventDTO>(){
 			public void handleSuccessCallBack(List<EventDTO> localEventDTOs) {
 				updateAdapter(localEventDTOs);
 				syncLocalEvents.setVisibility(View.GONE);
-				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
+				FragmentHelper.hideProgressDialog(progressDialogFragment);
 			}
 
 			public void handleErrorResult() {
-				FragmentHelper.changeProgressDialogState(getFragmentManager(),false);
+				FragmentHelper.hideProgressDialog(progressDialogFragment);
 				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_LONG).show();
 			}
 		}).execute();
@@ -179,18 +180,18 @@ public class EventListFragment extends ListFragment {
 
 		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
-			FragmentHelper.changeProgressDialogState(getFragmentManager(), true);
+			progressDialogFragment = FragmentHelper.showProgressDialog(getFragmentManager());
 			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, new GenericSuccessListHandleable<EventDTO>() {
 				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 					updateAdapter(remoteEventDTOs);
-					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
+					FragmentHelper.hideProgressDialog(progressDialogFragment);
 					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
 					syncLocalEvents.setVisibility(View.GONE);
 					Toast.makeText(activityAttached, R.string.events_updated_succ, Toast.LENGTH_SHORT).show();
 				}
 
 				public void handleErrorResult() {
-					FragmentHelper.changeProgressDialogState(getFragmentManager(), false);
+					FragmentHelper.hideProgressDialog(progressDialogFragment);
 					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
 				}

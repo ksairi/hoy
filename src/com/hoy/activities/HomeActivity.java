@@ -16,6 +16,7 @@ import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
 import com.hoy.fragments.EventListFragment;
+import com.hoy.fragments.PromoImgFragment;
 import com.hoy.schedulers.EventsScheduler;
 
 /**
@@ -25,7 +26,7 @@ import com.hoy.schedulers.EventsScheduler;
  * Time: 4:54 AM
  * To change this template use File | Settings | File Templates.
  */
-public class HomeActivity extends GenericActivity implements EventListFragment.EventListFragmentListener {
+public class HomeActivity extends GenericActivity implements EventListFragment.EventListFragmentListener, PromoImgFragment.PromoImgFragmentInterface {
 
 	Boolean mDualPane;
 	ViewGroup detailsWrapper;
@@ -37,8 +38,6 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
-		changePromoImgtask = EventsScheduler.startChangePromoImgTask(getContext(), changePromoImgHandler);
 
 		detailsWrapper = (ViewGroup) findViewById(R.id.event_details_wrapper);
 		mDualPane = detailsWrapper != null && detailsWrapper.getVisibility() == View.VISIBLE;
@@ -94,11 +93,6 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 		}
 	}
 
-	@Override
-	protected Context getContext() {
-		return this;
-	}
-
 	public void onClickTodaysMap() {
 		genericStartActivity(GoogleMapActivity.class, false);
 	}
@@ -118,14 +112,7 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 			//ImageService.retrievePromoImg(getContext());
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if(changePromoImgtask != null){
-				changePromoImgtask.cancel(true);
-		}
-
-
+	public Boolean getNextPromoImg() {
+		return true;
 	}
-
 }

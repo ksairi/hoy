@@ -76,14 +76,24 @@ public class ImageService {
 
 	}
 
-	public static String[] getPromoImgBase64ByIndex(Context context, Integer index){
+	public static String[] getNextPromoImgDataByIndex(Context context, Integer index){
 
 		getPromoImgDataSource(context).open();
-					String[] result = promoImgDataSource.getImgPromoBase64ByIndex(context,index);
+					String[] result = promoImgDataSource.getNextPromoImgDataByIndex(context,index);
 		getPromoImgDataSource(context).close();
 		return result;
 
 
 	}
+
+	public static String[] getPromoImgDataByIndex(Context context, Integer index){
+
+			getPromoImgDataSource(context).open();
+						String[] result = promoImgDataSource.getPromoImgDataByIndex(index);
+			getPromoImgDataSource(context).close();
+			return result;
+
+
+		}
 
 }

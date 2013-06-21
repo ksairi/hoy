@@ -56,7 +56,8 @@ public class SQLiteMilongaHelper extends SQLiteOpenHelper {
     Log.w(SQLiteMilongaHelper.class.getName(),
 			"Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
-    db.execSQL("DROP TABLE IF EXISTS " + COLUMN_DATA);
+    db.execSQL("DROP TABLE IF EXISTS " + TABLE_MILONGA);
+	db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROMO_IMG);
     onCreate(db);
   }
 

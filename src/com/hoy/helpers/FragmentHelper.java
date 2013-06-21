@@ -12,30 +12,22 @@ import com.hoy.fragments.ProgressDialogFragment;
  */
 public class FragmentHelper {
 
-	protected static ProgressDialogFragment progressDialogFragment;
-	public static void changeProgressDialogState(FragmentManager fragmentManager, Boolean show){
+	public static ProgressDialogFragment showProgressDialog(FragmentManager fragmentManager){
 
+		ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
 
-			progressDialogFragment = getProgressDialogFragment();
+		progressDialogFragment.show(fragmentManager,"progress");
 
-			if(show){
-				progressDialogFragment.show(fragmentManager,"progress");
+		return progressDialogFragment;
 
-			}
-			else{
-				progressDialogFragment.dismiss();
+	}
 
-			}
+	public static void hideProgressDialog(ProgressDialogFragment progressDialogFragment){
+
+		if(progressDialogFragment != null){
+			progressDialogFragment.dismiss();
 
 		}
+	}
 
-	protected static ProgressDialogFragment getProgressDialogFragment(){
-
-			if(progressDialogFragment == null){
-
-				progressDialogFragment = new ProgressDialogFragment();
-			}
-
-			return progressDialogFragment;
-		}
 }
