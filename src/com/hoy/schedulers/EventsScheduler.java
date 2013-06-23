@@ -51,9 +51,7 @@ public class EventsScheduler {
 
 		Long oneDayDelay = oneDayFuture.getTimeInMillis() - now.getTimeInMillis();
 
-
 		return scheduleTask(new SyncEventsDailyRunnable(context,handler), oneDayDelay, ONE_DAY_IN_MILLISECONDS);
-
 	}
 
 	public static ScheduledFuture startRetrievePromoImgTask(Context context, PromoImg promoImg){

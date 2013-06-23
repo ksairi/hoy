@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.ParametersDTO;
+import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.services.EventsService;
 
 public class SyncEventsDailyRunnable extends AbstractRunnable {
@@ -52,11 +53,12 @@ public class SyncEventsDailyRunnable extends AbstractRunnable {
 
 			if(EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params,false).equals(MilongaHoyConstants.SAVE_MILONGAS_SUCCESS)){
 
-					Bundle bundle = new Bundle();
-					bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
-					Message message = new Message();
-					message.setData(bundle);
-					handler.sendMessage(message);
+				Bundle bundle = new Bundle();
+				bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+				SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.NEW_MILONGAS_UPDATES, MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+				Message message = new Message();
+				message.setData(bundle);
+				handler.sendMessage(message);
 			}
 
 

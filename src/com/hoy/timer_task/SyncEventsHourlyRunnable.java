@@ -62,6 +62,7 @@ public class SyncEventsHourlyRunnable extends AbstractRunnable {
 
 				Bundle bundle = new Bundle();
 				bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+				SharedPreferencesHelper.setValueSharedPreferences(context,MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
 				Message message = new Message();
 				message.setData(bundle);
 				handler.sendMessage(message);

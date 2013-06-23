@@ -87,6 +87,16 @@ public class EventListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		if(!SharedPreferencesHelper.getValueInSharedPreferences(getActivity(),MilongaHoyConstants.NEW_MILONGAS_UPDATES).equals(MilongaHoyConstants.EMPTY_STRING)){
+
+			syncLocalEvents.setVisibility(View.VISIBLE);
+			SharedPreferencesHelper.removeValueSharedPreferences(getActivity(),MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+		}
+	}
+
+	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		listener.onItemSelected(eventDTOs.get(position),position);
