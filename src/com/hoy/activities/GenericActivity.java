@@ -40,7 +40,6 @@ public abstract class GenericActivity extends FragmentActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = GenericActivity.class.getSimpleName();
-	protected String languageCode = Locale.getDefault().getLanguage();
 	protected ProgressDialogFragment progressDialogFragment;
 
 	@Override
@@ -142,24 +141,4 @@ public abstract class GenericActivity extends FragmentActivity {
 		return this;
 
 	}
-
-
-	@Override
-	protected void onStop() {
-		super.onPause();
-		//changeProgressBarVisibility(View.GONE); //Para cuando se se inicia una actividad pero no se mata en la que nos encontramos para esconder el PB cuando nos vamos.
-	}
-
-	/**
-	 * Fuente: http://stackoverflow.com/questions/5726657/how-to-detect-orientation-change-in-layout-in-android
-	 */
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		if (!newConfig.locale.getLanguage().equals(languageCode)) {
-			languageCode = newConfig.locale.getLanguage();
-
-		}
-	}
-
 }
