@@ -45,11 +45,6 @@ public class SyncEventsDailyRunnable extends GenericSyncEvents {
 		return ParametersDTO.getDailyRefreshParameters();
 	}
 
-	protected String getUrl() {
-
-		return MilongaHoyConstants.SYNC_EVENTS_URL;
-	}
-
 	@Override
 	protected Boolean isDeltaUpdate() {
 		return false;  //To change body of implemented methods use File | Settings | File Templates.
