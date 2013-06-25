@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
@@ -32,6 +33,7 @@ import com.hoy.model.FilterParams;
 import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.EventsService;
 import com.hoy.utilities.DateUtils;
+import com.hoy.model.FilterParams;
 
 import java.util.List;
 
@@ -170,6 +172,7 @@ public class EventListFragment extends ListFragment {
 			}
 			else {
 				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+				
 			}
 		}
 	};
@@ -226,7 +229,26 @@ public class EventListFragment extends ListFragment {
 		else{
 				if(activityAttached != null){
 					activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
+					//JEFF!  how the fuck does this not work!?  R.string.no_events_to_show is not actually a string? 
+					//       I tried everything I could think of to simply concat a string to this 'string'... all failed
+					//       String finalString = new String(R.string.no_events_to_show.toString());//"x";// cursor.getString("1") + cursor.getString("2");
 					Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+					/*
+					 JEFF!  
+					 so, instead I just popped up a new toast, but this is kind of ugly
+					 What I was trying to do was show the date to the user that is currently being searched on, just incase his date is off, which is more lilely with tourists
+					 Better yet, is it possible to add the actuial date AFTER the string "Todays Milongas"?  I could not at all figuire out how to concat that either.  
+					 I tried and failed miserably.  I was editing MainMenuItem and had to create like 32 new fraking files to print a string!  xml's. layout, classes,  Man, I really hate java! 
+					 Anyway, I wiped them all out so it is back to 'normal'
+					
+					 Dude, you yourself and the world a service and forget Java and move on to Python.
+					
+					 check out https://ep2013.europython.eu/conference/talks/developing-android-apps-completely-in-python
+					 this is the future of android!!
+
+					*/
+					FilterParams filterParams = getFilterParams();
+					Toast.makeText(activityAttached, filterParams.getDate(), Toast.LENGTH_LONG).show();
 				}
 			}
 

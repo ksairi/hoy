@@ -43,7 +43,8 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|screenSize|keyboardHidden"/>
+		<!-- activity android:name=".activities.HomeActivity" android:configChanges="orientation|screenSize|keyboardHidden"/ -->
+		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|keyboardHidden"/>
 		<activity android:name=".activities.EventDetailsActivity"/>
 		<activity android:name=".activities.GoogleMapActivity"/>
 
