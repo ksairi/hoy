@@ -6,7 +6,7 @@
 				android:id="@+id/today_events_map"
 				style="@style/LabelTextStyle"
 				android:layout_gravity="center_horizontal"
-				android:layout_marginTop="10dp"
+
 				android:drawableTop="@drawable/google_map"
 				android:text="@string/today_events_map"/>
 
@@ -29,6 +29,7 @@
 				android:layout_width="wrap_content"
 				android:visibility="gone"
 				android:layout_alignParentRight="true"
+				android:layout_marginTop="10dp"
 				android:text="@string/sync_local_events"
 				android:drawableBottom="@drawable/refresh_local_events"/>
 
@@ -42,7 +43,7 @@
 				android:id="@+id/list_view_labels"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="5dp"
+				android:layout_marginTop="10dp"
 				android:visibility="gone"
 				android:layout_alignParentRight="true">
 
@@ -61,7 +62,7 @@
 					android:id="@android:id/list"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="25dp"
+					android:layout_marginTop="30dp"
 					android:divider="@color/black"
 					android:cacheColorHint="#00000000"
 					android:dividerHeight="1dp"/>

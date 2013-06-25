@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import com.hoy.R;
 
 /**
@@ -29,6 +32,12 @@ public class ProgressDialogFragment extends DialogFragment {
 		dialog.setMessage(getString(R.string.loading_text));
 		dialog.setIndeterminate(true);
 		dialog.setCancelable(false);
+
+		Window window = dialog.getWindow();
+		WindowManager.LayoutParams wlp = window.getAttributes();
+		wlp.gravity = Gravity.BOTTOM;
+		wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+		window.setAttributes(wlp);
 
 		// Disable the back button
 		DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
