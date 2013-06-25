@@ -2,32 +2,16 @@ package com.hoy.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import com.hoy.R;
-import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
-import com.hoy.fragments.ProgressDialogFragment;
-import com.hoy.helpers.ImageHelper;
-import com.hoy.timer_task.AbstractRunnable;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,7 +24,6 @@ public abstract class GenericActivity extends FragmentActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = GenericActivity.class.getSimpleName();
-	protected ProgressDialogFragment progressDialogFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +74,13 @@ public abstract class GenericActivity extends FragmentActivity {
 	protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<EventDTO> extras, Boolean finish) {
 
 
-			Intent intent = new Intent(this, clazz);
-			if (extras != null) {
-				intent.putParcelableArrayListExtra(extrasName, extras);
-			}
-
-			customStartActivity(intent, finish);
+		Intent intent = new Intent(this, clazz);
+		if (extras != null) {
+			intent.putParcelableArrayListExtra(extrasName, extras);
 		}
+
+		customStartActivity(intent, finish);
+	}
 
 	protected void customStartActivity(Intent intent, Boolean finish) {
 
@@ -136,7 +119,7 @@ public abstract class GenericActivity extends FragmentActivity {
 		finish();
 	}
 
-	protected Context getContext(){
+	protected Context getContext() {
 
 		return this;
 

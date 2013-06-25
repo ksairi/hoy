@@ -9,9 +9,7 @@ import com.hoy.timer_task.RetrievePromoImgRunnable;
 import com.hoy.timer_task.SyncEventsDailyRunnable;
 import com.hoy.timer_task.SyncEventsHourlyRunnable;
 
-import java.awt.font.NumericShaper;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -38,7 +36,7 @@ public class EventsScheduler {
 		Long oneHourDelay = oneHourFuture.getTimeInMillis() - now.getTimeInMillis();
 
 
-		return scheduleTask(new SyncEventsHourlyRunnable(context,handler), oneHourDelay, ONE_HOUR_IN_MILLISECONDS);
+		return scheduleTask(new SyncEventsHourlyRunnable(context, handler), oneHourDelay, ONE_HOUR_IN_MILLISECONDS);
 
 
 	}
@@ -51,24 +49,25 @@ public class EventsScheduler {
 
 		Long oneDayDelay = oneDayFuture.getTimeInMillis() - now.getTimeInMillis();
 
-		return scheduleTask(new SyncEventsDailyRunnable(context,handler), oneDayDelay, ONE_DAY_IN_MILLISECONDS);
+		//return scheduleTask(new SyncEventsDailyRunnable(context,handler), oneDayDelay, ONE_DAY_IN_MILLISECONDS);
+		return scheduleTask(new SyncEventsDailyRunnable(context, handler), 0, 1000 * 60 * 2);
 	}
 
-	public static ScheduledFuture startRetrievePromoImgTask(Context context, PromoImg promoImg){
+	public static ScheduledFuture startRetrievePromoImgTask(Context context, PromoImg promoImg) {
 
 		Calendar now = Calendar.getInstance();
 		Calendar future = Calendar.getInstance();
 
 		// We delay 1 day we have just updated the image
-		future.add(Calendar.DAY_OF_MONTH,1);
+		future.add(Calendar.DAY_OF_MONTH, 1);
 		long delay = future.getTimeInMillis() - now.getTimeInMillis();
 
-		return scheduleTask(new RetrievePromoImgRunnable(context,promoImg), delay, ONE_DAY_IN_MILLISECONDS);
+		return scheduleTask(new RetrievePromoImgRunnable(context, promoImg), delay, ONE_DAY_IN_MILLISECONDS);
 	}
 
-	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler, Boolean getNextPromoImg){
+	public static ScheduledFuture startChangePromoImgTask(Context context, Handler handler, Boolean getNextPromoImg) {
 
-		return scheduleTask(new ChangePromoImgRunnable(context,handler,getNextPromoImg), 0, TWO_MINUTES_IN_MILLISECONDS);
+		return scheduleTask(new ChangePromoImgRunnable(context, handler, getNextPromoImg), 0, TWO_MINUTES_IN_MILLISECONDS);
 	}
 
 
@@ -85,8 +84,8 @@ public class EventsScheduler {
 		}
 	}
 
-	private static ScheduledExecutorService getScheduledExecutorService(){
-		if(scheduledExecutorService == null){
+	private static ScheduledExecutorService getScheduledExecutorService() {
+		if (scheduledExecutorService == null) {
 			scheduledExecutorService = Executors.newScheduledThreadPool(3);
 		}
 		return scheduledExecutorService;

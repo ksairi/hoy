@@ -4,8 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.hoy.utilities.DateUtils;
 
-import java.text.ParseException;
-
 /**
  * @author LDicesaro
  */
@@ -321,6 +319,7 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 
 		return DateUtils.getTimeFromTimeString(lastClassEndsDateTime);
 	}
+
 	public void setLastClassEndsDateTime(String lastClassEndsDateTime) {
 		this.lastClassEndsDateTime = lastClassEndsDateTime;
 	}
@@ -584,11 +583,11 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
 
 	public int compareTo(EventDTO compareEventDTO) {
 
-			//ascending order
-			return this.getStartDateTime().compareTo(compareEventDTO.getStartDateTime());
+		//ascending order
+		return this.getStartDateTime().compareTo(compareEventDTO.getStartDateTime());
 
-			//descending order
-			//return compareEventDTO - this.getDate();
+		//descending order
+		//return compareEventDTO - this.getDate();
 
 	}
 }

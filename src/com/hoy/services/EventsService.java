@@ -2,6 +2,7 @@ package com.hoy.services;
 
 import android.content.Context;
 import android.database.SQLException;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.hoy.asynctasks.SyncEventsAsyncTask;
@@ -61,40 +62,40 @@ public class EventsService {
 		eventService = null;
 	}
 
-	public void synchronizeEventsFromServer(final Context context, final GenericSuccessHandleable genericSuccessHandleable) {
+	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, final GenericSuccessHandleable genericSuccessHandleable) {
 
-				new SyncEventsAsyncTask(context, new ParametersDTO(), new GenericSuccessHandleable() {
+		new SyncEventsAsyncTask(context, new ParametersDTO(), fragmentManager, new GenericSuccessHandleable() {
 
-					public void handleSuccessCallBack() {
+			public void handleSuccessCallBack() {
 
-						genericSuccessHandleable.handleSuccessCallBack();
+				genericSuccessHandleable.handleSuccessCallBack();
 
-					}
+			}
 
-					public void handleErrorResult() {
-						Log.i(TAG, "Error al sincronizar los eventos");
-						genericSuccessHandleable.handleErrorResult();
-					}
-				}).execute();
+			public void handleErrorResult() {
+				Log.i(TAG, "Error al sincronizar los eventos");
+				genericSuccessHandleable.handleErrorResult();
+			}
+		}).execute();
 	}
 
 
-	public void synchronizeEventsFromServer(final Context context, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
+	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
 
-			new SyncEventsAsyncTask(context, new ParametersDTO(), new GenericSuccessListHandleable<EventDTO>() {
+		new SyncEventsAsyncTask(context, new ParametersDTO(), fragmentManager, new GenericSuccessListHandleable<EventDTO>() {
 
-				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
+			public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 
-					genericSuccessHandleable.handleSuccessCallBack(remoteEventDTOs);
+				genericSuccessHandleable.handleSuccessCallBack(remoteEventDTOs);
 
-				}
+			}
 
-				public void handleErrorResult() {
-					Log.i(TAG, "Error al sincronizar los eventos");
-					genericSuccessHandleable.handleErrorResult();
-				}
-			}).execute();
-		}
+			public void handleErrorResult() {
+				Log.i(TAG, "Error al sincronizar los eventos");
+				genericSuccessHandleable.handleErrorResult();
+			}
+		}).execute();
+	}
 
 /*	public synchronized Boolean mergeEvents(Context context, String jsonString) {
 
@@ -119,17 +120,17 @@ public class EventsService {
 	public static synchronized void saveMilongasData(final Context uiContext, String jsonString) {
 
 		getMilongaDataSource(uiContext).open();
-				getMilongaDataSource(uiContext).createData(jsonString);
-			getMilongaDataSource(uiContext).close();
-		try{
+		getMilongaDataSource(uiContext).createData(jsonString);
+		getMilongaDataSource(uiContext).close();
+		try {
 			JSONArray jsonArray = new JSONArray(jsonString);
 
 			//we save the time of the server of each query
 			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			String serverLastUpdateTime = (String)jsonObject.get(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
-			SharedPreferencesHelper.setValueSharedPreferences(uiContext,MilongaHoyConstants.SERVER_LAST_UPDATE_TIME,serverLastUpdateTime);
+			String serverLastUpdateTime = (String) jsonObject.get(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+			SharedPreferencesHelper.setValueSharedPreferences(uiContext, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME, serverLastUpdateTime);
 
-		}catch (JSONException e){
+		} catch (JSONException e) {
 
 		}
 	}
@@ -143,16 +144,15 @@ public class EventsService {
 					return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
 				}
 			});
+		} else {
+			return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
+				public boolean evaluate(EventDTO eventDTO) {
+
+					return !DateUtils.getTodayString().equals(eventDTO.getDate());
+				}
+			});
+
 		}
-		else{
-				return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
-						public boolean evaluate(EventDTO eventDTO) {
-
-							return !DateUtils.getTodayString().equals(eventDTO.getDate());
-						}
-				});
-
-			}
 	}
 
 
@@ -162,22 +162,21 @@ public class EventsService {
 		String remoteEvents = RestClient.executeHttpGetRequest(url.concat(params));
 		remoteEvents = GsonHelper.parseResponse(remoteEvents);
 
-		if(remoteEvents != null && !remoteEvents.equals(MilongaHoyConstants.EMPTY_STRING)){
-			try{
-				if(deltaUpdate){
+		if (remoteEvents != null && !remoteEvents.equals(MilongaHoyConstants.EMPTY_STRING)) {
+			try {
+				if (deltaUpdate) {
 
 					List<EventDTO> localEventDTOs = populateEventsFromDatabase(uiContext);
 					eventsToSave = updateLocalEvents(localEventDTOs, remoteEvents);
-				}
-				else{
+				} else {
 					eventsToSave = remoteEvents;
 				}
 
-				if( eventsToSave != null && !eventsToSave.equals(MilongaHoyConstants.EMPTY_STRING)){
-					saveMilongasData(uiContext,eventsToSave);
+				if (eventsToSave != null && !eventsToSave.equals(MilongaHoyConstants.EMPTY_STRING)) {
+					saveMilongasData(uiContext, eventsToSave);
 				}
 
-			}catch (SQLException e){
+			} catch (SQLException e) {
 				return null;
 			}
 			return MilongaHoyConstants.SAVE_MILONGAS_SUCCESS;
@@ -188,16 +187,16 @@ public class EventsService {
 	private String updateLocalEvents(List<EventDTO> localEventsDTO, String remoteEvents) {
 
 
-		List<EventDTO> remoteEventsDTOs =GsonHelper.parseJsonToArrayListEntity(remoteEvents, new TypeToken<List<EventDTO>>() {}.getType());
+		List<EventDTO> remoteEventsDTOs = GsonHelper.parseJsonToArrayListEntity(remoteEvents, new TypeToken<List<EventDTO>>() {
+		}.getType());
 		String resultLocalEvents = MilongaHoyConstants.EMPTY_STRING;
 
-		if(remoteEventsDTOs != null && localEventsDTO != null){
-			for(EventDTO remoteEventDTO : remoteEventsDTOs){
+		if (remoteEventsDTOs != null && localEventsDTO != null) {
+			for (EventDTO remoteEventDTO : remoteEventsDTOs) {
 				int index = localEventsDTO.indexOf(remoteEventDTO);
-				if(index!= -1){
-					localEventsDTO.set(index,remoteEventDTO);
-				}
-				else{
+				if (index != -1) {
+					localEventsDTO.set(index, remoteEventDTO);
+				} else {
 					localEventsDTO.add(remoteEventDTO);
 				}
 			}
@@ -246,28 +245,45 @@ public class EventsService {
 		return result;
 	}
 
-	private static MilongaDataSource getMilongaDataSource(Context uiContext){
-		if(milongaDataSource == null){
+	private static MilongaDataSource getMilongaDataSource(Context uiContext) {
+		if (milongaDataSource == null) {
 			milongaDataSource = new MilongaDataSource(uiContext);
 		}
 		return milongaDataSource;
 	}
 
-	public void sortList(List<EventDTO> eventDTOs){
+	public void sortList(List<EventDTO> eventDTOs) {
 		Collections.sort(eventDTOs);
 	}
 
-	public String sortList(String jsonString){
-		List<EventDTO> eventDTOs =GsonHelper.parseJsonToArrayListEntity(jsonString, new TypeToken<List<EventDTO>>() {}.getType());
+	public String sortList(String jsonString) {
+		List<EventDTO> eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonString, new TypeToken<List<EventDTO>>() {
+		}.getType());
 		Collections.sort(eventDTOs);
 		return GsonHelper.parseEntityToJson(eventDTOs);
 	}
 
-	private String getAllMilongas(Context uiContext){
+	private String getAllMilongas(Context uiContext) {
 		getMilongaDataSource(uiContext).open();
-				String jsonString =getMilongaDataSource(uiContext).getAllMilongas();
+		String jsonString = getMilongaDataSource(uiContext).getAllMilongas();
 		getMilongaDataSource(uiContext).close();
 
 		return jsonString;
+	}
+
+	public synchronized static String synAndSaveEvents(String url, Context uiContext) {
+
+		String jsonResult = RestClient.executeHttpGetRequest(url);
+		jsonResult = GsonHelper.parseResponse(jsonResult);
+		if (jsonResult != null) {
+			jsonResult = EventsService.getInstance().sortList(jsonResult);
+			EventsService.saveMilongasData(uiContext, jsonResult);
+		}
+
+		return jsonResult;
+	}
+
+	public synchronized static String getParametersDTO() {
+		return MilongaHoyConstants.SYNC_EVENTS_URL.concat(ParametersDTO.getDailyRefreshParameters());
 	}
 }

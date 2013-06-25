@@ -1,10 +1,8 @@
 package com.hoy.dto;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.helpers.SharedPreferencesHelper;
-import com.hoy.utilities.MilongaCollectionUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,18 +22,16 @@ public class ParametersDTO {
 	private static String where = "date between CURDATE() AND ADDDATE(CURDATE(),7) AND areaId=1";
 
 
-
-
-	public static String getDailyRefreshParameters(){
+	public static String getDailyRefreshParameters() {
 
 		return ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(where);
 	}
 
-	public static String getHourlyRefreshParameters(Context context){
+	public static String getHourlyRefreshParameters(Context context) {
 
 		String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
 		String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(where);
-		if(!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)){
+		if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
 			result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
 		}
 		return result;

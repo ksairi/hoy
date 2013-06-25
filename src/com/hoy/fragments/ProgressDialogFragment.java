@@ -35,9 +35,9 @@ public class ProgressDialogFragment extends DialogFragment {
 
 
 			public boolean onKey(DialogInterface dialog, int keyCode,
-					KeyEvent event) {
+								 KeyEvent event) {
 
-					return keyCode == KeyEvent.KEYCODE_BACK;
+				return keyCode == KeyEvent.KEYCODE_BACK;
 			}
 
 

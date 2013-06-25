@@ -7,7 +7,6 @@ import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
 import com.hoy.fragments.PromoImgFragment;
-import com.hoy.schedulers.EventsScheduler;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +15,7 @@ import com.hoy.schedulers.EventsScheduler;
  * Time: 8:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EventDetailsActivity extends GenericActivity implements  PromoImgFragment.PromoImgFragmentInterface{
+public class EventDetailsActivity extends GenericActivity implements PromoImgFragment.PromoImgFragmentInterface {
 
 
 	@Override

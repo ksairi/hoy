@@ -68,18 +68,18 @@ public class DateUtils {
 	}
 
 	/**
-		 * Se obtiene la fecha de hoy en formato String.
-		 *
-		 * @return
-		 */
+	 * Se obtiene la fecha de hoy en formato String.
+	 *
+	 * @return
+	 */
 
 	public static String getTodayString() {
-			return DateUtils.getDateStringFromDate(Calendar.getInstance().getTime());
-		}
+		return DateUtils.getDateStringFromDate(Calendar.getInstance().getTime());
+	}
 
 	public static String getTodayAndTimeString() {
-				return DateUtils.getDateAndTimeStringFromDate(Calendar.getInstance().getTime());
-			}
+		return DateUtils.getDateAndTimeStringFromDate(Calendar.getInstance().getTime());
+	}
 
 	/**
 	 * Se obtiene la fecha de hoy, con los datos horarios inicializados a cero.
@@ -133,35 +133,35 @@ public class DateUtils {
 		return result;
 	}*/
 
-	public static String getTimeFromTimeString(String time){
+	public static String getTimeFromTimeString(String time) {
 
 		if (time != null && time.length() == MilongaHoyConstants.TIME_WITH_SECONDS_LENGTH) {
-				return time.substring(0, time.length() - 3);
-				}
+			return time.substring(0, time.length() - 3);
+		}
 
 		return time;
 	}
 
-	public static String getDateToShow(String dateString){
+	public static String getDateToShow(String dateString) {
 
 		String result = null;
-			try{
-				DateFormat nameDayFormatter = new SimpleDateFormat(SHORT_NAME_OF_DAY_PATTERN);
-				DateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
-				DateFormat nameMonthFormat = new SimpleDateFormat(SHORT_NAME_OF_MONTH_PATTERN);
+		try {
+			DateFormat nameDayFormatter = new SimpleDateFormat(SHORT_NAME_OF_DAY_PATTERN);
+			DateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
+			DateFormat nameMonthFormat = new SimpleDateFormat(SHORT_NAME_OF_MONTH_PATTERN);
 
-				Date date = dateFormat.parse(dateString);
-				Calendar dateToShow = Calendar.getInstance();
-				dateToShow.setTime(date);
-				String monthName = nameMonthFormat.format(date);
+			Date date = dateFormat.parse(dateString);
+			Calendar dateToShow = Calendar.getInstance();
+			dateToShow.setTime(date);
+			String monthName = nameMonthFormat.format(date);
 
-				result = nameDayFormatter.format(date);
-				result = result.concat(" ").concat(String.valueOf(dateToShow.get(Calendar.DAY_OF_MONTH))).concat(" ").concat(monthName);
+			result = nameDayFormatter.format(date);
+			result = result.concat(" ").concat(String.valueOf(dateToShow.get(Calendar.DAY_OF_MONTH))).concat(" ").concat(monthName);
 
-			}catch (ParseException e){
-				return result;
+		} catch (ParseException e) {
+			return result;
 
-			}
+		}
 
 		return result;
 	}

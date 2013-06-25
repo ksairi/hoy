@@ -1,13 +1,9 @@
 package com.hoy.activities;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +13,6 @@ import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
 import com.hoy.fragments.EventListFragment;
 import com.hoy.fragments.PromoImgFragment;
-import com.hoy.schedulers.EventsScheduler;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,38 +42,37 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 
 
 		if (mDualPane) {
-			if(!this.currentSelectedIndex.equals(newSelectedIndex)){
+			if (!this.currentSelectedIndex.equals(newSelectedIndex)) {
 
 				this.currentSelectedIndex = newSelectedIndex;
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-					EventDetailFragment eventDetailFragment = new EventDetailFragment();
-					Bundle bundle = new Bundle();
-					bundle.putParcelable(MilongaHoyConstants.EVENT_DTO, eventDTO);
-					eventDetailFragment.setArguments(bundle);
-					detailsWrapper.removeAllViewsInLayout();
-					fragmentTransaction.add(R.id.event_details_wrapper, eventDetailFragment);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					fragmentTransaction.addToBackStack(null);
+				EventDetailFragment eventDetailFragment = new EventDetailFragment();
+				Bundle bundle = new Bundle();
+				bundle.putParcelable(MilongaHoyConstants.EVENT_DTO, eventDTO);
+				eventDetailFragment.setArguments(bundle);
+				detailsWrapper.removeAllViewsInLayout();
+				fragmentTransaction.add(R.id.event_details_wrapper, eventDetailFragment);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction.commit();
 
 			}
 
+		} else {
+			genericStartActivity(EventDetailsActivity.class, MilongaHoyConstants.EVENT_DTO, eventDTO, false);
 		}
-		else {
-				genericStartActivity(EventDetailsActivity.class, MilongaHoyConstants.EVENT_DTO, eventDTO, false);
-			}
 
 	}
 
 	public void onMenuOptionSelected(MenuItem item) {
-		if(item.getItemId() == R.id.refresh_btn){
+		if (item.getItemId() == R.id.refresh_btn) {
 
-			EventListFragment eventListFragment = (EventListFragment)getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
-			if(mDualPane){
+			EventListFragment eventListFragment = (EventListFragment) getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
+			if (mDualPane) {
 
-				EventDetailFragment eventDetailFragment = (EventDetailFragment)getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
-				if(eventDetailFragment != null){
+				EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
+				if (eventDetailFragment != null) {
 
 					detailsWrapper.removeAllViewsInLayout();
 				}
@@ -88,7 +82,7 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 	}
 
 	public void onDateOptionChanged() {
-		if(mDualPane){
+		if (mDualPane) {
 			detailsWrapper.removeAllViewsInLayout();
 		}
 	}
@@ -98,9 +92,9 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 	}
 
 	@Override
-		public void onConfigurationChanged(Configuration newConfig) {
-			super.onConfigurationChanged(newConfig);
-			//((ImageView)findViewById(R.id.promo_img)).setImageBitmap(null);
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		//((ImageView)findViewById(R.id.promo_img)).setImageBitmap(null);
 /*
 			((ViewManager)findViewById(R.id.promo_img).getParent()).removeView(findViewById(R.id.promo_img));
 			ImageView imageView = new ImageView(getContext());
@@ -109,7 +103,7 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 			imageView.setLayoutParams(layoutParams);
 			((LinearLayout)findViewById(R.id.promo_img_wrapper)).addView(imageView);
 */
-			//ImageService.retrievePromoImg(getContext());
+		//ImageService.retrievePromoImg(getContext());
 	}
 
 	public Boolean getNextPromoImg() {

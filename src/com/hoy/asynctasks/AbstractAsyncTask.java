@@ -8,12 +8,17 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.provider.Settings.Secure;
+import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 import com.google.gson.reflect.TypeToken;
 import com.hoy.R;
+import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.message.MessageDTO;
+import com.hoy.fragments.ProgressDialogFragment;
+import com.hoy.helpers.FragmentHelper;
 import com.hoy.helpers.GsonHelper;
 import com.hoy.services.EventsService;
 import com.hoy.utilities.RestClient;
@@ -31,6 +36,11 @@ import java.util.List;
 public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, String> {
 
 	private static final String TAG = AbstractAsyncTask.class.getSimpleName();
+	protected FragmentManager fragmentManager;
+	protected ProgressDialogFragment progressDialogFragment;
+	protected GenericSuccessHandleable genericSuccessHandleable;
+	protected GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable;
+
 
 	protected Context uiContext;
 	protected T paramEntity;
@@ -40,13 +50,14 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	protected String doInBackground(String... urls) {
 		String jsonResult = RestClient.executeHttpGetRequest(getUrl());
 		jsonResult = GsonHelper.parseResponse(jsonResult);
-		if(jsonResult != null){
+		if (jsonResult != null) {
 			jsonResult = EventsService.getInstance().sortList(jsonResult);
 			EventsService.saveMilongasData(uiContext, jsonResult);
-			eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonResult,getType());
+			if (genericSuccessListHandleable != null) {
+				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonResult, getType());
+			}
 			return SUCCESS;
-		}
-		else{
+		} else {
 			return null;
 		}
 
@@ -58,8 +69,15 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 //		return RestClient.executeHttpGetRequest(RestaUnoConstants.HOST + RestaUnoUrlProtocol.LOGIN_URL + params, null);
 //	}
 
-	protected void onPostExecute(String result) {
 
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		progressDialogFragment = FragmentHelper.showProgressDialog(fragmentManager);
+	}
+
+	protected void onPostExecute(String result) {
+		FragmentHelper.hideProgressDialog(progressDialogFragment);
 		if (result != null && result.equals(SUCCESS)) {
 			doOnSuccess();
 		} else {
@@ -131,11 +149,11 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	}
 
 
-			protected Type getType() {
-				Type listType = new TypeToken<List<EventDTO>>() {
-				}.getType();
-				return listType;
-			}
+	protected Type getType() {
+		Type listType = new TypeToken<List<EventDTO>>() {
+		}.getType();
+		return listType;
+	}
 
 /*
 	String jsonString = GsonHelper.parseEntityToJson(messageDTO);

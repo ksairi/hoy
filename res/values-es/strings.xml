@@ -10,7 +10,6 @@
 	<string name="events_updated_succ">Eventos actualizados!</string>
 	<string name="no_events_to_show">No existen eventos para mostrar!</string>
 	<string name="event_cancelled">CANCELADO</string>
-	<string name="yes">Sí</string>
 	<string name="event_date_label">Fecha</string>
 	<string name="start_time_label">de</string>
 	<string name="end_time_label">a</string>

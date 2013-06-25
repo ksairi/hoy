@@ -1,22 +1,15 @@
 package com.hoy.timer_task;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.ParametersDTO;
-import com.hoy.helpers.SharedPreferencesHelper;
-import com.hoy.services.EventsService;
 
-public class SyncEventsDailyRunnable extends AbstractRunnable {
+public class SyncEventsDailyRunnable extends GenericSyncEvents {
 
-	private static final String TAG = SyncEventsDailyRunnable.class.getSimpleName();
 
 	public SyncEventsDailyRunnable(Context context, Handler handler) {
-		this.context = context;
-		this.handler = handler;
+		super(context, handler);
 	}
 
 	/*protected void createNotification() {
@@ -46,26 +39,6 @@ public class SyncEventsDailyRunnable extends AbstractRunnable {
 		notificationManager.notify((int) (Math.random() * 1000) + 1, notification);
 	}*/
 
-	@Override
-	public void run() {
-		String params = getParams();
-		if (params != null) {
-
-			if(EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params,false).equals(MilongaHoyConstants.SAVE_MILONGAS_SUCCESS)){
-
-				Bundle bundle = new Bundle();
-				bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES,MilongaHoyConstants.NEW_MILONGAS_UPDATES);
-				SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.NEW_MILONGAS_UPDATES, MilongaHoyConstants.NEW_MILONGAS_UPDATES);
-				Message message = new Message();
-				message.setData(bundle);
-				handler.sendMessage(message);
-			}
-
-
-		} else {
-			Log.i(TAG, "Error al obtener los parametros");
-		}
-	}
 
 	protected String getParams() {
 
@@ -77,4 +50,8 @@ public class SyncEventsDailyRunnable extends AbstractRunnable {
 		return MilongaHoyConstants.SYNC_EVENTS_URL;
 	}
 
+	@Override
+	protected Boolean isDeltaUpdate() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
 }

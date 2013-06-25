@@ -7,7 +7,7 @@ package com.hoy.asynctasks.interfaces;
  * Time: 6:42 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GenericSuccessImgHandleable extends GenericErrorHandleable{
+public interface GenericSuccessImgHandleable extends GenericErrorHandleable {
 
 	public void handleSuccessCallBack(String base64String);
 }

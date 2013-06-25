@@ -27,9 +27,10 @@ import java.util.concurrent.ScheduledFuture;
  * Time: 11:05 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PromoImgFragment  extends Fragment {
+public class PromoImgFragment extends Fragment {
 	ScheduledFuture changePromoImgtask;
 	PromoImgFragmentInterface promoImgFragmentInterface;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.include_img_promo, container, false);
@@ -42,15 +43,16 @@ public class PromoImgFragment  extends Fragment {
 		changePromoImgtask = EventsScheduler.startChangePromoImgTask(getActivity(), changePromoImgHandler, promoImgFragmentInterface.getNextPromoImg());
 	}
 
-	protected Handler changePromoImgHandler = new Handler(){
+	protected Handler changePromoImgHandler = new Handler() {
 
 		ImageView promoImageView;
 		Bundle bundle;
+
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			bundle = msg.getData();
-			promoImageView = (ImageView)getActivity().findViewById(R.id.promo_img);
+			promoImageView = (ImageView) getActivity().findViewById(R.id.promo_img);
 			String[] promoImgData = bundle.getStringArray(MilongaHoyConstants.PROMO_IMG_DATA);
 			Animation myFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
 			promoImageView.startAnimation(myFadeInAnimation); //Set animation to your ImageView
@@ -60,7 +62,7 @@ public class PromoImgFragment  extends Fragment {
 			promoImageView.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View view) {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
-					if(promoImgUrlDestination != null && !promoImgUrlDestination.equals(MilongaHoyConstants.EMPTY_STRING)){
+					if (promoImgUrlDestination != null && !promoImgUrlDestination.equals(MilongaHoyConstants.EMPTY_STRING)) {
 						intent.setData(Uri.parse(promoImgUrlDestination));
 						startActivity(intent);
 					}
@@ -70,7 +72,7 @@ public class PromoImgFragment  extends Fragment {
 		}
 	};
 
-	public interface PromoImgFragmentInterface{
+	public interface PromoImgFragmentInterface {
 
 		public Boolean getNextPromoImg();
 
@@ -79,20 +81,20 @@ public class PromoImgFragment  extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDestroyView();
-		if(changePromoImgtask != null){
+		if (changePromoImgtask != null) {
 			changePromoImgtask.cancel(true);
 		}
 	}
 
 	@Override
-		public void onAttach(Activity activity) {
-			super.onAttach(activity);
-			if (activity instanceof PromoImgFragmentInterface) {
-				promoImgFragmentInterface = (PromoImgFragmentInterface) activity;
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof PromoImgFragmentInterface) {
+			promoImgFragmentInterface = (PromoImgFragmentInterface) activity;
 
-			} else {
-				throw new ClassCastException(activity.toString()
-						+ " must implemenet EventListFragment.OnItemSelectedListener");
-			}
+		} else {
+			throw new ClassCastException(activity.toString()
+					+ " must implemenet EventListFragment.OnItemSelectedListener");
 		}
+	}
 }

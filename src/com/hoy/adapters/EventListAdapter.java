@@ -66,8 +66,8 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 		String eventName = "";
 		String appointmentDate = "";
 		String beginTime = "";
-		String offersClasses ="";
-		String specialEvents ="";
+		String offersClasses = "";
+		String specialEvents = "";
 		String eventCancelled = "";
 		String eventNeighbourhood = "";
 
@@ -78,23 +78,21 @@ public class EventListAdapter extends ArrayAdapter<EventDTO> {
 			specialEvents = eventsDTO.get(position).getSpecialEventFlag();
 			eventCancelled = eventsDTO.get(position).getEventCancelledFlag();
 			eventNeighbourhood = eventsDTO.get(position).getFamiliarNameOfArea();
-			if(eventNeighbourhood.contains("-")){
-				eventNeighbourhood = eventNeighbourhood.substring(eventNeighbourhood.indexOf("-")+1,eventNeighbourhood.length());
+			if (eventNeighbourhood.contains("-")) {
+				eventNeighbourhood = eventNeighbourhood.substring(eventNeighbourhood.indexOf("-") + 1, eventNeighbourhood.length());
 			}
-			if (todayEvents != null && !todayEvents) {
-				appointmentDate = eventsDTO.get(position).getDateToShow();
-			}else{
-				holder.appointmentDate.setVisibility(View.GONE);
-			}
+
+			appointmentDate = eventsDTO.get(position).getDateToShow();
+
 		}
 
 		holder.eventName.setText(eventName);
 		holder.appointmentDate.setText(appointmentDate);
 		holder.beginTime.setText(beginTime);
 		holder.eventNeighbourhood.setText(eventNeighbourhood);
-		holder.hasClasses.setVisibility(offersClasses.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
-		holder.specialEvent.setVisibility(specialEvents.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.INVISIBLE);
-		holder.eventCancelled.setVisibility(eventCancelled.equals(MilongaHoyConstants.TRUE)?View.VISIBLE:View.GONE);
+		holder.hasClasses.setVisibility(offersClasses.equals(MilongaHoyConstants.TRUE) ? View.VISIBLE : View.INVISIBLE);
+		holder.specialEvent.setVisibility(specialEvents.equals(MilongaHoyConstants.TRUE) ? View.VISIBLE : View.INVISIBLE);
+		holder.eventCancelled.setVisibility(eventCancelled.equals(MilongaHoyConstants.TRUE) ? View.VISIBLE : View.GONE);
 
 
 		return rowView;

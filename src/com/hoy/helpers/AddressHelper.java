@@ -12,8 +12,8 @@ import com.hoy.dto.EventDTO;
  */
 public class AddressHelper {
 
-	public static String getEventAddress(EventDTO eventDTO){
-		if(eventDTO != null){
+	public static String getEventAddress(EventDTO eventDTO) {
+		if (eventDTO != null) {
 			return eventDTO.getStreetLine1().concat("-").concat(eventDTO.getFamiliarNameOfArea());
 		}
 		return MilongaHoyConstants.EMPTY_STRING;

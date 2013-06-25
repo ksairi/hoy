@@ -11,13 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.hoy.R;
@@ -49,7 +46,9 @@ public class EventListFragment extends ListFragment {
 	protected CheckBox todayEvents;
 	private Activity activityAttached;
 	private TextView syncLocalEvents;
-	private ProgressDialogFragment progressDialogFragment;
+	private Boolean newMilongasUpdate = false;
+	private Boolean errorSyncEvents = false;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,24 +61,25 @@ public class EventListFragment extends ListFragment {
 	public void onActivityCreated(Bundle bundle) {
 		super.onActivityCreated(bundle);
 
-		todayEvents = (CheckBox)activityAttached.findViewById(R.id.today_events);
+		todayEvents = (CheckBox) activityAttached.findViewById(R.id.today_events);
 
 		syncEventList();
 
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
-		TextView todaysMap = (TextView)getActivity().findViewById(R.id.today_events_map);
+		TextView todaysMap = (TextView) getActivity().findViewById(R.id.today_events_map);
 
 		todaysMap.setOnClickListener(onClickTodaysMap);
 
-		syncLocalEvents = (TextView)getActivity().findViewById(R.id.sync_local_events);
+		syncLocalEvents = (TextView) getActivity().findViewById(R.id.sync_local_events);
 		syncLocalEvents.setOnClickListener(syncLocalEventsOnClick);
 
 		Bundle extras = getActivity().getIntent().getExtras();
-		if(extras != null){
+		if (extras != null) {
 			eventDTOs = extras.getParcelableArrayList(MilongaHoyConstants.EVENT_DTOS);
 			updateAdapter(eventDTOs);
 		}
+
 
 		EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
 		EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
@@ -89,20 +89,27 @@ public class EventListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(!SharedPreferencesHelper.getValueInSharedPreferences(getActivity(),MilongaHoyConstants.NEW_MILONGAS_UPDATES).equals(MilongaHoyConstants.EMPTY_STRING)){
+		if (newMilongasUpdate) {
 
-			syncLocalEvents.setVisibility(View.VISIBLE);
-			SharedPreferencesHelper.removeValueSharedPreferences(getActivity(),MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+			syncEventList();
+			newMilongasUpdate = false;
+		} else {
+
+			if (errorSyncEvents) {
+
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				errorSyncEvents = false;
+			}
 		}
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		listener.onItemSelected(eventDTOs.get(position),position);
+		listener.onItemSelected(eventDTOs.get(position), position);
 	}
 
-	private View.OnClickListener syncLocalEventsOnClick = new View.OnClickListener(){
+	private View.OnClickListener syncLocalEventsOnClick = new View.OnClickListener() {
 		public void onClick(View view) {
 			syncEventList();
 
@@ -111,17 +118,15 @@ public class EventListFragment extends ListFragment {
 
 	protected void syncEventList() {
 
-		progressDialogFragment = FragmentHelper.showProgressDialog(getFragmentManager());
-		new SyncLocalEventsAsyncTask(activityAttached,getFilterParams(),new GenericSuccessListHandleable<EventDTO>(){
+		new SyncLocalEventsAsyncTask(activityAttached, getFilterParams(), getFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
 			public void handleSuccessCallBack(List<EventDTO> localEventDTOs) {
 				updateAdapter(localEventDTOs);
 				syncLocalEvents.setVisibility(View.GONE);
-				FragmentHelper.hideProgressDialog(progressDialogFragment);
 			}
 
 			public void handleErrorResult() {
-				FragmentHelper.hideProgressDialog(progressDialogFragment);
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_LONG).show();
+
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 			}
 		}).execute();
 
@@ -130,8 +135,11 @@ public class EventListFragment extends ListFragment {
 	public interface EventListFragmentListener {
 
 		public void onItemSelected(EventDTO eventDTO, Integer index);
+
 		public void onMenuOptionSelected(MenuItem item);
+
 		public void onDateOptionChanged();
+
 		public void onClickTodaysMap();
 	}
 
@@ -164,12 +172,11 @@ public class EventListFragment extends ListFragment {
 
 	private View.OnClickListener onClickTodaysMap = new View.OnClickListener() {
 		public void onClick(View view) {
-			if(!eventDTOs.isEmpty()){
+			if (!eventDTOs.isEmpty()) {
 
 				listener.onClickTodaysMap();
-			}
-			else {
-				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -177,7 +184,7 @@ public class EventListFragment extends ListFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_refresh_refresh,menu);
+		inflater.inflate(R.menu.menu_refresh_refresh, menu);
 	}
 
 	@Override
@@ -186,74 +193,87 @@ public class EventListFragment extends ListFragment {
 		return false;
 	}
 
-	public void updateManually(){
+	public void updateManually() {
 
 		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
-			progressDialogFragment = FragmentHelper.showProgressDialog(getFragmentManager());
-			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, new GenericSuccessListHandleable<EventDTO>() {
+
+			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
 				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 					updateAdapter(remoteEventDTOs);
-					FragmentHelper.hideProgressDialog(progressDialogFragment);
+
 					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
 					syncLocalEvents.setVisibility(View.GONE);
 					Toast.makeText(activityAttached, R.string.events_updated_succ, Toast.LENGTH_SHORT).show();
 				}
 
 				public void handleErrorResult() {
-					FragmentHelper.hideProgressDialog(progressDialogFragment);
+
 					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
 				}
 			});
-		}
-		else{
+		} else {
 			Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
-	private void updateAdapter(List<EventDTO> eventDTOs){
-		if(activityAttached != null){
+	private void updateAdapter(List<EventDTO> eventDTOs) {
+		if (activityAttached != null) {
 			this.eventDTOs = eventDTOs;
 			ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(activityAttached, eventDTOs, todayEvents.isChecked());
 			getListView().setAdapter(arrayAdapter);
 			listener.onDateOptionChanged();
 		}
-		if(!eventDTOs.isEmpty() && activityAttached != null){
+		if (!eventDTOs.isEmpty() && activityAttached != null) {
 			activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
-		}
-		else{
-				if(activityAttached != null){
-					activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
-					Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_LONG).show();
-				}
+		} else {
+			if (activityAttached != null) {
+				activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
+				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
 			}
+		}
 
 	}
 
-	private FilterParams getFilterParams(){
+	private FilterParams getFilterParams() {
 
-		if(todayEvents.isChecked()){
+		if (todayEvents.isChecked()) {
 
 			return new FilterParams(DateUtils.getTodayString());
 		}
-			return null;
+		return null;
 
 	}
 
-	private Handler syncEventsHandler = new Handler(){
+	private Handler syncEventsHandler = new Handler() {
 
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-				if((msg != null) && msg.getData().containsKey(MilongaHoyConstants.NEW_MILONGAS_UPDATES)){
-					syncLocalEvents.setVisibility(View.VISIBLE);
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if (msg != null) {
 
-				}
-				else{
-					Toast.makeText(getActivity(),R.string.cant_sync_new_events,Toast.LENGTH_SHORT).show();
+				if (msg.getData().containsKey(MilongaHoyConstants.NEW_MILONGAS_UPDATES)) {
+
+					if (FragmentHelper.isFragmentInForeGround(getActivity())) {
+
+						syncLocalEvents.setVisibility(View.VISIBLE);
+					} else {
+						newMilongasUpdate = true;
+					}
+				} else {
+					if (msg.getData().containsKey(MilongaHoyConstants.ERROR_SYNC_EVENTS)) {
+
+						if (FragmentHelper.isFragmentInForeGround(getActivity())) {
+							Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+						} else {
+							errorSyncEvents = true;
+						}
+					}
 				}
 			}
-		};
+
+		}
+	};
 }

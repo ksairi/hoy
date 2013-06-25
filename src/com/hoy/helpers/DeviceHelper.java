@@ -13,8 +13,8 @@ import android.view.WindowManager;
  */
 public class DeviceHelper {
 
-	public static Display getDisplay(Context context){
+	public static Display getDisplay(Context context) {
 
-		return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		return ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 	}
 }

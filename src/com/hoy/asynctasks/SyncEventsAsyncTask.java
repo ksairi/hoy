@@ -1,15 +1,12 @@
 package com.hoy.asynctasks;
 
 import android.content.Context;
-import com.google.gson.reflect.TypeToken;
+import android.support.v4.app.FragmentManager;
 import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
-import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.ParametersDTO;
-
-import java.lang.reflect.Type;
-import java.util.List;
+import com.hoy.services.EventsService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,15 +17,17 @@ import java.util.List;
  */
 public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO, EventDTO> {
 
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessHandleable genericHandleable) {
-		super(uiContext, paramEntity, genericHandleable);
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, GenericSuccessHandleable genericHandleable) {
+		super(uiContext, paramEntity, fragmentManager, genericHandleable);
 	}
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
-			super(uiContext, paramEntity, genericSuccessListHandleable);
-		}
+
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
+		super(uiContext, paramEntity, fragmentManager, genericSuccessListHandleable);
+	}
+
 	@Override
 	protected String getUrl() {
-		return MilongaHoyConstants.SYNC_EVENTS_URL.concat(ParametersDTO.getDailyRefreshParameters());
+		return EventsService.getParametersDTO();
 	}
 
 	/*//@Override

@@ -3,8 +3,6 @@ package com.hoy.timer_task;
 import android.content.Context;
 import android.os.Handler;
 
-import java.util.TimerTask;
-
 /**
  * Created with IntelliJ IDEA.
  * User: ksairi

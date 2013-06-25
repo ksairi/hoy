@@ -67,34 +67,34 @@ public class GsonHelper {
 
 		String resultData = null;
 		try {
-				if(jsonString != null){
-					jsonString = jsonString.replace(MilongaHoyConstants.JSON_PREFIX_SUFIX,MilongaHoyConstants.EMPTY_STRING);
-					JSONObject jsonObject = new JSONObject(jsonString);
+			if (jsonString != null) {
+				jsonString = jsonString.replace(MilongaHoyConstants.JSON_PREFIX_SUFIX, MilongaHoyConstants.EMPTY_STRING);
+				JSONObject jsonObject = new JSONObject(jsonString);
 
-					JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
-					String errorNumber = resultSummary.getString("errorNumber");
-					if (errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)) {
-						resultData = adaptJson(jsonObject);
-					}
+				JSONObject resultSummary = jsonObject.getJSONObject("resultSummary");
+				String errorNumber = resultSummary.getString("errorNumber");
+				if (errorNumber.equals(MilongaHoyConstants.RESPONSE_OK)) {
+					resultData = adaptJson(jsonObject);
 				}
-			}catch (JSONException e) {
-				resultData = null;
 			}
+		} catch (JSONException e) {
+			resultData = null;
+		}
 
 		return resultData;
 
 	}
 
-	private static String adaptJson(JSONObject jsonObject){
+	private static String adaptJson(JSONObject jsonObject) {
 
 		JSONArray jsonArray;
-		try{
+		try {
 			jsonArray = jsonObject.getJSONArray("resultData");
-			for(Integer i = 0;i< jsonArray.length();i++){
-				JSONObject aux = (JSONObject)jsonArray.get(i);
+			for (Integer i = 0; i < jsonArray.length(); i++) {
+				JSONObject aux = (JSONObject) jsonArray.get(i);
 				aux.put(EventDTO.DATE_TO_SHOW, DateUtils.getDateToShow(aux.getString("date")));
 			}
-		}catch (JSONException e){
+		} catch (JSONException e) {
 			return null;
 		}
 		return jsonArray.toString();

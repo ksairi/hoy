@@ -4,7 +4,7 @@ public class MilongaHoyConstants {
 
 	public static final String EMPTY_STRING = "";
 
-//	public static final String HOST = "http://10.0.2.2";
+	//	public static final String HOST = "http://10.0.2.2";
 //	public static final String HOST = "http://192.168.1.107";
 	public static final String HOST = "http://www.milongaproject.com";
 	public static final String IMG_HOST = "http://teachingtango.com";
@@ -14,7 +14,7 @@ public class MilongaHoyConstants {
 	public static final String PROMO_IMG_URL = IMG_HOST + "/api/convert.php";
 //	public static final String PROMO_IMG_URL = IMG_HOST + "/testImg.php";
 
-//	public static final String SYNC_EVENTS_URL = HOST + "/test.php";
+	//	public static final String SYNC_EVENTS_URL = HOST + "/test.php";
 	public static final String SYNC_EVENTS_URL = HOST + "/mp/prod/php/api/CRRetrieve.php";
 
 	public static final String SHARED_PREFERENCES = "sharedPreferences";
@@ -40,4 +40,5 @@ public class MilongaHoyConstants {
 	public static final String SERVER_LAST_UPDATE_TIME = "serverLastUpdateTime";
 	public static final Integer PROMO_IMG_BASE_64_INDEX_POSITION = 0;
 	public static final Integer PROMO_IMG_URL_DESTINATION_INDEX_POSITION = 1;
+	public static final String ERROR_SYNC_EVENTS = "errorSyncEvents";
 }

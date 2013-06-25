@@ -2,26 +2,12 @@ package com.hoy.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 import com.hoy.R;
-import com.hoy.asynctasks.SyncPromoImgsAysncTask;
+import com.hoy.asynctasks.GetInitialContentAsyncTask;
 import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
-import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
-import com.hoy.constants.MilongaHoyConstants;
-import com.hoy.dto.EventDTO;
-import com.hoy.fragments.ProgressDialogFragment;
-import com.hoy.helpers.FragmentHelper;
-import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.PromoImg;
 import com.hoy.schedulers.EventsScheduler;
-import com.hoy.services.EventsService;
 import com.hoy.services.ImageService;
-import com.hoy.utilities.DateUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,56 +16,33 @@ import java.util.List;
  * Time: 5:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class InitialActivity extends GenericActivity{
+public class InitialActivity extends GenericActivity {
 
 	@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			setContentView(R.layout.init_layout);
-			prepareContent();
-		}
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.init_layout);
+		prepareContent();
+	}
 
 	private void prepareContent() {
-
-
-		progressDialogFragment = FragmentHelper.showProgressDialog(getSupportFragmentManager());
-		EventsService.getInstance().synchronizeEventsFromServer(getContext(), new GenericSuccessHandleable() {
+		final PromoImg promoImg = ImageService.getPromoImg(getContext());
+		new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessHandleable() {
 			public void handleSuccessCallBack() {
-
-				SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
-				retrieveImgsPromos();
-
+				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
+				genericStartActivity(HomeActivity.class, true);
 			}
 
 			public void handleErrorResult() {
-				FragmentHelper.hideProgressDialog(progressDialogFragment);
-				retrieveImgsPromos();
-				Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
+				genericStartActivity(HomeActivity.class, true);
 			}
-		});
+		}).execute();
+
 	}
 
 	@Override
 	protected Context getContext() {
 		return this;  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	private void retrieveImgsPromos(){
-
-		final PromoImg promoImg = ImageService.getPromoImg(getContext());
-		new SyncPromoImgsAysncTask(getContext(), ImageService.getPromoImg(getContext()),new GenericSuccessHandleable(){
-			public void handleSuccessCallBack() {
-				FragmentHelper.hideProgressDialog(progressDialogFragment);
-				EventsScheduler.startRetrievePromoImgTask(getContext(),promoImg);
-				genericStartActivity(HomeActivity.class,true);
-
-			}
-
-			public void handleErrorResult() {
-				FragmentHelper.hideProgressDialog(progressDialogFragment);
-				EventsScheduler.startRetrievePromoImgTask(getContext(),promoImg);
-				genericStartActivity(HomeActivity.class,true);
-			}
-		}).execute();
 	}
 }

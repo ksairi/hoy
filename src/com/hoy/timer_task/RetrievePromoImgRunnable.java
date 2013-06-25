@@ -29,17 +29,16 @@ public class RetrievePromoImgRunnable extends AbstractRunnable {
 	@Override
 	public void run() {
 
-		String result =  RestClient.executeHttpGetRequest(ImageHelper.buildUrl(promoImg));
-		List<PromoImg>promoImgs = ImageHelper.parseResponse(result, promoImg);
-		if(promoImgs != null){
+		String result = RestClient.executeHttpGetRequest(ImageHelper.buildUrl(promoImg));
+		List<PromoImg> promoImgs = ImageHelper.parseResponse(result, promoImg);
+		if (promoImgs != null) {
 			ImageService.savePromoImgs(context, promoImgs);
 
-			SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.PROMO_IMG_UPDATED,"true");
+			SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.PROMO_IMG_UPDATED, "true");
 
 		}
 
 	}
-
 
 
 	@Override
