@@ -141,7 +141,19 @@ public class EventsService {
 		if (filterParams != null) {
 			return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
 				public boolean evaluate(EventDTO eventDTO) {
-					return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
+					//return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
+
+					// JEFF! I changed this around for debugging porposes
+					if (filterParams.getDate() != null) {
+						Log.i(TAG, "filterParams.getDate() = TRUE -> "+filterParams.getDate());
+						if (filterParams.getDate().equals(eventDTO.getDate())) {
+							Log.i(TAG, "DateUtils.getTodayString() ["+DateUtils.getTodayString()+"] => ");
+							Log.i(TAG, "eventDTO.getDate() = ["+eventDTO.getDate()+"]");
+
+							return(true);
+						}
+					}
+					return(false);
 				}
 			});
 		} else {
