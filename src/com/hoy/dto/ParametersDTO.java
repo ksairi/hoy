@@ -29,10 +29,12 @@ public class ParametersDTO {
 
 	public static String getHourlyRefreshParameters(Context context) {
 
-		String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
 		String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(where);
-		if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
-			result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
+		if(context != null){
+			String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+			if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
+				result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
+			}
 		}
 		return result;
 

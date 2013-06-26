@@ -44,8 +44,7 @@ public class GoogleMapActivity extends GenericActivity {
 
 		if (map == null) {
 
-			int connectionResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-
+			//int connectionResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 			//		if(ConnectionResult.SUCCESS == connectionResult){
 
 			if (isGoogleMapsInstalled()) {
@@ -75,10 +74,6 @@ public class GoogleMapActivity extends GenericActivity {
 			} else {
 				redirectToMarket();
 			}
-			//		}
-			//		else{
-			//			redirectToMarket();
-			//		}
 		}
 
 
