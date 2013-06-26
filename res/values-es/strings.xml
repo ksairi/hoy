@@ -37,6 +37,7 @@
 	<string name="today_events_map">El mapa de Hoy</string>
 	<string name="cant_sync_new_events">No se pueden obtener novedades en las milongas. Chequea tu conexión a internet</string>
 	<string name="sync_local_events">Novedades recientes</string>
+	<string name="invalid_map_data">Disculpa, no se puede mostrar la ubicación</string>
 
 
 

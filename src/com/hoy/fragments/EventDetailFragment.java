@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.activities.GoogleMapActivity;
 import com.hoy.constants.MilongaHoyConstants;
@@ -195,12 +196,24 @@ public class EventDetailFragment extends Fragment {
 		public void onClick(View view) {
 
 			Intent intent = new Intent(getActivity(), GoogleMapActivity.class);
-			intent.putExtra(MilongaHoyConstants.EVENT_NAME, eventDTO.getName());
-			intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, eventDTO.getLatitude());
-			intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, eventDTO.getLongitude());
-			String eventAddress = AddressHelper.getEventAddress(eventDTO);
-			intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
-			getActivity().startActivity(intent);
+			try{
+				Double latitude = Double.parseDouble(eventDTO.getLatitude());
+				Double longitude = Double.parseDouble(eventDTO.getLongitude());
+				String  name = eventDTO.getName();
+				String eventAddress = AddressHelper.getEventAddress(eventDTO);
+				if(name == null){
+					name = MilongaHoyConstants.EMPTY_STRING;
+				}
+					intent.putExtra(MilongaHoyConstants.EVENT_NAME, name);
+					intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, latitude);
+					intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, longitude);
+					intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
+					getActivity().startActivity(intent);
+
+
+			}catch (NumberFormatException e){
+				Toast.makeText(getActivity(),R.string.invalid_map_data,Toast.LENGTH_SHORT);
+			}
 
 		}
 	};

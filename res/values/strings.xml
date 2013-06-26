@@ -41,5 +41,6 @@
 	<string name="today_events_map">Today\'s map</string>
 	<string name="cant_sync_new_events">Can\'t get updates in milongas. Check your internet connection</string>
 	<string name="sync_local_events">Newest updates</string>
+	<string name="invalid_map_data">Sorry, can\'t show the location</string>
 
 </resources>

@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -55,8 +54,8 @@ public class GoogleMapActivity extends GenericActivity {
 
 				if (extras != null) {
 					//coming from DetailFragment, show only the event selected
-					Double eventLatitude = Double.valueOf((String) extras.get(MilongaHoyConstants.EVENT_LATITUDE));
-					Double eventLongitude = Double.valueOf((String) extras.get(MilongaHoyConstants.EVENT_LONGITUDE));
+					Double eventLatitude = extras.getDouble(MilongaHoyConstants.EVENT_LATITUDE);
+					Double eventLongitude = extras.getDouble(MilongaHoyConstants.EVENT_LONGITUDE);
 					String eventName = extras.getString(MilongaHoyConstants.EVENT_NAME);
 					String eventAddress = extras.getString(MilongaHoyConstants.EVENT_ADDRESS);
 					extras.remove(MilongaHoyConstants.EVENT_LATITUDE);
@@ -100,9 +99,20 @@ public class GoogleMapActivity extends GenericActivity {
 		LatLng milongaLocation = null;
 		for (EventDTO eventDTO : eventDTOs) {
 
-			milongaLocation = new LatLng(Double.parseDouble(eventDTO.getLatitude()), Double.parseDouble(eventDTO.getLongitude()));
+			try{
+				Double latitude = Double.parseDouble(eventDTO.getLatitude());
+				Double longitude = Double.parseDouble(eventDTO.getLongitude());
+				String name = eventDTO.getName() == null?MilongaHoyConstants.EMPTY_STRING:eventDTO.getName();
 
-			addMarker(milongaLocation, eventDTO.getName(), AddressHelper.getEventAddress(eventDTO));
+				if(latitude != null && longitude != null){
+
+					milongaLocation = new LatLng(latitude , longitude);
+
+					addMarker(milongaLocation, name, AddressHelper.getEventAddress(eventDTO));
+				}
+			}catch (NumberFormatException e){
+
+			}
 		}
 
 		addUserLocation();
