@@ -122,17 +122,7 @@ public class EventsService {
 		getMilongaDataSource(uiContext).open();
 		getMilongaDataSource(uiContext).createData(jsonString);
 		getMilongaDataSource(uiContext).close();
-		try {
-			JSONArray jsonArray = new JSONArray(jsonString);
 
-			//we save the time of the server of each query
-			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			String serverLastUpdateTime = (String) jsonObject.get(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
-			SharedPreferencesHelper.setValueSharedPreferences(uiContext, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME, serverLastUpdateTime);
-
-		} catch (JSONException e) {
-
-		}
 	}
 
 	public synchronized List<EventDTO> getFilteredEventDTOs(final Context uiContext, final FilterParams filterParams) {
@@ -141,19 +131,7 @@ public class EventsService {
 		if (filterParams != null) {
 			return (List<EventDTO>) MilongaCollectionUtils.select(eventDTOs, new RestaunoPredicate<EventDTO>() {
 				public boolean evaluate(EventDTO eventDTO) {
-					//return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
-
-					// JEFF! I changed this around for debugging porposes
-					if (filterParams.getDate() != null) {
-						Log.i(TAG, "filterParams.getDate() = TRUE -> "+filterParams.getDate());
-						if (filterParams.getDate().equals(eventDTO.getDate())) {
-							Log.i(TAG, "DateUtils.getTodayString() ["+DateUtils.getTodayString()+"] => ");
-							Log.i(TAG, "eventDTO.getDate() = ["+eventDTO.getDate()+"]");
-
-							return(true);
-						}
-					}
-					return(false);
+					return filterParams.getDate() != null && filterParams.getDate().equals(eventDTO.getDate());
 				}
 			});
 		} else {
@@ -172,6 +150,9 @@ public class EventsService {
 
 		String eventsToSave;
 		String remoteEvents = RestClient.executeHttpGetRequest(url.concat(params));
+		if (remoteEvents == null) {
+			return null;
+		}
 		remoteEvents = GsonHelper.parseResponse(remoteEvents);
 
 		if (remoteEvents != null && !remoteEvents.equals(MilongaHoyConstants.EMPTY_STRING)) {
@@ -185,6 +166,7 @@ public class EventsService {
 				}
 
 				if (eventsToSave != null && !eventsToSave.equals(MilongaHoyConstants.EMPTY_STRING)) {
+					saveServerLastTimeUpdate(uiContext, remoteEvents);
 					saveMilongasData(uiContext, eventsToSave);
 				}
 
@@ -193,7 +175,20 @@ public class EventsService {
 			}
 			return MilongaHoyConstants.SAVE_MILONGAS_SUCCESS;
 		}
-		return null;
+		return MilongaHoyConstants.EMPTY_STRING;
+	}
+
+	private static void saveServerLastTimeUpdate(Context context, String jsonString) {
+		//we save the time of the server of each query
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+
+			JSONObject jsonObject = jsonArray.getJSONObject(0);
+			String serverLastUpdateTime = (String) jsonObject.get(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+			SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME, serverLastUpdateTime);
+		} catch (JSONException e) {
+
+		}
 	}
 
 	private String updateLocalEvents(List<EventDTO> localEventsDTO, String remoteEvents) {
@@ -283,12 +278,13 @@ public class EventsService {
 		return jsonString;
 	}
 
-	public synchronized static String synAndSaveEvents(String url, Context uiContext) {
+	public synchronized static String syncAndSaveEvents(String url, Context uiContext) {
 
 		String jsonResult = RestClient.executeHttpGetRequest(url);
 		jsonResult = GsonHelper.parseResponse(jsonResult);
 		if (jsonResult != null) {
 			jsonResult = EventsService.getInstance().sortList(jsonResult);
+			saveServerLastTimeUpdate(uiContext, jsonResult);
 			EventsService.saveMilongasData(uiContext, jsonResult);
 		}
 

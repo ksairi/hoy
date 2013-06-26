@@ -30,17 +30,19 @@ public abstract class GenericSyncEvents extends AbstractRunnable {
 			Message message = new Message();
 			Bundle bundle = new Bundle();
 			String result = EventsService.getInstance().synchronizeEventsFromServer(context, getUrl(), params, isDeltaUpdate());
-			if (result != null && result.equals(MilongaHoyConstants.SAVE_MILONGAS_SUCCESS)) {
-
-				bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES, MilongaHoyConstants.NEW_MILONGAS_UPDATES);
-			} else {
+			if (result == null){
 				bundle.putString(MilongaHoyConstants.ERROR_SYNC_EVENTS, MilongaHoyConstants.ERROR_SYNC_EVENTS);
 			}
+			else{
+					if (result.equals(MilongaHoyConstants.SAVE_MILONGAS_SUCCESS)) {
+
+						bundle.putString(MilongaHoyConstants.NEW_MILONGAS_UPDATES, MilongaHoyConstants.NEW_MILONGAS_UPDATES);
+					}
+				}
 			message.setData(bundle);
 			handler.sendMessage(message);
-
-
-		} else {
+		}
+		else {
 			Log.i(TAG, "Error al obtener los parametros");
 		}
 	}

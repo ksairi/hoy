@@ -41,7 +41,7 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 
 	@Override
 	protected String doInBackground(String... strings) {
-		String jsonEvents = EventsService.synAndSaveEvents(EventsService.getParametersDTO(), context);
+		String jsonEvents = EventsService.syncAndSaveEvents(EventsService.getParametersDTO(), context);
 		String promoImgResult = ImageService.syncAndSavePromoImgs(promoImg, context);
 		if (jsonEvents != null && promoImgResult != null) {
 			return SUCCESS;

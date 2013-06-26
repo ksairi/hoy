@@ -165,4 +165,20 @@ public class DateUtils {
 
 		return result;
 	}
+
+	public static String getTodayDateToShow() {
+
+		DateFormat nameDayFormatter = new SimpleDateFormat(SHORT_NAME_OF_DAY_PATTERN);
+		DateFormat nameMonthFormat = new SimpleDateFormat(SHORT_NAME_OF_MONTH_PATTERN);
+
+		Calendar dateToShow = Calendar.getInstance();
+		Date date = dateToShow.getTime();
+		String monthName = nameMonthFormat.format(dateToShow.getTime());
+
+		String result = nameDayFormatter.format(date);
+		result = result.concat(" ").concat(String.valueOf(dateToShow.get(Calendar.DAY_OF_MONTH))).concat(" ").concat(monthName);
+
+		return result;
+
+	}
 }

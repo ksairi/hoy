@@ -21,7 +21,6 @@ import com.hoy.fragments.ProgressDialogFragment;
 import com.hoy.helpers.FragmentHelper;
 import com.hoy.helpers.GsonHelper;
 import com.hoy.services.EventsService;
-import com.hoy.utilities.RestClient;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -48,19 +47,15 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	protected final String SUCCESS = "success";
 
 	protected String doInBackground(String... urls) {
-		String jsonResult = RestClient.executeHttpGetRequest(getUrl());
-		jsonResult = GsonHelper.parseResponse(jsonResult);
-		if (jsonResult != null) {
-			jsonResult = EventsService.getInstance().sortList(jsonResult);
-			EventsService.saveMilongasData(uiContext, jsonResult);
+		String jsonEvents = EventsService.syncAndSaveEvents(EventsService.getParametersDTO(), uiContext);
+		if (jsonEvents != null) {
 			if (genericSuccessListHandleable != null) {
-				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonResult, getType());
+				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonEvents, getType());
 			}
 			return SUCCESS;
 		} else {
 			return null;
 		}
-
 	}
 
 	// Ejemplo de como mandarlo por GET.

@@ -2,28 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  style="@style/ComponentStyle">
 
-			<TextView
-				android:id="@+id/today_events_map"
-				style="@style/LabelTextStyle"
-				android:layout_gravity="center_horizontal"
+	<TextView
+			android:id="@+id/today_events_map"
+			style="@style/LabelTextStyle"
+			android:layout_gravity="center_horizontal"
 
-				android:drawableTop="@drawable/google_map"
-				android:text="@string/today_events_map"/>
+			android:drawableTop="@drawable/google_map"
+			android:text="@string/today_events_map"/>
 
 
-		<RelativeLayout
+	<RelativeLayout
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:layout_marginTop="5dp">
 
-			<CheckBox
+		<CheckBox
 				android:id="@+id/today_events"
 				style="@style/LabelTextStyle"
 				android:checked="true"
+				android:paddingBottom="10dp"
 				android:layout_alignParentLeft="true"
 				android:text="@string/today_list_events_label"/>
+		<TextView
+				android:id="@+id/today_date"
+				style="@style/LabelTextStyle"
+				android:layout_marginLeft="40dp"
+				android:layout_alignBottom="@id/today_events"/>
 
-			<TextView
+		<TextView
 				android:id="@+id/sync_local_events"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
@@ -33,13 +39,13 @@
 				android:text="@string/sync_local_events"
 				android:drawableBottom="@drawable/refresh_local_events"/>
 
-		</RelativeLayout>
+	</RelativeLayout>
 
-		<RelativeLayout
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+	<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
 
-			<LinearLayout
+		<LinearLayout
 				android:id="@+id/list_view_labels"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -47,26 +53,26 @@
 				android:visibility="gone"
 				android:layout_alignParentRight="true">
 
-					<TextView
-						style="@style/LabelTextStyle"
-						android:layout_marginRight="10dp"
-						android:text="@string/special_event"/>
+			<TextView
+					style="@style/LabelTextStyle"
+					android:layout_marginRight="10dp"
+					android:text="@string/special_event"/>
 
-					<TextView
-						style="@style/LabelTextStyle"
-						android:text="@string/classes_available"/>
-			</LinearLayout>
+			<TextView
+					style="@style/LabelTextStyle"
+					android:text="@string/classes_available"/>
+		</LinearLayout>
 
 
-			<ListView
-					android:id="@android:id/list"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="30dp"
-					android:divider="@color/black"
-					android:cacheColorHint="#00000000"
-					android:dividerHeight="1dp"/>
-		</RelativeLayout>
+		<ListView
+				android:id="@android:id/list"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="30dp"
+				android:divider="@color/black"
+				android:cacheColorHint="#00000000"
+				android:dividerHeight="1dp"/>
+	</RelativeLayout>
 
 </LinearLayout>
 

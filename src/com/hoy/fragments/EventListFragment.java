@@ -31,6 +31,7 @@ import com.hoy.services.EventsService;
 import com.hoy.utilities.DateUtils;
 
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,6 +49,9 @@ public class EventListFragment extends ListFragment {
 	private TextView syncLocalEvents;
 	private Boolean newMilongasUpdate = false;
 	private Boolean errorSyncEvents = false;
+	private TextView todayDateTextView;
+	private ScheduledFuture scheduleFutureHourly;
+	private ScheduledFuture scheduleFutureDaily;
 
 
 	@Override
@@ -62,6 +66,8 @@ public class EventListFragment extends ListFragment {
 		super.onActivityCreated(bundle);
 
 		todayEvents = (CheckBox) activityAttached.findViewById(R.id.today_events);
+		todayDateTextView = (TextView) activityAttached.findViewById(R.id.today_date);
+		setTodayDateTextView(DateUtils.getTodayDateToShow());
 
 		syncEventList();
 
@@ -81,22 +87,28 @@ public class EventListFragment extends ListFragment {
 		}
 
 
-		EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
-		EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
+		scheduleFutureHourly = EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
+		scheduleFutureDaily = EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
 
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (newMilongasUpdate) {
+
+		String todayString = DateUtils.getTodayDateToShow();
+		Boolean isTodayDateTextViewValid = todayString.equals(getTodayDateTextView());
+		if (!isTodayDateTextViewValid) {
+			setTodayDateTextView(todayString);
+		}
+
+		if ((todayEvents.isChecked() && !isTodayDateTextViewValid) || newMilongasUpdate) {
 
 			syncEventList();
 			newMilongasUpdate = false;
+
 		} else {
-
 			if (errorSyncEvents) {
-
 				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 				errorSyncEvents = false;
 			}
@@ -160,6 +172,12 @@ public class EventListFragment extends ListFragment {
 		super.onDetach();
 		listener = null;
 		activityAttached = null;
+		if (scheduleFutureHourly != null) {
+			scheduleFutureHourly.cancel(true);
+		}
+		if (scheduleFutureDaily != null) {
+			scheduleFutureDaily.cancel(true);
+		}
 	}
 
 	private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -276,4 +294,13 @@ public class EventListFragment extends ListFragment {
 
 		}
 	};
+
+	private void setTodayDateTextView(String todayString) {
+
+		todayDateTextView.setText("(".concat(todayString).concat(")"));
+	}
+
+	private String getTodayDateTextView() {
+		return todayDateTextView.getText().toString().replace("(", "").replace(")", "");
+	}
 }
