@@ -20,7 +20,7 @@
 				android:id="@+id/today_events"
 				style="@style/LabelTextStyle"
 				android:checked="true"
-				android:paddingBottom="10dp"
+				android:paddingBottom="15dp"
 				android:layout_alignParentLeft="true"
 				android:text="@string/today_list_events_label"/>
 		<TextView

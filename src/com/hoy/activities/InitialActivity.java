@@ -1,7 +1,9 @@
 package com.hoy.activities;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.asynctasks.GetInitialContentAsyncTask;
@@ -56,5 +58,12 @@ public class InitialActivity extends GenericActivity {
 	@Override
 	protected Context getContext() {
 		return this;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+			ImageView imageView = (ImageView)findViewById(R.id.init_image);
+			imageView.setBackgroundResource(R.drawable.init_image);
 	}
 }

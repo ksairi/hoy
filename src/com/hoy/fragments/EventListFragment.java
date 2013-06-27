@@ -341,10 +341,6 @@ public class EventListFragment extends ListFragment {
 		todayDateTextView.setText("(".concat(todayString).concat(")"));
 	}
 
-	private String getTodayDateTextView() {
-		return todayDateTextView.getText().toString().replace("(", "").replace(")", "");
-	}
-
 	@Override
 	public void onViewStateRestored(Bundle savedInstanceState) {
 		super.onViewStateRestored(savedInstanceState);
