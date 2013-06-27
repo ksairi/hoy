@@ -41,4 +41,5 @@ public class MilongaHoyConstants {
 	public static final Integer PROMO_IMG_BASE_64_INDEX_POSITION = 0;
 	public static final Integer PROMO_IMG_URL_DESTINATION_INDEX_POSITION = 1;
 	public static final String ERROR_SYNC_EVENTS = "errorSyncEvents";
+	public static final String TODAY_STRING = "todayString";
 }

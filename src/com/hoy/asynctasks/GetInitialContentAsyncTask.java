@@ -3,12 +3,17 @@ package com.hoy.asynctasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
-import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
+import com.hoy.dto.EventDTO;
 import com.hoy.fragments.ProgressDialogFragment;
 import com.hoy.helpers.FragmentHelper;
+import com.hoy.model.FilterParams;
 import com.hoy.model.PromoImg;
 import com.hoy.services.EventsService;
 import com.hoy.services.ImageService;
+import com.hoy.utilities.DateUtils;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,13 +27,15 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 	private Context context;
 	private PromoImg promoImg;
 	private static String SUCCESS = "success";
-	private GenericSuccessHandleable genericSuccessHandleable;
+	private GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable;
 	private FragmentManager fragmentManager;
 	private ProgressDialogFragment progressDialogFragment;
+	private List<EventDTO> eventDTOs;
 
-	public GetInitialContentAsyncTask(Context context, PromoImg promoImg, FragmentManager fragmentManager, GenericSuccessHandleable genericSuccessHandleable) {
+	//public GetInitialContentAsyncTask(Context context, PromoImg promoImg, FragmentManager fragmentManager, GenericSuccessHandleable genericSuccessHandleable) {
+	public GetInitialContentAsyncTask(Context context, PromoImg promoImg, FragmentManager fragmentManager, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
 		this.context = context;
-		this.genericSuccessHandleable = genericSuccessHandleable;
+		this.genericSuccessListHandleable = genericSuccessListHandleable;
 		this.promoImg = promoImg;
 		this.fragmentManager = fragmentManager;
 	}
@@ -41,8 +48,12 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 
 	@Override
 	protected String doInBackground(String... strings) {
+
 		String jsonEvents = EventsService.syncAndSaveEvents(EventsService.getParametersDTO(), context);
+		eventDTOs = EventsService.getInstance().getFilteredEventDTOs(context, new FilterParams(DateUtils.getTodayString()));
+
 		String promoImgResult = ImageService.syncAndSavePromoImgs(promoImg, context);
+
 		if (jsonEvents != null && promoImgResult != null) {
 			return SUCCESS;
 		}
@@ -55,10 +66,10 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 		FragmentHelper.hideProgressDialog(progressDialogFragment);
 		if (responseString != null && responseString.equals(SUCCESS)) {
 
-			genericSuccessHandleable.handleSuccessCallBack();
+			genericSuccessListHandleable.handleSuccessCallBack(eventDTOs);
 
 		} else {
-			genericSuccessHandleable.handleErrorResult();
+			genericSuccessListHandleable.handleErrorCallBack(eventDTOs);
 		}
 
 	}

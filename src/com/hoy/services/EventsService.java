@@ -94,6 +94,11 @@ public class EventsService {
 				Log.i(TAG, "Error al sincronizar los eventos");
 				genericSuccessHandleable.handleErrorResult();
 			}
+
+			public void handleErrorCallBack(List<EventDTO> remoteEventDTOs) {
+
+
+			}
 		}).execute();
 	}
 
@@ -167,6 +172,7 @@ public class EventsService {
 
 				if (eventsToSave != null && !eventsToSave.equals(MilongaHoyConstants.EMPTY_STRING)) {
 					saveServerLastTimeUpdate(uiContext, remoteEvents);
+					eventsToSave = getInstance().sortList(eventsToSave);
 					saveMilongasData(uiContext, eventsToSave);
 				}
 
@@ -207,7 +213,7 @@ public class EventsService {
 					localEventsDTO.add(remoteEventDTO);
 				}
 			}
-			sortList(remoteEvents);
+			getInstance().sortList(remoteEvents);
 			resultLocalEvents = GsonHelper.parseEntityToJson(localEventsDTO);
 		}
 
@@ -283,7 +289,7 @@ public class EventsService {
 		String jsonResult = RestClient.executeHttpGetRequest(url);
 		jsonResult = GsonHelper.parseResponse(jsonResult);
 		if (jsonResult != null) {
-			jsonResult = EventsService.getInstance().sortList(jsonResult);
+			jsonResult = getInstance().sortList(jsonResult);
 			saveServerLastTimeUpdate(uiContext, jsonResult);
 			EventsService.saveMilongasData(uiContext, jsonResult);
 		}

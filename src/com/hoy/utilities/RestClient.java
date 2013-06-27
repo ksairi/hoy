@@ -54,7 +54,7 @@ public class RestClient {
 			// Las urls GET deben ser del tipo http://hostname/app/action?param1=value1&param2=value2
 
 			url = url.replace(" ", "%20").replace(">", "%3E");
-
+			//Log.i(TAG, url);
 			HttpGet httpGet = new HttpGet(url);
 
 			httpGet.setHeader("Accept", "application/json");

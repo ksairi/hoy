@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.view.Window;
-import com.hoy.dto.EventDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public abstract class GenericActivity extends FragmentActivity {
 		customStartActivity(intent, finish);
 	}
 
-	protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<EventDTO> extras, Boolean finish) {
+	protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<Parcelable> extras, Boolean finish) {
 
 
 		Intent intent = new Intent(this, clazz);

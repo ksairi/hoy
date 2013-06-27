@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
+import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
@@ -69,7 +70,7 @@ public class EventListFragment extends ListFragment {
 		todayDateTextView = (TextView) activityAttached.findViewById(R.id.today_date);
 		setTodayDateTextView(DateUtils.getTodayDateToShow());
 
-		syncEventList();
+		//syncEventList();
 
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
@@ -84,25 +85,32 @@ public class EventListFragment extends ListFragment {
 		if (extras != null) {
 			eventDTOs = extras.getParcelableArrayList(MilongaHoyConstants.EVENT_DTOS);
 			updateAdapter(eventDTOs);
+		} else {
+			syncEventList();
 		}
-
 
 		scheduleFutureHourly = EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
 		scheduleFutureDaily = EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
 
+		SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING, DateUtils.getTodayDateToShow());
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		String todayString = DateUtils.getTodayDateToShow();
-		Boolean isTodayDateTextViewValid = todayString.equals(getTodayDateTextView());
-		if (!isTodayDateTextViewValid) {
+		String savedTodayString = SharedPreferencesHelper.getValueInSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING);
+		if (!todayString.equals(savedTodayString)) {
+			newMilongasUpdate = false;
+			reScheduleTasks();
+			SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING, todayString);
 			setTodayDateTextView(todayString);
+			syncRemoteEvents();
+			return;
 		}
 
-		if ((todayEvents.isChecked() && !isTodayDateTextViewValid) || newMilongasUpdate) {
+
+		if (newMilongasUpdate) {
 
 			syncEventList();
 			newMilongasUpdate = false;
@@ -113,6 +121,37 @@ public class EventListFragment extends ListFragment {
 				errorSyncEvents = false;
 			}
 		}
+	}
+
+	private void reScheduleTasks() {
+
+		if (scheduleFutureHourly != null) {
+			scheduleFutureHourly.cancel(true);
+
+		}
+		if (scheduleFutureDaily != null) {
+
+			scheduleFutureDaily.cancel(true);
+
+		}
+		scheduleFutureHourly = EventsScheduler.startSyncEventsHourly(getActivity(), syncEventsHandler, 1);
+		scheduleFutureDaily = EventsScheduler.startSyncEventsDaily(getActivity(), syncEventsHandler, 1);
+	}
+
+	private void syncRemoteEvents() {
+
+		EventsService.getInstance().synchronizeEventsFromServer(getActivity(), getFragmentManager(), new GenericSuccessHandleable() {
+			public void handleSuccessCallBack() {
+
+				syncEventList();
+			}
+
+			public void handleErrorResult() {
+
+				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
+			}
+		});
+
 	}
 
 	@Override
@@ -138,7 +177,11 @@ public class EventListFragment extends ListFragment {
 
 			public void handleErrorResult() {
 
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
+			}
+
+			public void handleErrorCallBack(List<EventDTO> localEventDTOs) {
+
 			}
 		}).execute();
 
@@ -216,13 +259,11 @@ public class EventListFragment extends ListFragment {
 		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
 
-			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
-				public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
-					updateAdapter(remoteEventDTOs);
+			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), new GenericSuccessHandleable() {
+				public void handleSuccessCallBack() {
 
 					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
-					syncLocalEvents.setVisibility(View.GONE);
-					Toast.makeText(activityAttached, R.string.events_updated_succ, Toast.LENGTH_SHORT).show();
+					syncEventList();
 				}
 
 				public void handleErrorResult() {
@@ -302,5 +343,11 @@ public class EventListFragment extends ListFragment {
 
 	private String getTodayDateTextView() {
 		return todayDateTextView.getText().toString().replace("(", "").replace(")", "");
+	}
+
+	@Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+		todayEvents.setText(R.string.today_list_events_label);
 	}
 }

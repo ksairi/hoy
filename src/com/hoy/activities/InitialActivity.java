@@ -2,12 +2,18 @@ package com.hoy.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.asynctasks.GetInitialContentAsyncTask;
-import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
+import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
+import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.dto.EventDTO;
 import com.hoy.model.PromoImg;
 import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.ImageService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,15 +33,21 @@ public class InitialActivity extends GenericActivity {
 
 	private void prepareContent() {
 		final PromoImg promoImg = ImageService.getPromoImg(getContext());
-		new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessHandleable() {
-			public void handleSuccessCallBack() {
+		new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
+			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
 				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
-				genericStartActivity(HomeActivity.class, true);
+				genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
 			}
 
 			public void handleErrorResult() {
+
+			}
+
+			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+
+				Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
 				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
-				genericStartActivity(HomeActivity.class, true);
+				genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
 			}
 		}).execute();
 

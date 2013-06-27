@@ -12,4 +12,6 @@ import java.util.List;
 public interface GenericSuccessListHandleable<T> extends GenericErrorHandleable {
 
 	public void handleSuccessCallBack(List<T> list);
+
+	public void handleErrorCallBack(List<T> list);
 }
