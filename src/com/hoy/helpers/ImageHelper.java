@@ -22,7 +22,11 @@ public class ImageHelper {
 	private static final String IMG_PROMO_WIDTH_PARAMETER = "w";
 	private static final String IMG_PROMO_HEIGHT_PARAMETER = "h";
 	private static final String IMG_PROMO_APP_NUMBER_PARAMETER = "i";
-	private static final String IMG_PROMO_APP_NUMBER_VALUE = "0";
+	/// JEFF! change this to customize the banner
+    //0 = get all banners
+    // 1 = flordemilonga
+    // 2 = teachingtango
+    private static final String IMG_PROMO_APP_NUMBER_VALUE = "2";
 
 	public static String buildUrl(PromoImg promoImg) {
 
