@@ -26,7 +26,7 @@ public class ImageHelper {
     //0 = get all banners
     // 1 = flordemilonga
     // 2 = teachingtango
-    private static final String IMG_PROMO_APP_NUMBER_VALUE = "2";
+    private static final String IMG_PROMO_APP_NUMBER_VALUE = "0";
 
 	public static String buildUrl(PromoImg promoImg) {
 
