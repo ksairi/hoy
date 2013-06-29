@@ -80,9 +80,9 @@ public class EventsService {
 	}
 
 
-	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
+	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, FilterParams filterParams, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
 
-		new SyncEventsAsyncTask(context, new ParametersDTO(), fragmentManager, new GenericSuccessListHandleable<EventDTO>() {
+		new SyncEventsAsyncTask(context, new ParametersDTO(), fragmentManager, filterParams, new GenericSuccessListHandleable<EventDTO>() {
 
 			public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 

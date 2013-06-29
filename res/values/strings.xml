@@ -31,7 +31,9 @@
 	<string name="special_event">Special Event</string>
 	<string name="website_label">Website</string>
 	<string name="reservation_advised">Reservation Recommended</string>
-	<string name="classes_details_label"><u>Class Details</u></string>
+	<string name="classes_details_label">
+		<u>Class Details</u>
+	</string>
 	<string name="first_class_time_label">First Class Time</string>
 	<string name="how_to_get_there_label">How to get</string>
 	<string name="you_are_here">You\'re here</string>

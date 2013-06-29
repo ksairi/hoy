@@ -2,13 +2,13 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				xmlns:tools="http://schemas.android.com/tools"
-			  	android:layout_width="fill_parent"
-			  	android:layout_height="fill_parent"
-			  	tools:context="com.hoy.activities.GoogleMapActivity">
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				tools:context="com.hoy.activities.GoogleMapActivity">
 	<fragment
-		android:id="@+id/map"
-	    class="com.google.android.gms.maps.SupportMapFragment"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"/>
+			android:id="@+id/map"
+			class="com.google.android.gms.maps.SupportMapFragment"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
 
 </RelativeLayout>

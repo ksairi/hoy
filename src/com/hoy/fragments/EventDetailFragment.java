@@ -196,23 +196,23 @@ public class EventDetailFragment extends Fragment {
 		public void onClick(View view) {
 
 			Intent intent = new Intent(getActivity(), GoogleMapActivity.class);
-			try{
+			try {
 				Double latitude = Double.parseDouble(eventDTO.getLatitude());
 				Double longitude = Double.parseDouble(eventDTO.getLongitude());
-				String  name = eventDTO.getName();
+				String name = eventDTO.getName();
 				String eventAddress = AddressHelper.getEventAddress(eventDTO);
-				if(name == null){
+				if (name == null) {
 					name = MilongaHoyConstants.EMPTY_STRING;
 				}
-					intent.putExtra(MilongaHoyConstants.EVENT_NAME, name);
-					intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, latitude);
-					intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, longitude);
-					intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
-					getActivity().startActivity(intent);
+				intent.putExtra(MilongaHoyConstants.EVENT_NAME, name);
+				intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, latitude);
+				intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, longitude);
+				intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
+				getActivity().startActivity(intent);
 
 
-			}catch (NumberFormatException e){
-				Toast.makeText(getActivity(),R.string.invalid_map_data,Toast.LENGTH_SHORT);
+			} catch (NumberFormatException e) {
+				Toast.makeText(getActivity(), R.string.invalid_map_data, Toast.LENGTH_SHORT);
 			}
 
 		}

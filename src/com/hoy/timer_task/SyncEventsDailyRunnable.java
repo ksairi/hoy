@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.ParametersDTO;
+import com.hoy.helpers.SharedPreferencesHelper;
+import com.hoy.utilities.DateUtils;
 
 public class SyncEventsDailyRunnable extends GenericSyncEvents {
 
@@ -48,5 +50,10 @@ public class SyncEventsDailyRunnable extends GenericSyncEvents {
 	@Override
 	protected Boolean isDeltaUpdate() {
 		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	protected void setLastFullUpdateDate() {
+		SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayDateToShow());
 	}
 }

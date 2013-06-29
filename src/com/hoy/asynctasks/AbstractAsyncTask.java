@@ -20,6 +20,7 @@ import com.hoy.dto.message.MessageDTO;
 import com.hoy.fragments.ProgressDialogFragment;
 import com.hoy.helpers.FragmentHelper;
 import com.hoy.helpers.GsonHelper;
+import com.hoy.model.FilterParams;
 import com.hoy.services.EventsService;
 
 import java.lang.reflect.Type;
@@ -39,6 +40,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	protected ProgressDialogFragment progressDialogFragment;
 	protected GenericSuccessHandleable genericSuccessHandleable;
 	protected GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable;
+	protected FilterParams filterParams;
 
 
 	protected Context uiContext;
@@ -51,6 +53,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 		if (jsonEvents != null) {
 			if (genericSuccessListHandleable != null) {
 				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonEvents, getType());
+				eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
 			}
 			return SUCCESS;
 		} else {

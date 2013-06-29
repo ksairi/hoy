@@ -10,11 +10,11 @@
 				android:id="@+id/event_name"
 				style="@style/LabelTextStyle"/>
 		<TextView
-			android:id="@+id/slash"
-			style="@style/LabelTextStyle"
-			android:layout_toRightOf="@id/event_name"
-			android:layout_marginLeft="10dp"
-			android:text="-"/>
+				android:id="@+id/slash"
+				style="@style/LabelTextStyle"
+				android:layout_toRightOf="@id/event_name"
+				android:layout_marginLeft="10dp"
+				android:text="-"/>
 
 		<TextView
 				android:id="@+id/event_neighbourhood"
@@ -36,31 +36,30 @@
 				style="@style/LabelTextStyle"
 				android:layout_toRightOf="@id/event_appointment_date"/>
 		<TextView
-			android:id="@+id/event_cancelled"
-			style="@style/LabelTextStyle"
-			android:layout_toRightOf="@id/event_begin_time"
-			android:textColor="#ff0000"
-			android:layout_marginLeft="10dp"
-			android:visibility="gone"
-			android:text="@string/event_cancelled"/>
+				android:id="@+id/event_cancelled"
+				style="@style/LabelTextStyle"
+				android:layout_toRightOf="@id/event_begin_time"
+				android:textColor="#ff0000"
+				android:layout_marginLeft="10dp"
+				android:visibility="gone"
+				android:text="@string/event_cancelled"/>
 
 		<ImageView
-			android:id="@+id/event_has_classes"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:background="@drawable/class_icon"
-			android:layout_alignParentRight="true"
-			android:contentDescription="@string/event_has_classes"/>
+				android:id="@+id/event_has_classes"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:background="@drawable/class_icon"
+				android:layout_alignParentRight="true"
+				android:contentDescription="@string/event_has_classes"/>
 
 		<ImageView
-			android:id="@+id/event_special_event"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:background="@drawable/special_event_icon"
-			android:layout_toLeftOf="@id/event_has_classes"
-			android:layout_marginRight="50dp"
-			android:contentDescription="@string/event_special_event"/>
-
+				android:id="@+id/event_special_event"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:background="@drawable/special_event_icon"
+				android:layout_toLeftOf="@id/event_has_classes"
+				android:layout_marginRight="50dp"
+				android:contentDescription="@string/event_special_event"/>
 
 
 	</RelativeLayout>

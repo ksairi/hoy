@@ -63,7 +63,7 @@ public class InitialActivity extends GenericActivity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-			ImageView imageView = (ImageView)findViewById(R.id.init_image);
-			imageView.setBackgroundResource(R.drawable.init_image);
+		ImageView imageView = (ImageView) findViewById(R.id.init_image);
+		imageView.setBackgroundResource(R.drawable.init_image);
 	}
 }

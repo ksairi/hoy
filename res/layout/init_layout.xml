@@ -5,11 +5,11 @@
 			  android:layout_height="fill_parent">
 
 	<ImageView
-		android:id="@+id/init_image"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:background="@drawable/init_image"
-		android:contentDescription="@string/answer_no">
+			android:id="@+id/init_image"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="@drawable/init_image"
+			android:contentDescription="@string/answer_no">
 	</ImageView>
 
 </LinearLayout>

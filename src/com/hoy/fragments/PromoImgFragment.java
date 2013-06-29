@@ -30,6 +30,7 @@ import java.util.concurrent.ScheduledFuture;
 public class PromoImgFragment extends Fragment {
 	ScheduledFuture changePromoImgtask;
 	PromoImgFragmentInterface promoImgFragmentInterface;
+	String promoImgUrlDestination;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,8 +57,11 @@ public class PromoImgFragment extends Fragment {
 			String[] promoImgData = bundle.getStringArray(MilongaHoyConstants.PROMO_IMG_DATA);
 			Animation myFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
 			promoImageView.startAnimation(myFadeInAnimation); //Set animation to your ImageView
-			promoImageView.setImageBitmap(ImageHelper.getBitMap(promoImgData[MilongaHoyConstants.PROMO_IMG_BASE_64_INDEX_POSITION]));
-			final String promoImgUrlDestination = promoImgData[(MilongaHoyConstants.PROMO_IMG_URL_DESTINATION_INDEX_POSITION)];
+
+			if (promoImgData != null) {
+				promoImageView.setImageBitmap(ImageHelper.getBitMap(promoImgData[MilongaHoyConstants.PROMO_IMG_BASE_64_INDEX_POSITION]));
+				promoImgUrlDestination = promoImgData[(MilongaHoyConstants.PROMO_IMG_URL_DESTINATION_INDEX_POSITION)];
+			}
 
 			promoImageView.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View view) {

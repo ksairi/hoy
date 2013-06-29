@@ -28,7 +28,9 @@
 	<string name="special_event">Evento Especial</string>
 	<string name="website_label">Sitio Web</string>
 	<string name="reservation_advised">Se sugiere reservar</string>
-	<string name="classes_details_label"><u>Detalles de Clase</u></string>
+	<string name="classes_details_label">
+		<u>Detalles de Clase</u>
+	</string>
 	<string name="how_to_get_there_label">Como llegar</string>
 	<string name="you_are_here">Ud. está aquí</string>
 	<string name="event_map">Mapa de Milonga</string>
@@ -38,7 +40,6 @@
 	<string name="cant_sync_new_events">No se pueden obtener novedades en las milongas. Chequea tu conexión a internet</string>
 	<string name="sync_local_events">Novedades recientes</string>
 	<string name="invalid_map_data">Disculpa, no se puede mostrar la ubicación</string>
-
 
 
 </resources>

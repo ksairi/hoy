@@ -6,6 +6,7 @@ import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.dto.EventDTO;
 import com.hoy.dto.ParametersDTO;
+import com.hoy.model.FilterParams;
 import com.hoy.services.EventsService;
 
 /**
@@ -21,8 +22,8 @@ public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO,
 		super(uiContext, paramEntity, fragmentManager, genericHandleable);
 	}
 
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
-		super(uiContext, paramEntity, fragmentManager, genericSuccessListHandleable);
+	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
+		super(uiContext, paramEntity, fragmentManager, filterParams, genericSuccessListHandleable);
 	}
 
 	@Override

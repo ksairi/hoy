@@ -32,7 +32,7 @@ public class ParametersDTO {
 	public static String getHourlyRefreshParameters(Context context) {
 
 		String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(getWhereClause());
-		if(context != null){
+		if (context != null) {
 			String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
 			if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
 				result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
@@ -42,7 +42,7 @@ public class ParametersDTO {
 
 	}
 
-	private static String getWhereClause(){
+	private static String getWhereClause() {
 
 		String todayString = "'".concat(DateUtils.getTodayString()).concat("'");
 		return "date between ".concat(todayString).concat(" AND ADDDATE(").concat(todayString).concat(",7) AND areaId=1");

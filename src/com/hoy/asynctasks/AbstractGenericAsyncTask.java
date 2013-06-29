@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.dto.EventDTO;
+import com.hoy.model.FilterParams;
 
 /**
  * Encargada de generalizar todo el comportamiento que prepara los datos para enviar al servicio remoto y recibir su respuesta.
@@ -26,11 +27,12 @@ public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T
 		this.fragmentManager = fragmentManager;
 	}
 
-	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
+	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
 		this.uiContext = uiContext;
 		this.paramEntity = paramEntity;
 		this.genericSuccessListHandleable = genericSuccessListHandleable;
 		this.fragmentManager = fragmentManager;
+		this.filterParams = filterParams;
 
 	}
 

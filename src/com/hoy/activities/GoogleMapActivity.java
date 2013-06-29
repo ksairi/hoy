@@ -99,18 +99,18 @@ public class GoogleMapActivity extends GenericActivity {
 		LatLng milongaLocation = null;
 		for (EventDTO eventDTO : eventDTOs) {
 
-			try{
+			try {
 				Double latitude = Double.parseDouble(eventDTO.getLatitude());
 				Double longitude = Double.parseDouble(eventDTO.getLongitude());
-				String name = eventDTO.getName() == null?MilongaHoyConstants.EMPTY_STRING:eventDTO.getName();
+				String name = eventDTO.getName() == null ? MilongaHoyConstants.EMPTY_STRING : eventDTO.getName();
 
-				if(latitude != null && longitude != null){
+				if (latitude != null && longitude != null) {
 
-					milongaLocation = new LatLng(latitude , longitude);
+					milongaLocation = new LatLng(latitude, longitude);
 
 					addMarker(milongaLocation, name, AddressHelper.getEventAddress(eventDTO));
 				}
-			}catch (NumberFormatException e){
+			} catch (NumberFormatException e) {
 
 			}
 		}

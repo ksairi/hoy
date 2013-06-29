@@ -47,4 +47,9 @@ public class SyncEventsHourlyRunnable extends GenericSyncEvents {
 		return true;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
+	@Override
+	protected void setLastFullUpdateDate() {
+
+	}
+
 }

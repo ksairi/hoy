@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
-import com.hoy.asynctasks.interfaces.GenericSuccessHandleable;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
@@ -104,8 +104,16 @@ public class EventListFragment extends ListFragment {
 			newMilongasUpdate = false;
 			reScheduleTasks();
 			SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING, todayString);
+			if (SharedPreferencesHelper.getValueInSharedPreferences(getActivity(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE).equals(todayString)) {
+				syncEventList();
+				Log.i("ksairi", "ya se habia updeteado entonces leyo local");
+			} else {
+				syncRemoteEvents();
+				Log.i("ksairi", "syncRemoteEvents");
+			}
+
 			setTodayDateTextView(todayString);
-			syncRemoteEvents();
+
 			return;
 		}
 
@@ -140,15 +148,21 @@ public class EventListFragment extends ListFragment {
 
 	private void syncRemoteEvents() {
 
-		EventsService.getInstance().synchronizeEventsFromServer(getActivity(), getFragmentManager(), new GenericSuccessHandleable() {
-			public void handleSuccessCallBack() {
+		EventsService.getInstance().synchronizeEventsFromServer(getActivity(), getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
+			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
 
-				syncEventList();
+				updateAdapter(eventDTOs);
 			}
 
 			public void handleErrorResult() {
 
 				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
+			}
+
+			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+
+				updateAdapter(eventDTOs);
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -256,25 +270,30 @@ public class EventListFragment extends ListFragment {
 
 	public void updateManually() {
 
-		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
+		//if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
 
-			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), new GenericSuccessHandleable() {
-				public void handleSuccessCallBack() {
+		EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
+			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
 
-					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
-					syncEventList();
-				}
+				SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
+				updateAdapter(eventDTOs);
+			}
 
-				public void handleErrorResult() {
+			public void handleErrorResult() {
 
-					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
-				}
-			});
-		} else {
-			Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
-		}
+			}
+
+			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+
+				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+			}
+		});
+		//} else {
+		//	Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
+		//}
 
 	}
 

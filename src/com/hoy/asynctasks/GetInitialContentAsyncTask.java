@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
+import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.ProgressDialogFragment;
 import com.hoy.helpers.FragmentHelper;
+import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.FilterParams;
 import com.hoy.model.PromoImg;
 import com.hoy.services.EventsService;
@@ -55,6 +57,7 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 		String promoImgResult = ImageService.syncAndSavePromoImgs(promoImg, context);
 
 		if (jsonEvents != null && promoImgResult != null) {
+			SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayDateToShow());
 			return SUCCESS;
 		}
 		return null;

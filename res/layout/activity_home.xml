@@ -5,10 +5,10 @@
 		style="@style/background_paper">
 
 	<fragment
-		android:name="com.hoy.fragments.PromoImgFragment"
-		android:id="@+id/promoImgFragment"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"/>
+			android:name="com.hoy.fragments.PromoImgFragment"
+			android:id="@+id/promoImgFragment"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
 
 	<LinearLayout style="@style/fragment_wrapper">
 
