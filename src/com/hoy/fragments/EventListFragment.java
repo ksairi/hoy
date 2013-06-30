@@ -270,30 +270,31 @@ public class EventListFragment extends ListFragment {
 
 	public void updateManually() {
 
-		//if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
+		if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
 
-		EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
-			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
+			EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
+				public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
 
-				SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
-				updateAdapter(eventDTOs);
-			}
+					SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
+					updateAdapter(eventDTOs);
+				}
 
-			public void handleErrorResult() {
+				public void handleErrorResult() {
 
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
-			}
+				}
 
-			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+				public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
-			}
-		});
-		//} else {
-		//	Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
-		//}
+					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				}
+			});
+
+		} else {
+			Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
+		}
 
 	}
 

@@ -75,7 +75,7 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 	}
 
 	protected void onPostExecute(String result) {
-		FragmentHelper.hideProgressDialog(progressDialogFragment);
+		fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
 		if (result != null && result.equals(SUCCESS)) {
 			doOnSuccess();
 		} else {

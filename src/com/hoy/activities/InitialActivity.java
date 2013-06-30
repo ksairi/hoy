@@ -66,4 +66,9 @@ public class InitialActivity extends GenericActivity {
 		ImageView imageView = (ImageView) findViewById(R.id.init_image);
 		imageView.setBackgroundResource(R.drawable.init_image);
 	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    //No call for super(). Bug on API Level > 11.
+	}
 }

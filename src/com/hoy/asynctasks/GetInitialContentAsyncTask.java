@@ -66,7 +66,7 @@ public class GetInitialContentAsyncTask extends AsyncTask<String, Void, String> 
 	@Override
 	protected void onPostExecute(String responseString) {
 		super.onPostExecute(responseString);
-		FragmentHelper.hideProgressDialog(progressDialogFragment);
+		fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
 		if (responseString != null && responseString.equals(SUCCESS)) {
 
 			genericSuccessListHandleable.handleSuccessCallBack(eventDTOs);
