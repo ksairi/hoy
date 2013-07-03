@@ -4,11 +4,17 @@
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		style="@style/background_paper">
 
-	<fragment
-			android:name="com.hoy.fragments.PromoImgFragment"
-			android:id="@+id/promoImgFragment"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal">
+
+		<fragment
+				android:name="com.hoy.fragments.PromoImgFragment"
+				android:id="@+id/promoImgFragment"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+	</LinearLayout>
 
 	<LinearLayout style="@style/fragment_wrapper">
 
