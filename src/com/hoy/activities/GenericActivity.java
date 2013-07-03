@@ -30,12 +30,6 @@ public abstract class GenericActivity extends FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-
-	}
-
 	protected void genericStartActivity(Class<?> clazz, Map<String, String> paramsMap, Boolean finish) {
 
 

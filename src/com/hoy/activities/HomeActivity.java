@@ -106,6 +106,13 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 		//ImageService.retrievePromoImg(getContext());
 	}
 
+	public void autoSelectFirst(EventDTO eventDTO, Integer index) {
+		if (mDualPane) {
+
+			onItemSelected(eventDTO,index);
+		}
+	}
+
 	public Boolean getNextPromoImg() {
 		return true;
 	}

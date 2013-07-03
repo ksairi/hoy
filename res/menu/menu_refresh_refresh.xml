@@ -3,5 +3,6 @@
 	<item
 			android:id="@+id/refresh_btn"
 			android:icon="@drawable/refresh_menu_icon"
-			android:title="@string/update_manually"/>
+			android:title="@string/update_manually"
+			android:showAsAction="ifRoom|withText"/>
 </menu>

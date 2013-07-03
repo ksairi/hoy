@@ -7,7 +7,7 @@
 	<fragment
 			android:name="com.hoy.fragments.PromoImgFragment"
 			android:id="@+id/promoImgFragment"
-			android:layout_width="fill_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"/>
 
 	<LinearLayout style="@style/fragment_wrapper">

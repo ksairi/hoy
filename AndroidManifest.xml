@@ -49,10 +49,5 @@
 				android:name="com.google.android.maps.v2.API_KEY"
 				android:value="AIzaSyAsh4Ti_cXfXzNjJo0zclCstj6Um_pD3Ak"/>
 
-		<!-- desarrollo - Mariano -->
-		<!-- AIzaSyDgVCDomTS7ra46sW261BtLoqyGZPxANJI -->
-
-		<!-- prod -->
-		<!-- AIzaSyAsh4Ti_cXfXzNjJo0zclCstj6Um_pD3Ak -->
 	</application>
 </manifest> 

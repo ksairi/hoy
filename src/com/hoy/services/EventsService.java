@@ -80,24 +80,24 @@ public class EventsService {
 	}
 
 
-	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, FilterParams filterParams, final GenericSuccessListHandleable<EventDTO> genericSuccessHandleable) {
+	public void synchronizeEventsFromServer(final Context context, FragmentManager fragmentManager, FilterParams filterParams, final GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
 
 		new SyncEventsAsyncTask(context, new ParametersDTO(), fragmentManager, filterParams, new GenericSuccessListHandleable<EventDTO>() {
 
 			public void handleSuccessCallBack(List<EventDTO> remoteEventDTOs) {
 
-				genericSuccessHandleable.handleSuccessCallBack(remoteEventDTOs);
+				genericSuccessListHandleable.handleSuccessCallBack(remoteEventDTOs);
 
 			}
 
 			public void handleErrorResult() {
 				Log.i(TAG, "Error al sincronizar los eventos");
-				genericSuccessHandleable.handleErrorResult();
+				genericSuccessListHandleable.handleErrorResult();
 			}
 
 			public void handleErrorCallBack(List<EventDTO> remoteEventDTOs) {
 
-
+				genericSuccessListHandleable.handleErrorCallBack(remoteEventDTOs);
 			}
 		}).execute();
 	}

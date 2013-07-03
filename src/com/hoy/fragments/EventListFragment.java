@@ -70,8 +70,6 @@ public class EventListFragment extends ListFragment {
 		todayDateTextView = (TextView) activityAttached.findViewById(R.id.today_date);
 		setTodayDateTextView(DateUtils.getTodayDateToShow());
 
-		//syncEventList();
-
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
 		TextView todaysMap = (TextView) getActivity().findViewById(R.id.today_events_map);
@@ -106,10 +104,8 @@ public class EventListFragment extends ListFragment {
 			SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING, todayString);
 			if (SharedPreferencesHelper.getValueInSharedPreferences(getActivity(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE).equals(todayString)) {
 				syncEventList();
-				Log.i("ksairi", "ya se habia updeteado entonces leyo local");
 			} else {
 				syncRemoteEvents();
-				Log.i("ksairi", "syncRemoteEvents");
 			}
 
 			setTodayDateTextView(todayString);
@@ -156,13 +152,13 @@ public class EventListFragment extends ListFragment {
 
 			public void handleErrorResult() {
 
-				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
 			}
 
 			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
 				updateAdapter(eventDTOs);
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -210,6 +206,8 @@ public class EventListFragment extends ListFragment {
 		public void onDateOptionChanged();
 
 		public void onClickTodaysMap();
+
+		public void autoSelectFirst(EventDTO eventDTO, Integer index);
 	}
 
 	@Override
@@ -282,13 +280,13 @@ public class EventListFragment extends ListFragment {
 
 				public void handleErrorResult() {
 
-					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
 				}
 
 				public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
-					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 				}
 			});
 
@@ -299,14 +297,13 @@ public class EventListFragment extends ListFragment {
 	}
 
 	private void updateAdapter(List<EventDTO> eventDTOs) {
-		if (activityAttached != null) {
+		if (activityAttached != null && eventDTOs != null && !eventDTOs.isEmpty() && activityAttached != null) {
 			this.eventDTOs = eventDTOs;
 			ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(activityAttached, eventDTOs, todayEvents.isChecked());
 			getListView().setAdapter(arrayAdapter);
 			listener.onDateOptionChanged();
-		}
-		if (!eventDTOs.isEmpty() && activityAttached != null) {
 			activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
+			listener.autoSelectFirst(eventDTOs.get(0), 0);
 		} else {
 			if (activityAttached != null) {
 				activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
