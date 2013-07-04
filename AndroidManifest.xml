@@ -34,16 +34,16 @@
 	<application android:label="@string/app_name"
 				 android:icon="@drawable/launch_icon"
 				 android:allowBackup="true">
-		<activity android:name=".activities.InitialActivity" android:configChanges="orientation|screenSize|keyboardHidden">
+		<activity android:name=".activities.InitialActivity" android:configChanges="orientation|screenSize|keyboardHidden" android:theme="@style/Theme.Sherlock.Light">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|screenSize|keyboardHidden"/>
-		<activity android:name=".activities.EventDetailsActivity"/>
-		<activity android:name=".activities.GoogleMapActivity"/>
+		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|screenSize|keyboardHidden" android:theme="@style/Theme.Sherlock.Light"/>
+		<activity android:name=".activities.EventDetailsActivity" android:theme="@style/Theme.Sherlock.Light"/>
+		<activity android:name=".activities.GoogleMapActivity" android:theme="@style/Theme.Sherlock.Light"/>
 
 		<meta-data
 				android:name="com.google.android.maps.v2.API_KEY"

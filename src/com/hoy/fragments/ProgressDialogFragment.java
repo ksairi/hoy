@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.hoy.R;
 
 /**
@@ -18,7 +19,7 @@ import com.hoy.R;
  * Time: 10:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ProgressDialogFragment extends DialogFragment {
+public class ProgressDialogFragment extends SherlockDialogFragment {
 
 	public ProgressDialogFragment() {
 
