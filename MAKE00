@@ -1,0 +1,5 @@
+#!/bin/sh
+
+unzip -o hoypng.zip
+perl -pi -e 's/private static final String IMG_PROMO_APP_NUMBER_VALUE = ".";/private static final String IMG_PROMO_APP_NUMBER_VALUE = "0";/gmi' src/com/hoy/helpers/ImageHelper.java
+echo "Now make APK for i=0"
