@@ -162,13 +162,6 @@ public class GoogleMapActivity extends GenericActivity {
 		return this;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.google_map, menu);
-		return true;
-	}
-
 	private void redirectToMarket() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(R.string.most_recent_google_play_services_needed);

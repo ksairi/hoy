@@ -40,20 +40,14 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-
-		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|keyboardHidden"/>
-		<activity android:name=".activities.EventDetailsActivity"/>
-		<activity android:name=".activities.GoogleMapActivity"/>
+		<activity android:name=".activities.HomeActivity" android:configChanges="orientation|keyboardHidden" android:theme="@style/Theme.Sherlock.Light"/>
+		<activity android:name=".activities.EventDetailsActivity" android:theme="@style/Theme.Sherlock.Light"/>
+		<activity android:name=".activities.GoogleMapActivity" android:theme="@style/Theme.Sherlock.Light"/>
 
 		<meta-data
 				android:name="com.google.android.maps.v2.API_KEY"
 				android:value="AIzaSyBZrmcfqhrigYXnU34in9B1PtBIUrcSA2Q"/>
 		<!-- 		android:value="AIzaSyAsh4Ti_cXfXzNjJo0zclCstj6Um_pD3Ak"/-->
 
-		<!-- desarrollo - Mariano -->
-		<!-- AIzaSyDgVCDomTS7ra46sW261BtLoqyGZPxANJI -->
-
-		<!-- prod -->
-		<!-- AIzaSyAsh4Ti_cXfXzNjJo0zclCstj6Um_pD3Ak -->
 	</application>
 </manifest> 

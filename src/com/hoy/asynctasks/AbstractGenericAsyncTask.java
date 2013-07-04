@@ -51,7 +51,7 @@ public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T
 		if (genericSuccessHandleable != null) {
 			genericSuccessHandleable.handleErrorResult();
 		} else {
-			genericSuccessListHandleable.handleErrorResult();
+			genericSuccessListHandleable.handleErrorCallBack(eventDTOs);
 		}
 	}
 

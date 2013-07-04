@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
@@ -41,7 +40,7 @@ import java.util.concurrent.ScheduledFuture;
  * Time: 9:10 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EventListFragment extends ListFragment {
+public class EventListFragment extends SherlockListFragment {
 
 	protected List<EventDTO> eventDTOs;
 	protected EventListFragmentListener listener;
@@ -70,8 +69,6 @@ public class EventListFragment extends ListFragment {
 		todayDateTextView = (TextView) activityAttached.findViewById(R.id.today_date);
 		setTodayDateTextView(DateUtils.getTodayDateToShow());
 
-		//syncEventList();
-
 		todayEvents.setOnCheckedChangeListener(onCheckedChangeListener);
 
 		TextView todaysMap = (TextView) getActivity().findViewById(R.id.today_events_map);
@@ -98,6 +95,7 @@ public class EventListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		todayEvents.setText(R.string.today_list_events_label);
 		String todayString = DateUtils.getTodayDateToShow();
 		String savedTodayString = SharedPreferencesHelper.getValueInSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING);
 		if (!todayString.equals(savedTodayString)) {
@@ -106,10 +104,8 @@ public class EventListFragment extends ListFragment {
 			SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.TODAY_STRING, todayString);
 			if (SharedPreferencesHelper.getValueInSharedPreferences(getActivity(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE).equals(todayString)) {
 				syncEventList();
-				Log.i("ksairi", "ya se habia updeteado entonces leyo local");
 			} else {
 				syncRemoteEvents();
-				Log.i("ksairi", "syncRemoteEvents");
 			}
 
 			setTodayDateTextView(todayString);
@@ -156,13 +152,13 @@ public class EventListFragment extends ListFragment {
 
 			public void handleErrorResult() {
 
-				Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
 			}
 
 			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
 				updateAdapter(eventDTOs);
-				Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -205,11 +201,13 @@ public class EventListFragment extends ListFragment {
 
 		public void onItemSelected(EventDTO eventDTO, Integer index);
 
-		public void onMenuOptionSelected(MenuItem item);
+		public void onFragmentMenuOptionSelected(MenuItem item);
 
 		public void onDateOptionChanged();
 
 		public void onClickTodaysMap();
+
+		public void autoSelectFirst(EventDTO eventDTO, Integer index);
 	}
 
 	@Override
@@ -264,7 +262,7 @@ public class EventListFragment extends ListFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		listener.onMenuOptionSelected(item);
+		listener.onFragmentMenuOptionSelected(item);
 		return false;
 	}
 
@@ -282,13 +280,13 @@ public class EventListFragment extends ListFragment {
 
 				public void handleErrorResult() {
 
-					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
 				}
 
 				public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
-					Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 				}
 			});
 
@@ -299,14 +297,13 @@ public class EventListFragment extends ListFragment {
 	}
 
 	private void updateAdapter(List<EventDTO> eventDTOs) {
-		if (activityAttached != null) {
+		if (activityAttached != null && eventDTOs != null && !eventDTOs.isEmpty() && activityAttached != null) {
 			this.eventDTOs = eventDTOs;
 			ArrayAdapter<EventDTO> arrayAdapter = new EventListAdapter(activityAttached, eventDTOs, todayEvents.isChecked());
 			getListView().setAdapter(arrayAdapter);
 			listener.onDateOptionChanged();
-		}
-		if (!eventDTOs.isEmpty() && activityAttached != null) {
 			activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.VISIBLE);
+			listener.autoSelectFirst(eventDTOs.get(0), 0);
 		} else {
 			if (activityAttached != null) {
 				activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
@@ -361,9 +358,9 @@ public class EventListFragment extends ListFragment {
 		todayDateTextView.setText("(".concat(todayString).concat(")"));
 	}
 
-	@Override
-	public void onViewStateRestored(Bundle savedInstanceState) {
-		super.onViewStateRestored(savedInstanceState);
-		todayEvents.setText(R.string.today_list_events_label);
-	}
+	//@Override
+	//public void onViewStateRestored(Bundle savedInstanceState) {
+		//super.onViewStateRestored(savedInstanceState);
+		//todayEvents.setText(R.string.today_list_events_label);
+	//}
 }

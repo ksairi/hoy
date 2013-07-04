@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.hoy.R;
 import com.hoy.activities.GoogleMapActivity;
 import com.hoy.constants.MilongaHoyConstants;
@@ -22,7 +23,7 @@ import com.hoy.helpers.AddressHelper;
  * Time: 11:25 AM
  * To change this template use File | Settings | File Templates.
  */
-public class EventDetailFragment extends Fragment {
+public class EventDetailFragment extends SherlockFragment {
 
 	private EventDTO eventDTO;
 

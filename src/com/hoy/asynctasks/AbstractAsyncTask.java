@@ -56,9 +56,11 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
 				eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
 			}
 			return SUCCESS;
-		} else {
-			return null;
-		}
+		} else
+				{
+					eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
+					return null;
+				}
 	}
 
 	// Ejemplo de como mandarlo por GET.

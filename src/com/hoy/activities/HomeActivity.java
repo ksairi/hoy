@@ -4,7 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.hoy.R;
@@ -65,7 +65,7 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 
 	}
 
-	public void onMenuOptionSelected(MenuItem item) {
+	public void onFragmentMenuOptionSelected(MenuItem item) {
 		if (item.getItemId() == R.id.refresh_btn) {
 
 			EventListFragment eventListFragment = (EventListFragment) getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
@@ -104,6 +104,13 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 			((LinearLayout)findViewById(R.id.promo_img_wrapper)).addView(imageView);
 */
 		//ImageService.retrievePromoImg(getContext());
+	}
+
+	public void autoSelectFirst(EventDTO eventDTO, Integer index) {
+		if (mDualPane) {
+
+			onItemSelected(eventDTO,index);
+		}
 	}
 
 	public Boolean getNextPromoImg() {

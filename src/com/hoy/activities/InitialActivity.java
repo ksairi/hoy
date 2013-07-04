@@ -10,9 +10,11 @@ import com.hoy.asynctasks.GetInitialContentAsyncTask;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
+import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.PromoImg;
 import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.ImageService;
+import com.hoy.utilities.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class InitialActivity extends GenericActivity {
 		final PromoImg promoImg = ImageService.getPromoImg(getContext());
 		new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
 			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
+				SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
 				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
 				genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
 			}
@@ -65,10 +68,5 @@ public class InitialActivity extends GenericActivity {
 		super.onConfigurationChanged(newConfig);
 		ImageView imageView = (ImageView) findViewById(R.id.init_image);
 		imageView.setBackgroundResource(R.drawable.init_image);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-	    //No call for super(). Bug on API Level > 11.
 	}
 }

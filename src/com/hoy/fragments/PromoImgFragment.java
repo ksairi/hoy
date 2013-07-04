@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.helpers.ImageHelper;
@@ -27,7 +28,7 @@ import java.util.concurrent.ScheduledFuture;
  * Time: 11:05 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PromoImgFragment extends Fragment {
+public class PromoImgFragment extends SherlockFragment {
 	ScheduledFuture changePromoImgtask;
 	PromoImgFragmentInterface promoImgFragmentInterface;
 	String promoImgUrlDestination;
