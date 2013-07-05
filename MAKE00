@@ -1,5 +1,7 @@
 #!/bin/sh
 
 unzip -o hoypng.zip
+# change i=? to i=0
 perl -pi -e 's/private static final String IMG_PROMO_APP_NUMBER_VALUE = ".";/private static final String IMG_PROMO_APP_NUMBER_VALUE = "0";/gmi' src/com/hoy/helpers/ImageHelper.java
-echo "Now make APK for i=0"
+perl -pi -e 's/<string name\=\"app_name\"\>(.*)\<\/string\>/\<string name\=\"app_name\"\>Hoy Milonga<\/string\>/gmi' res/values/strings.xml
+echo "Now make APK for i=0 (hoy milonga)"
