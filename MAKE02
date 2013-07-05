@@ -1,0 +1,9 @@
+#!/bin/sh
+
+unzip -o hoyttpng.zip
+# change i=? to i=2
+perl -pi -e 's/private static final String IMG_PROMO_APP_NUMBER_VALUE = ".";/private static final String IMG_PROMO_APP_NUMBER_VALUE = "2";/gmi' src/com/hoy/helpers/ImageHelper.java
+
+perl -pi -e 's/<string name\=\"app_name\"\>(.*)\<\/string\>/\<string name\=\"app_name\"\>Yuyu Herrera\x5c\x27s TeachingTango.com\<\/string\>/gmi' res/values/strings.xml
+
+echo "Now make APK for i=2 (teachingtango)"
