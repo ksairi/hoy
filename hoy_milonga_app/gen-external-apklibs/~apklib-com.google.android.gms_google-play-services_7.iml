@@ -25,7 +25,7 @@
       <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_7/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="Android 4.0.3 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android 4.2.2 Platform" jdkType="Android SDK" />
   </component>
 </module>
 

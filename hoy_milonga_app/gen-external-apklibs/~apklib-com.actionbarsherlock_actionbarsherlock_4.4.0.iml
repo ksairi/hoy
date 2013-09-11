@@ -25,7 +25,7 @@
       <sourceFolder url="file://$MODULE_DIR$/com.actionbarsherlock_actionbarsherlock_4.4.0/gen" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="Android 4.0.3 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android 4.2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="library" name="Maven: com.google.android:support-v4:r7" level="project" />
   </component>
 </module>
