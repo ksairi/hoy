@@ -6,9 +6,9 @@ import com.hoy.dto.ParametersDTO;
 
 public class SyncEventsHourlyRunnable extends GenericSyncEvents {
 
-	public SyncEventsHourlyRunnable(Context context, Handler handler) {
-		super(context, handler);
-	}
+    public SyncEventsHourlyRunnable(Context context, Handler handler) {
+        super(context, handler);
+    }
 
 	/*protected void createNotification() {
 
@@ -37,19 +37,19 @@ public class SyncEventsHourlyRunnable extends GenericSyncEvents {
 		notificationManager.notify((int) (Math.random() * 1000) + 1, notification);
 	}*/
 
-	protected String getParams() {
+    protected String getParams() {
 
-		return ParametersDTO.getHourlyRefreshParameters(context);
-	}
+        return ParametersDTO.getHourlyRefreshParameters(context);
+    }
 
-	@Override
-	protected Boolean isDeltaUpdate() {
-		return true;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+    @Override
+    protected Boolean isDeltaUpdate() {
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@Override
-	protected void setLastFullUpdateDate() {
+    @Override
+    protected void setLastFullUpdateDate() {
 
-	}
+    }
 
 }

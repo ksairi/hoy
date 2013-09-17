@@ -21,91 +21,91 @@ import java.util.List;
  */
 public class ImageService {
 
-	private static PromoImgDataSource promoImgDataSource;
-	private static PromoImg promoImg;
+    private static PromoImgDataSource promoImgDataSource;
+    private static PromoImg promoImg;
 
 
-	private static PromoImgDataSource getPromoImgDataSource(Context uiContext) {
-		if (promoImgDataSource == null) {
-			promoImgDataSource = new PromoImgDataSource(uiContext);
-		}
-		return promoImgDataSource;
+    private static PromoImgDataSource getPromoImgDataSource(Context uiContext) {
+        if (promoImgDataSource == null) {
+            promoImgDataSource = new PromoImgDataSource(uiContext);
+        }
+        return promoImgDataSource;
 
 
-	}
+    }
 
-	public static String savePromoImgs(Context context, List<PromoImg> promoImgs) {
-		try {
-			getPromoImgDataSource(context).open();
-			getPromoImgDataSource(context).truncateImgPromoTable();
+    public static String savePromoImgs(Context context, List<PromoImg> promoImgs) {
+        try {
+            getPromoImgDataSource(context).open();
+            getPromoImgDataSource(context).truncateImgPromoTable();
 
-			for (PromoImg promoImg : promoImgs) {
-				getPromoImgDataSource(context).createData(promoImg.getBase64p(), promoImg.getUrlDestination(), promoImg.getWidth(), promoImg.getHeight());
-				//getPromoImgDataSource(context).createData(promoImg.getBase64l(),promoImg.getHeight(),promoImg.getWidth());
-			}
-			getPromoImgDataSource(context).close();
-		} catch (SQLException e) {
-			return null;
-		}
+            for (PromoImg promoImg : promoImgs) {
+                getPromoImgDataSource(context).createData(promoImg.getBase64p(), promoImg.getUrlDestination(), promoImg.getWidth(), promoImg.getHeight());
+                //getPromoImgDataSource(context).createData(promoImg.getBase64l(),promoImg.getHeight(),promoImg.getWidth());
+            }
+            getPromoImgDataSource(context).close();
+        } catch (SQLException e) {
+            return null;
+        }
 
-		return MilongaHoyConstants.SAVE_PROMO_SUCCESS;
+        return MilongaHoyConstants.SAVE_PROMO_SUCCESS;
 
-	}
-
-
-	public static PromoImg getPromoImg(Context context) {
+    }
 
 
-		if (promoImg == null) {
-			promoImg = new PromoImg();
-		}
-
-		Display display = DeviceHelper.getDisplay(context);
-		final int width = display.getWidth();  // deprecated
-		final int height = display.getHeight();  // deprecated
-		if (width > height) {
-			//landscape
-			promoImg.setWidth(height);
-			promoImg.setHeight(width);
-		} else {
-			//portrait
-			promoImg.setWidth(width);
-			promoImg.setHeight(height);
-		}
-		return promoImg;
-
-	}
-
-	public static String[] getNextPromoImgDataByIndex(Context context, Integer index) {
-
-		getPromoImgDataSource(context).open();
-		String[] result = promoImgDataSource.getNextPromoImgDataByIndex(context, index);
-		getPromoImgDataSource(context).close();
-		return result;
+    public static PromoImg getPromoImg(Context context) {
 
 
-	}
+        if (promoImg == null) {
+            promoImg = new PromoImg();
+        }
 
-	public static String[] getPromoImgDataByIndex(Context context, Integer index) {
+        Display display = DeviceHelper.getDisplay(context);
+        final int width = display.getWidth();  // deprecated
+        final int height = display.getHeight();  // deprecated
+        if (width > height) {
+            //landscape
+            promoImg.setWidth(height);
+            promoImg.setHeight(width);
+        } else {
+            //portrait
+            promoImg.setWidth(width);
+            promoImg.setHeight(height);
+        }
+        return promoImg;
 
-		getPromoImgDataSource(context).open();
-		String[] result = promoImgDataSource.getPromoImgDataByIndex(index);
-		getPromoImgDataSource(context).close();
-		return result;
+    }
+
+    public static String[] getNextPromoImgDataByIndex(Context context, Integer index) {
+
+        getPromoImgDataSource(context).open();
+        String[] result = promoImgDataSource.getNextPromoImgDataByIndex(context, index);
+        getPromoImgDataSource(context).close();
+        return result;
 
 
-	}
+    }
 
-	public static synchronized String syncAndSavePromoImgs(PromoImg promoImg, Context context) {
+    public static String[] getPromoImgDataByIndex(Context context, Integer index) {
 
-		String url = ImageHelper.buildUrl(promoImg);
-		String jsonString = RestClient.executeHttpGetRequest(url);
-		List<PromoImg> promoImgs = ImageHelper.parseResponse(jsonString, promoImg);
-		if (promoImgs != null && ImageService.savePromoImgs(context, promoImgs) != null) {
-			return MilongaHoyConstants.SAVE_PROMO_SUCCESS;
-		}
-		return null;
-	}
+        getPromoImgDataSource(context).open();
+        String[] result = promoImgDataSource.getPromoImgDataByIndex(index);
+        getPromoImgDataSource(context).close();
+        return result;
+
+
+    }
+
+    public static synchronized String syncAndSavePromoImgs(PromoImg promoImg, Context context) {
+
+        String url = ImageHelper.buildUrl(promoImg);
+        String jsonString = RestClient.executeHttpGetRequest(url);
+        List<PromoImg> promoImgs = ImageHelper.parseResponse(jsonString, promoImg);
+        if (promoImgs != null && ImageService.savePromoImgs(context, promoImgs) != null) {
+            return MilongaHoyConstants.SAVE_PROMO_SUCCESS;
+        }
+        return null;
+    }
 
 
 }

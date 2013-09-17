@@ -28,7 +28,7 @@
 	<string name="too_many_update_manually">Try again in a couple of minutes</string>
 	<string name="loading_text">Loading&#8230;</string>
 	<string name="classes_available">Class</string>
-	<string name="special_event">Special Event</string>
+	<string name="special_event">Special event</string>
 	<string name="website_label">Website</string>
 	<string name="reservation_advised">Reservation Recommended</string>
 	<string name="classes_details_label">
@@ -38,11 +38,13 @@
 	<string name="how_to_get_there_label">How to get</string>
 	<string name="you_are_here">You\'re here</string>
 	<string name="event_map">Milonga Map</string>
-	<string name="most_recent_google_play_services_needed">You must have the most recent Google Play version to continue</string>
+	<string name="google_maps_not_found">You don\'t have Google Maps installed.</string>
 	<string name="install">Install</string>
 	<string name="today_events_map">Today\'s map</string>
 	<string name="cant_sync_new_events">Can\'t get updates in milongas. Check your internet connection</string>
 	<string name="sync_local_events">Newest updates</string>
 	<string name="invalid_map_data">Sorry, can\'t show the location</string>
+    <string name="drawer_open"><![CDATA[>]]></string>
+    <string name="drawer_close"><![CDATA[<]]></string>
 
 </resources>

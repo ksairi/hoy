@@ -28,45 +28,49 @@ import java.util.List;
  */
 public class InitialActivity extends GenericActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.init_layout);
-		prepareContent();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.init_layout);
+        prepareContent();
+    }
 
-	private void prepareContent() {
-		final PromoImg promoImg = ImageService.getPromoImg(getContext());
-		new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
-			public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
-				SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_MANUALLY_UPDATE_DATE, DateUtils.getTodayAndTimeString());
-				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
-				genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
-			}
+    private void prepareContent() {
+        final PromoImg promoImg = ImageService.getPromoImg(getContext());
+        if (SharedPreferencesHelper.getValueInSharedPreferences(getContext(), MilongaHoyConstants.HAS_CLEANED_VALUES).equals(MilongaHoyConstants.EMPTY_STRING)) {
+            SharedPreferencesHelper.removeValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE);
+            SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.HAS_CLEANED_VALUES, MilongaHoyConstants.HAS_CLEANED_VALUES);
+        }
 
-			public void handleErrorResult() {
+        new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
+            public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
+                SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayAndTimeString());
+                EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
+                genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
+            }
 
-			}
+            public void handleErrorResult() {
 
-			public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+            }
 
-				Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
-				EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
-				genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
-			}
-		}).execute();
+            public void handleErrorCallBack(List<EventDTO> eventDTOs) {
 
-	}
+                Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
+                EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
+                genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
+            }
+        }).execute();
 
-	@Override
-	protected Context getContext() {
-		return this;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+    }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		ImageView imageView = (ImageView) findViewById(R.id.init_image);
-		imageView.setBackgroundResource(R.drawable.init_image);
-	}
+    protected Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ImageView imageView = (ImageView) findViewById(R.id.init_image);
+        imageView.setBackgroundResource(R.drawable.init_image);
+    }
 }

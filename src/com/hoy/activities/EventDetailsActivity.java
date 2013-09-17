@@ -1,6 +1,5 @@
 package com.hoy.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
@@ -18,27 +17,23 @@ import com.hoy.fragments.PromoImgFragment;
 public class EventDetailsActivity extends GenericActivity implements PromoImgFragment.PromoImgFragmentInterface {
 
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
-		setContentView(R.layout.activity_event_detail);
-		EventDTO eventDTO = getIntent().getExtras().getParcelable(MilongaHoyConstants.EVENT_DTO);
-		getIntent().getExtras().remove(MilongaHoyConstants.EVENT_DTO);
-		EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
-		eventDetailFragment.setEventProperties(eventDTO);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+        setContentView(R.layout.activity_event_detail);
+        EventDTO eventDTO = getIntent().getExtras().getParcelable(MilongaHoyConstants.EVENT_DTO);
+        getIntent().getExtras().remove(MilongaHoyConstants.EVENT_DTO);
+        EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
+        eventDetailFragment.setEventProperties(eventDTO);
+    }
 
-	@Override
-	protected Context getContext() {
-		return this;  //To change body of implemented methods use File | Settings | File Templates.
-	}
 
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
-	public Boolean getNextPromoImg() {
-		return false;
-	}
+    public Boolean getNextPromoImg() {
+        return false;
+    }
 }

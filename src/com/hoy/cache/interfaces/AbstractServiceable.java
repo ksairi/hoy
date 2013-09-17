@@ -7,6 +7,6 @@ package com.hoy.cache.interfaces;
  */
 public interface AbstractServiceable {
 
-	public void handleErrorResult();
+    public void handleErrorResult();
 
 }

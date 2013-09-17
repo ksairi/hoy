@@ -14,38 +14,38 @@ import com.hoy.utilities.DateUtils;
  */
 public class ParametersDTO {
 
-	private static final String SYNC_EVENTS_SEL_PARAM_NAME = "sel";
-	private static final String SYNC_EVENTS_FROM_PARAM_NAME = "from";
-	private static final String SYNC_EVENTS_DATE_PARAM_NAME = "where";
+    private static final String SYNC_EVENTS_SEL_PARAM_NAME = "sel";
+    private static final String SYNC_EVENTS_FROM_PARAM_NAME = "from";
+    private static final String SYNC_EVENTS_DATE_PARAM_NAME = "where";
 
 
-	private static String sel = "*,now() as ".concat(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
-	private static String from = "MEventFull";
+    private static String sel = "*,now() as ".concat(MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+    private static String from = "MEventFull";
 
 
-	public static String getDailyRefreshParameters() {
+    public static String getDailyRefreshParameters() {
 
 
-		return ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(getWhereClause());
-	}
+        return ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(getWhereClause());
+    }
 
-	public static String getHourlyRefreshParameters(Context context) {
+    public static String getHourlyRefreshParameters(Context context) {
 
-		String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(getWhereClause());
-		if (context != null) {
-			String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
-			if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
-				result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
-			}
-		}
-		return result;
+        String result = ("?").concat(SYNC_EVENTS_SEL_PARAM_NAME).concat("=").concat(sel).concat("&").concat(SYNC_EVENTS_FROM_PARAM_NAME).concat("=").concat(from).concat("&").concat(SYNC_EVENTS_DATE_PARAM_NAME).concat("=").concat(getWhereClause());
+        if (context != null) {
+            String lastUpdate = SharedPreferencesHelper.getValueInSharedPreferences(context, MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+            if (!lastUpdate.equals(MilongaHoyConstants.EMPTY_STRING)) {
+                result = result.concat(" AND lastUpdated >=").concat("'").concat(lastUpdate).concat("'");
+            }
+        }
+        return result;
 
-	}
+    }
 
-	private static String getWhereClause() {
+    private static String getWhereClause() {
 
-		String todayString = "'".concat(DateUtils.getTodayString()).concat("'");
-		return "date between ".concat(todayString).concat(" AND ADDDATE(").concat(todayString).concat(",7) AND areaId=1");
-	}
+        String todayString = "'".concat(DateUtils.getTodayString()).concat("'");
+        return "date between ".concat(todayString).concat(" AND ADDDATE(").concat(todayString).concat(",7) AND areaId=1");
+    }
 
 }

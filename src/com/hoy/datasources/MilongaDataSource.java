@@ -17,68 +17,68 @@ import com.hoy.helpers.SQLiteMilongaHelper;
  */
 public class MilongaDataSource { // Database fields
 
-	private SQLiteDatabase database;
-	private SQLiteMilongaHelper dbMilongaHelper;
-	private String[] allColumns = {SQLiteMilongaHelper.COLUMN_DATA};
-	private String[] args = {};
+    private SQLiteDatabase database;
+    private SQLiteMilongaHelper dbMilongaHelper;
+    private String[] allColumns = {SQLiteMilongaHelper.COLUMN_DATA};
+    private String[] args = {};
 
-	public MilongaDataSource(Context context) {
-		dbMilongaHelper = new SQLiteMilongaHelper(context);
-	}
+    public MilongaDataSource(Context context) {
+        dbMilongaHelper = new SQLiteMilongaHelper(context);
+    }
 
-	public synchronized void open() throws SQLException {
-		database = dbMilongaHelper.getWritableDatabase();
-	}
+    public synchronized void open() throws SQLException {
+        database = dbMilongaHelper.getWritableDatabase();
+    }
 
-	public synchronized void close() {
-		dbMilongaHelper.close();
-	}
+    public synchronized void close() {
+        dbMilongaHelper.close();
+    }
 
-	public synchronized void createData(String data) {
-		ContentValues values = new ContentValues();
-		String milongas = getAllMilongas();
-		if (!milongas.equals(MilongaHoyConstants.EMPTY_STRING)) {
-			updateMilongas(data);
-		} else {
-			values.put(SQLiteMilongaHelper.COLUMN_DATA, data);
-			database.insert(SQLiteMilongaHelper.TABLE_MILONGA, null,
-					values);
-		}
+    public synchronized void createData(String data) {
+        ContentValues values = new ContentValues();
+        String milongas = getAllMilongas();
+        if (!milongas.equals(MilongaHoyConstants.EMPTY_STRING)) {
+            updateMilongas(data);
+        } else {
+            values.put(SQLiteMilongaHelper.COLUMN_DATA, data);
+            database.insert(SQLiteMilongaHelper.TABLE_MILONGA, null,
+                    values);
+        }
 
-	}
+    }
 
-	public void deleteMilonga(String id) {
+    public void deleteMilonga(String id) {
 
-		System.out.println("Comment deleted with id: " + id);
-		database.delete(SQLiteMilongaHelper.TABLE_MILONGA, SQLiteMilongaHelper.COLUMN_ID
-				+ " = " + id, null);
-	}
+        System.out.println("Comment deleted with id: " + id);
+        database.delete(SQLiteMilongaHelper.TABLE_MILONGA, SQLiteMilongaHelper.COLUMN_ID
+                + " = " + id, null);
+    }
 
-	public synchronized String getAllMilongas() {
+    public synchronized String getAllMilongas() {
 
-		String jsonString = MilongaHoyConstants.EMPTY_STRING;
+        String jsonString = MilongaHoyConstants.EMPTY_STRING;
 
-		Cursor cursor = database.query(SQLiteMilongaHelper.TABLE_MILONGA,
-				allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(SQLiteMilongaHelper.TABLE_MILONGA,
+                allColumns, null, null, null, null, null);
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			jsonString = getJsonString(cursor);
-			cursor.moveToNext();
-		}
-		// Make sure to close the cursor
-		cursor.close();
-		return jsonString;
-	}
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            jsonString = getJsonString(cursor);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+        return jsonString;
+    }
 
-	private String getJsonString(Cursor cursor) {
-		return cursor.getString(0); //get the data column
-	}
+    private String getJsonString(Cursor cursor) {
+        return cursor.getString(0); //get the data column
+    }
 
-	private void updateMilongas(String data) {
-		ContentValues values = new ContentValues();
-		values.put(SQLiteMilongaHelper.COLUMN_DATA, data);
-		database.update(SQLiteMilongaHelper.TABLE_MILONGA, values, "", args);
+    private void updateMilongas(String data) {
+        ContentValues values = new ContentValues();
+        values.put(SQLiteMilongaHelper.COLUMN_DATA, data);
+        database.update(SQLiteMilongaHelper.TABLE_MILONGA, values, "", args);
 
-	}
+    }
 }

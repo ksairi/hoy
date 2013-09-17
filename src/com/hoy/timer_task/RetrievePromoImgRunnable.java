@@ -18,38 +18,38 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class RetrievePromoImgRunnable extends AbstractRunnable {
-	private PromoImg promoImg;
+    private PromoImg promoImg;
 
 
-	public RetrievePromoImgRunnable(Context context, PromoImg promoImg) {
-		this.context = context;
-		this.promoImg = promoImg;
-	}
+    public RetrievePromoImgRunnable(Context context, PromoImg promoImg) {
+        this.context = context;
+        this.promoImg = promoImg;
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		String result = RestClient.executeHttpGetRequest(ImageHelper.buildUrl(promoImg));
-		List<PromoImg> promoImgs = ImageHelper.parseResponse(result, promoImg);
-		if (promoImgs != null) {
-			ImageService.savePromoImgs(context, promoImgs);
+        String result = RestClient.executeHttpGetRequest(ImageHelper.buildUrl(promoImg));
+        List<PromoImg> promoImgs = ImageHelper.parseResponse(result, promoImg);
+        if (promoImgs != null) {
+            ImageService.savePromoImgs(context, promoImgs);
 
-			SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.PROMO_IMG_UPDATED, "true");
+            SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.PROMO_IMG_UPDATED, "true");
 
-		}
+        }
 
-	}
+    }
 
 
-	@Override
-	protected String getParams() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+    @Override
+    protected String getParams() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@Override
-	protected String getUrl() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+    @Override
+    protected String getUrl() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
 
 }

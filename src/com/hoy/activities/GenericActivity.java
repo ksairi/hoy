@@ -1,10 +1,9 @@
 package com.hoy.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,102 +17,93 @@ import java.util.Set;
  * Time: 5:58 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class GenericActivity extends SherlockFragmentActivity {
+public abstract class GenericActivity extends ActionBarActivity {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = GenericActivity.class.getSimpleName();
+    @SuppressWarnings("unused")
+    private static final String TAG = GenericActivity.class.getSimpleName();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
 
-	protected void genericStartActivity(Class<?> clazz, Map<String, String> paramsMap, Boolean finish) {
-
-
-		Intent intent = new Intent(this, clazz);
-		if (paramsMap != null) {
-			Set<String> keySet = paramsMap.keySet();
-			for (String key : keySet) {
-				intent.putExtra(key, paramsMap.get(key));
-			}
-		}
-		customStartActivity(intent, finish);
-	}
-
-	protected void genericStartActivity(Class<?> clazz, String extrasName, String extras, Boolean finish) {
-
-		Intent intent = new Intent(this, clazz);
-		if (extras != null) {
-			intent.putExtra(extrasName, extras);
-		}
-
-		customStartActivity(intent, finish);
-	}
-
-	protected void genericStartActivity(Class<?> clazz, String extrasName, Parcelable extras, Boolean finish) {
+    protected void genericStartActivity(Class<?> clazz, Map<String, String> paramsMap, Boolean finish) {
 
 
-		Intent intent = new Intent(this, clazz);
-		if (extras != null) {
-			intent.putExtra(extrasName, extras);
-		}
+        Intent intent = new Intent(this, clazz);
+        if (paramsMap != null) {
+            Set<String> keySet = paramsMap.keySet();
+            for (String key : keySet) {
+                intent.putExtra(key, paramsMap.get(key));
+            }
+        }
+        customStartActivity(intent, finish);
+    }
 
-		customStartActivity(intent, finish);
-	}
+    protected void genericStartActivity(Class<?> clazz, String extrasName, String extras, Boolean finish) {
 
-	protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<Parcelable> extras, Boolean finish) {
+        Intent intent = new Intent(this, clazz);
+        if (extras != null) {
+            intent.putExtra(extrasName, extras);
+        }
 
+        customStartActivity(intent, finish);
+    }
 
-		Intent intent = new Intent(this, clazz);
-		if (extras != null) {
-			intent.putParcelableArrayListExtra(extrasName, extras);
-		}
-
-		customStartActivity(intent, finish);
-	}
-
-	protected void customStartActivity(Intent intent, Boolean finish) {
-
-		startActivity(intent);
-		if (finish) {
-			finish();
-		}
-	}
-
-	protected void genericStartActivity(Class<?> clazz) {
+    protected void genericStartActivity(Class<?> clazz, String extrasName, Parcelable extras, Boolean finish) {
 
 
-		Intent intent = new Intent(this, clazz);
-		startActivity(intent);
-		finish();
-	}
+        Intent intent = new Intent(this, clazz);
+        if (extras != null) {
+            intent.putExtra(extrasName, extras);
+        }
 
-	protected void genericStartActivity(Class<?> clazz, Boolean finish) {
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
-		Intent intent = new Intent(this, clazz);
-		customStartActivity(intent, finish);
-	}
+        customStartActivity(intent, finish);
+    }
 
-	protected void genericStartActivity(Class<?> clazz, List<Integer> flags) {
-		// Para hacer aparecer la progress bar ya que se esta haciendo navegacion entre View's.
-		//changeProgressBarVisibility(View.VISIBLE);
-		Intent intent = new Intent(this, clazz);
+    protected void genericStartActivity(Class<?> clazz, String extrasName, ArrayList<Parcelable> extras, Boolean finish) {
 
-		for (Integer flag : flags) {
 
-			intent.setFlags(flag);
-		}
+        Intent intent = new Intent(this, clazz);
+        if (extras != null) {
+            intent.putParcelableArrayListExtra(extrasName, extras);
+        }
 
-		startActivity(intent);
-		finish();
-	}
+        customStartActivity(intent, finish);
+    }
 
-	protected Context getContext() {
+    protected void customStartActivity(Intent intent, Boolean finish) {
 
-		return this;
+        startActivity(intent);
+        if (finish) {
+            finish();
+        }
+    }
 
-	}
+    protected void genericStartActivity(Class<?> clazz) {
+
+
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+        finish();
+    }
+
+    protected void genericStartActivity(Class<?> clazz, Boolean finish) {
+        Intent intent = new Intent(this, clazz);
+        customStartActivity(intent, finish);
+    }
+
+    protected void genericStartActivity(Class<?> clazz, List<Integer> flags) {
+        Intent intent = new Intent(this, clazz);
+
+        for (Integer flag : flags) {
+
+            intent.setFlags(flag);
+        }
+
+        startActivity(intent);
+        finish();
+    }
+
 }

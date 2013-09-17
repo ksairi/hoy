@@ -18,21 +18,21 @@ import com.hoy.services.EventsService;
  */
 public class SyncEventsAsyncTask extends AbstractGenericAsyncTask<ParametersDTO, EventDTO> {
 
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, GenericSuccessHandleable genericHandleable) {
-		super(uiContext, paramEntity, fragmentManager, genericHandleable);
-	}
+    public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, GenericSuccessHandleable genericHandleable) {
+        super(uiContext, paramEntity, fragmentManager, genericHandleable);
+    }
 
-	public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
-		super(uiContext, paramEntity, fragmentManager, filterParams, genericSuccessListHandleable);
-	}
+    public SyncEventsAsyncTask(Context uiContext, ParametersDTO paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
+        super(uiContext, paramEntity, fragmentManager, filterParams, genericSuccessListHandleable);
+    }
 
-	@Override
-	protected String getUrl() {
-		return EventsService.getParametersDTO();
-	}
+    @Override
+    protected String getUrl() {
+        return EventsService.getParametersDTO();
+    }
 
 	/*//@Override
-		protected Type getType() {
+        protected Type getType() {
 			Type listType = new TypeToken<List<EventDTO>>() {
 			}.getType();
 			return listType;

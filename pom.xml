@@ -17,11 +17,41 @@
             <version>4.1.1.4</version>
             <scope>provided</scope>
         </dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<version>r7</version>
-		</dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <version>18</version>
+        </dependency>
+
+
+        <!--dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7</artifactId>
+            <version>18</version>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7</artifactId>
+            <version>18</version>
+            <type>jar</type>
+        </dependency-->
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <version>18</version>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <version>18</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -34,12 +64,6 @@
 		  <version>7</version>
 		  <type>apklib</type>
 		</dependency>
-		<dependency>
-		  <groupId>com.actionbarsherlock</groupId>
-			<artifactId>actionbarsherlock</artifactId>
-			<version>4.4.0</version>
-		  	<type>apklib</type>
-		</dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -51,21 +75,15 @@
                     <artifactId>android-maven-plugin</artifactId>
                     <version>3.6.1</version>
                     <extensions>true</extensions>
+                    <configuration>
+                        <sdk>
+                            <!-- platform or api level (api level 4 = platform 1.6) -->
+                            <platform>4.0</platform>
+                        </sdk>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                <artifactId>android-maven-plugin</artifactId>
-                <configuration>
-                    <sdk>
-                        <!-- platform or api level (api level 4 = platform 1.6) -->
-                        <platform>17</platform>
-                    </sdk>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
     <profiles>
         <profile>
@@ -92,7 +110,7 @@
                                     <includes>
                                         <include>target/${project.artifactId}.apk</include>
                                     </includes>
-                                    <!-- val/home/ksairi/.m2 -->
+                                    <!-- values in /home/ksairi/.m2/settings.xml -->
                                     <keystore>${sign.keystore}</keystore>
                                     <storepass>${sign.storepass}</storepass>
                                     <keypass>${sign.keypass}</keypass>

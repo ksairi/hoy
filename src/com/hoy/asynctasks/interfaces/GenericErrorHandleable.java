@@ -7,6 +7,6 @@ package com.hoy.asynctasks.interfaces;
  */
 public interface GenericErrorHandleable {
 
-	public void handleErrorResult();
+    public void handleErrorResult();
 
 }

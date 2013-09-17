@@ -9,49 +9,49 @@ package com.hoy.model;
  */
 public class PromoImg {
 
-	private String base64p;
-	private String base64l;
-	private Integer width;
-	private Integer height;
-	private String urlDestination;
+    private String base64p;
+    private String base64l;
+    private Integer width;
+    private Integer height;
+    private String urlDestination;
 
-	public String getBase64p() {
-		return base64p;
-	}
+    public String getBase64p() {
+        return base64p;
+    }
 
-	public void setBase64p(String base64p) {
-		this.base64p = base64p;
-	}
+    public void setBase64p(String base64p) {
+        this.base64p = base64p;
+    }
 
-	public String getBase64l() {
-		return base64l;
-	}
+    public String getBase64l() {
+        return base64l;
+    }
 
-	public void setBase64l(String base64l) {
-		this.base64l = base64l;
-	}
+    public void setBase64l(String base64l) {
+        this.base64l = base64l;
+    }
 
-	public Integer getWidth() {
-		return width;
-	}
+    public Integer getWidth() {
+        return width;
+    }
 
-	public void setWidth(Integer width) {
-		this.width = width;
-	}
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
 
-	public Integer getHeight() {
-		return height;
-	}
+    public Integer getHeight() {
+        return height;
+    }
 
-	public void setHeight(Integer height) {
-		this.height = height;
-	}
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
 
-	public String getUrlDestination() {
-		return urlDestination;
-	}
+    public String getUrlDestination() {
+        return urlDestination;
+    }
 
-	public void setUrlDestination(String urlDestination) {
-		this.urlDestination = urlDestination;
-	}
+    public void setUrlDestination(String urlDestination) {
+        this.urlDestination = urlDestination;
+    }
 }

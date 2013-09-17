@@ -16,45 +16,45 @@ import com.hoy.model.FilterParams;
  */
 public abstract class AbstractGenericAsyncTask<T, S> extends AbstractAsyncTask<T> {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = AbstractGenericAsyncTask.class.getSimpleName();
+    @SuppressWarnings("unused")
+    private static final String TAG = AbstractGenericAsyncTask.class.getSimpleName();
 
 
-	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, GenericSuccessHandleable genericSuccessHandleable) {
-		this.uiContext = uiContext;
-		this.paramEntity = paramEntity;
-		this.genericSuccessHandleable = genericSuccessHandleable;
-		this.fragmentManager = fragmentManager;
-	}
+    public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, GenericSuccessHandleable genericSuccessHandleable) {
+        this.uiContext = uiContext;
+        this.paramEntity = paramEntity;
+        this.genericSuccessHandleable = genericSuccessHandleable;
+        this.fragmentManager = fragmentManager;
+    }
 
-	public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
-		this.uiContext = uiContext;
-		this.paramEntity = paramEntity;
-		this.genericSuccessListHandleable = genericSuccessListHandleable;
-		this.fragmentManager = fragmentManager;
-		this.filterParams = filterParams;
+    public AbstractGenericAsyncTask(Context uiContext, T paramEntity, FragmentManager fragmentManager, FilterParams filterParams, GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable) {
+        this.uiContext = uiContext;
+        this.paramEntity = paramEntity;
+        this.genericSuccessListHandleable = genericSuccessListHandleable;
+        this.fragmentManager = fragmentManager;
+        this.filterParams = filterParams;
 
-	}
+    }
 
-	@Override
-	protected void doOnSuccess() {
+    @Override
+    protected void doOnSuccess() {
 
-		if (genericSuccessHandleable != null) {
-			genericSuccessHandleable.handleSuccessCallBack();
-		} else {
-			genericSuccessListHandleable.handleSuccessCallBack(eventDTOs);
-		}
-	}
+        if (genericSuccessHandleable != null) {
+            genericSuccessHandleable.handleSuccessCallBack();
+        } else {
+            genericSuccessListHandleable.handleSuccessCallBack(eventDTOs);
+        }
+    }
 
-	@Override
-	protected void doOnError() {
-		if (genericSuccessHandleable != null) {
-			genericSuccessHandleable.handleErrorResult();
-		} else {
-			genericSuccessListHandleable.handleErrorCallBack(eventDTOs);
-		}
-	}
+    @Override
+    protected void doOnError() {
+        if (genericSuccessHandleable != null) {
+            genericSuccessHandleable.handleErrorResult();
+        } else {
+            genericSuccessListHandleable.handleErrorCallBack(eventDTOs);
+        }
+    }
 
 
-	//protected abstract Type getType();
+    //protected abstract Type getType();
 }

@@ -9,17 +9,17 @@ package com.hoy.model;
  */
 public class FilterParams {
 
-	private String date;
+    private String date;
 
-	public FilterParams(String date) {
-		this.date = date;
-	}
+    public FilterParams(String date) {
+        this.date = date;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

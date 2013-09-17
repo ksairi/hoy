@@ -9,5 +9,5 @@ package com.hoy.asynctasks.interfaces;
  */
 public interface GenericSuccessHandleable extends GenericErrorHandleable {
 
-	public void handleSuccessCallBack();
+    public void handleSuccessCallBack();
 }

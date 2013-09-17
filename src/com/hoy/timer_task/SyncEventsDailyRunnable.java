@@ -10,9 +10,9 @@ import com.hoy.utilities.DateUtils;
 public class SyncEventsDailyRunnable extends GenericSyncEvents {
 
 
-	public SyncEventsDailyRunnable(Context context, Handler handler) {
-		super(context, handler);
-	}
+    public SyncEventsDailyRunnable(Context context, Handler handler) {
+        super(context, handler);
+    }
 
 	/*protected void createNotification() {
 
@@ -42,18 +42,18 @@ public class SyncEventsDailyRunnable extends GenericSyncEvents {
 	}*/
 
 
-	protected String getParams() {
+    protected String getParams() {
 
-		return ParametersDTO.getDailyRefreshParameters();
-	}
+        return ParametersDTO.getDailyRefreshParameters();
+    }
 
-	@Override
-	protected Boolean isDeltaUpdate() {
-		return false;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+    @Override
+    protected Boolean isDeltaUpdate() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@Override
-	protected void setLastFullUpdateDate() {
-		SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayDateToShow());
-	}
+    @Override
+    protected void setLastFullUpdateDate() {
+        SharedPreferencesHelper.setValueSharedPreferences(context, MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayDateToShow());
+    }
 }

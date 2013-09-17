@@ -2,6 +2,7 @@
 
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_list_wrapper"
 		style="@style/background_paper">
 
 	<LinearLayout
@@ -11,7 +12,7 @@
 
 		<fragment
 				android:name="com.hoy.fragments.PromoImgFragment"
-				android:id="@+id/promoImgFragment"
+				android:id="@+id/promo_img_list"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>
 	</LinearLayout>

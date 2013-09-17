@@ -35,125 +35,124 @@ import java.util.List;
  */
 public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, String> {
 
-	private static final String TAG = AbstractAsyncTask.class.getSimpleName();
-	protected FragmentManager fragmentManager;
-	protected ProgressDialogFragment progressDialogFragment;
-	protected GenericSuccessHandleable genericSuccessHandleable;
-	protected GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable;
-	protected FilterParams filterParams;
+    private static final String TAG = AbstractAsyncTask.class.getSimpleName();
+    protected FragmentManager fragmentManager;
+    protected ProgressDialogFragment progressDialogFragment;
+    protected GenericSuccessHandleable genericSuccessHandleable;
+    protected GenericSuccessListHandleable<EventDTO> genericSuccessListHandleable;
+    protected FilterParams filterParams;
 
 
-	protected Context uiContext;
-	protected T paramEntity;
-	protected List<EventDTO> eventDTOs;
-	protected final String SUCCESS = "success";
+    protected Context uiContext;
+    protected T paramEntity;
+    protected List<EventDTO> eventDTOs;
+    protected final String SUCCESS = "success";
 
-	protected String doInBackground(String... urls) {
-		String jsonEvents = EventsService.syncAndSaveEvents(EventsService.getParametersDTO(), uiContext);
-		if (jsonEvents != null) {
-			if (genericSuccessListHandleable != null) {
-				eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonEvents, getType());
-				eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
-			}
-			return SUCCESS;
-		} else
-				{
-					eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
-					return null;
-				}
-	}
+    protected String doInBackground(String... urls) {
+        String jsonEvents = EventsService.syncAndSaveEvents(EventsService.getParametersDTO(), uiContext);
+        if (jsonEvents != null) {
+            if (genericSuccessListHandleable != null) {
+                eventDTOs = GsonHelper.parseJsonToArrayListEntity(jsonEvents, getType());
+                eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
+            }
+            return SUCCESS;
+        } else {
+            eventDTOs = EventsService.getInstance().getFilteredEventDTOs(uiContext, filterParams);
+            return null;
+        }
+    }
 
-	// Ejemplo de como mandarlo por GET.
+    // Ejemplo de como mandarlo por GET.
 //	protected String doInBackground(String... urls) {
 //		String params = "?username=" + userDTO.getUsername() + "&password=" + userDTO.getPassword();
 //		return RestClient.executeHttpGetRequest(RestaUnoConstants.HOST + RestaUnoUrlProtocol.LOGIN_URL + params, null);
 //	}
 
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		progressDialogFragment = FragmentHelper.showProgressDialog(fragmentManager);
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialogFragment = FragmentHelper.showProgressDialog(fragmentManager);
+    }
 
-	protected void onPostExecute(String result) {
-		fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
-		if (result != null && result.equals(SUCCESS)) {
-			doOnSuccess();
-		} else {
-			if (!isApplicationBroughtToBackground()) {
-				Toast.makeText(uiContext, R.string.connection_errors, Toast.LENGTH_LONG).show();
-			}
-			doOnError();
-		}
-	}
+    protected void onPostExecute(String result) {
+        fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
+        if (result != null && result.equals(SUCCESS)) {
+            doOnSuccess();
+        } else {
+            if (!isApplicationBroughtToBackground()) {
+                Toast.makeText(uiContext, R.string.connection_errors, Toast.LENGTH_LONG).show();
+            }
+            doOnError();
+        }
+    }
 
-	protected T getBodyDTO() {
-		return paramEntity;
-	}
+    protected T getBodyDTO() {
+        return paramEntity;
+    }
 
-	protected abstract String getUrl();
+    protected abstract String getUrl();
 
-	protected abstract void doOnSuccess();
+    protected abstract void doOnSuccess();
 
-	protected abstract void doOnError();
+    protected abstract void doOnError();
 
 
-	protected MessageDTO<T> getMessageDTO() {
+    protected MessageDTO<T> getMessageDTO() {
 
 		/*MessageDTO<T> messageDTO = new MessageDTO<T>();
-		HeaderDTO headerDTO = new HeaderDTO();
+        HeaderDTO headerDTO = new HeaderDTO();
 		headerDTO.setDeviceId(InstallationUtils.id(uiContext));
 		messageDTO.setHeaderDTO(headerDTO);*/
-		return new MessageDTO<T>();
-	}
+        return new MessageDTO<T>();
+    }
 
-	/**
-	 * This will return whatever strings.xml uniquely identifies the device (IMEI on GSM, MEID for CDMA).
-	 *
-	 * @return
-	 */
-	protected String getDeviceID() {
-		TelephonyManager telephonyManager = (TelephonyManager) uiContext.getSystemService(Context.TELEPHONY_SERVICE);
-		return telephonyManager.getDeviceId();
-	}
+    /**
+     * This will return whatever strings.xml uniquely identifies the device (IMEI on GSM, MEID for CDMA).
+     *
+     * @return
+     */
+    protected String getDeviceID() {
+        TelephonyManager telephonyManager = (TelephonyManager) uiContext.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getDeviceId();
+    }
 
-	protected String getMacAddress() {
-		WifiManager wifiMan = (WifiManager) uiContext.getSystemService(Context.WIFI_SERVICE);
-		WifiInfo wifiInf = wifiMan.getConnectionInfo();
-		return wifiInf.getMacAddress();
-	}
+    protected String getMacAddress() {
+        WifiManager wifiMan = (WifiManager) uiContext.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInf = wifiMan.getConnectionInfo();
+        return wifiInf.getMacAddress();
+    }
 
-	protected String getAndroidId() {
-		return Secure.getString(uiContext.getContentResolver(), Secure.ANDROID_ID);
-	}
+    protected String getAndroidId() {
+        return Secure.getString(uiContext.getContentResolver(), Secure.ANDROID_ID);
+    }
 
-	/**
-	 * Checks if the top running activity on the device belongs to application,
-	 * by comparing package names.
-	 * Fuente: http://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo
-	 *
-	 * @return
-	 */
-	private boolean isApplicationBroughtToBackground() {
-		ActivityManager am = (ActivityManager) uiContext.getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningTaskInfo> tasks = am.getRunningTasks(1);
-		if (!tasks.isEmpty()) {
-			ComponentName topActivity = tasks.get(0).topActivity;
-			if (!topActivity.getPackageName().equals(uiContext.getPackageName())) {
-				return true;
-			}
-		}
+    /**
+     * Checks if the top running activity on the device belongs to application,
+     * by comparing package names.
+     * Fuente: http://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo
+     *
+     * @return
+     */
+    private boolean isApplicationBroughtToBackground() {
+        ActivityManager am = (ActivityManager) uiContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(uiContext.getPackageName())) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
-	protected Type getType() {
-		Type listType = new TypeToken<List<EventDTO>>() {
-		}.getType();
-		return listType;
-	}
+    protected Type getType() {
+        Type listType = new TypeToken<List<EventDTO>>() {
+        }.getType();
+        return listType;
+    }
 
 /*
 	String jsonString = GsonHelper.parseEntityToJson(messageDTO);

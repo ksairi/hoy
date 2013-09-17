@@ -12,12 +12,12 @@ import android.os.Handler;
  */
 public abstract class AbstractRunnable implements Runnable {
 
-	protected Context context;
-	protected Handler handler;
+    protected Context context;
+    protected Handler handler;
 
-	public abstract void run();
+    public abstract void run();
 
-	protected abstract String getParams();
+    protected abstract String getParams();
 
-	protected abstract String getUrl();
+    protected abstract String getUrl();
 }
