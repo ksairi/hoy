@@ -6,12 +6,12 @@
 
 	<fragment
 			android:name="com.hoy.fragments.PromoImgFragment"
-			android:id="@+id/promoImgFragment"
+			android:id="@+id/promo_img_list"
 			android:layout_width="wrap_content"
 			android:layout_gravity="center_horizontal"
 			android:layout_height="wrap_content"/>
 
-	<LinearLayout style="@style/fragment_wrapper">
+	<LinearLayout style="@style/fragment_wrapper" android:baselineAligned="false">
 
 		<fragment
 				android:name="com.hoy.fragments.EventListFragment"
