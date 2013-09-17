@@ -2,6 +2,7 @@
 
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/promo_img_wrapper"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_gravity="center_horizontal">
@@ -9,7 +10,8 @@
 			<ImageView
 			   android:id="@+id/promo_img"
 			   android:layout_height="wrap_content"
-			   android:layout_width="wrap_content"/>
+			   android:layout_width="wrap_content"
+               android:contentDescription="@string/answer_no"/>
 
 	</LinearLayout>
 
