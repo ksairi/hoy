@@ -60,15 +60,21 @@
                     <artifactId>android-maven-plugin</artifactId>
                     <version>3.6.1</version>
                     <extensions>true</extensions>
-                    <configuration>
-                        <sdk>
-                            <!-- platform or api level (api level 4 = platform 1.6) -->
-                            <platform>4.0</platform>
-                        </sdk>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <configuration>
+                    <sdk>
+                        <!-- platform or api level (api level 4 = platform 1.6) -->
+                        <platform>4.0</platform>
+                    </sdk>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     <profiles>
         <profile>

@@ -7,10 +7,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.asynctasks.GetInitialContentAsyncTask;
+import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.helpers.SharedPreferencesHelper;
+import com.hoy.model.FilterParams;
 import com.hoy.model.PromoImg;
 import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.ImageService;
@@ -53,11 +55,24 @@ public class InitialActivity extends GenericActivity {
 
             }
 
-            public void handleErrorCallBack(List<EventDTO> eventDTOs) {
+            public void handleErrorCallBack(final List<EventDTO> eventDTOs) {
 
-                Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
                 EventsScheduler.startRetrievePromoImgTask(getContext(), promoImg);
-                genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
+                new SyncLocalEventsAsyncTask(getContext(), new FilterParams(DateUtils.getTodayString()), getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
+                    public void handleSuccessCallBack(List<EventDTO> localEventDTOs) {
+                        genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) localEventDTOs, true);
+                        Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
+                    }
+
+                    public void handleErrorResult() {
+                        genericStartActivity(HomeActivity.class, MilongaHoyConstants.EVENT_DTOS, (ArrayList) eventDTOs, true);
+                        Toast.makeText(getContext(), R.string.connection_errors, Toast.LENGTH_SHORT).show();
+                    }
+
+                    public void handleErrorCallBack(List<EventDTO> localEventDTOs) {
+
+                    }
+                }).execute();
             }
         }).execute();
 

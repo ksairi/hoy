@@ -145,8 +145,19 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 
     public void autoSelectFirst(EventDTO eventDTO, Integer index) {
         onItemSelected(eventDTO, index);
+        openDrawer();
+    }
+
+    @Override
+    public void showEmptyEventList() {
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        mDrawer.findViewById(R.id.event_detail_content).setVisibility(View.INVISIBLE);
+    }
+
+    public void openDrawer() {
         if (mDrawer != null) {
             mDrawer.openDrawer(Gravity.LEFT);
+            mDrawer.findViewById(R.id.event_detail_content).setVisibility(View.VISIBLE);
         }
     }
 
@@ -227,8 +238,12 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                detailPromoImgFragment.cancelPromoImgTimerTask();
-                listPromoImgFragment.startPromoImgTimerTask();
+                if (detailPromoImgFragment != null) {
+                    detailPromoImgFragment.cancelPromoImgTimerTask();
+                }
+                if (listPromoImgFragment != null) {
+                    listPromoImgFragment.startPromoImgTimerTask();
+                }
                 menu.getItem(0).setVisible(true);
 
             }

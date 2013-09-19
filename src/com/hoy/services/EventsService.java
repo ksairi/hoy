@@ -245,7 +245,7 @@ public class EventsService {
                 lastManuallyUpdatedCalendar.setTime(lastManuallyUpdatedDate);
                 lastManuallyUpdatedCalendar.add(Calendar.MINUTE, MilongaHoyConstants.MANUALLY_UPDATE_PERIOD);
                 Calendar nowCalendar = Calendar.getInstance();
-                result = lastManuallyUpdatedCalendar.before(nowCalendar);
+                result = lastManuallyUpdatedCalendar.after(nowCalendar);
             }
         } catch (ParseException e) {
             return result;

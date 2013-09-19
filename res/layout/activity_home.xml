@@ -7,6 +7,7 @@
         android:layout_height="match_parent">
     <!-- The main content view -->
     <include
+            android:id="@+id/event_detail_content"
             layout="@layout/activity_event_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

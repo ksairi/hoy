@@ -187,6 +187,8 @@ public class EventListFragment extends ListFragment {
         public void onClickTodaysMap(List<EventDTO> eventDTOs);
 
         public void autoSelectFirst(EventDTO eventDTO, Integer index);
+
+        public void showEmptyEventList();
     }
 
     @Override
@@ -236,7 +238,7 @@ public class EventListFragment extends ListFragment {
 
     public void updateManually() {
 
-        if (EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
+        if (!EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
 
 
             EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
@@ -278,6 +280,7 @@ public class EventListFragment extends ListFragment {
             listener.autoSelectFirst(eventDTOs.get(0), 0);
         } else {
             if (activityAttached != null) {
+                listener.showEmptyEventList();
                 activityAttached.findViewById(R.id.list_view_labels).setVisibility(View.GONE);
                 Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();
             }
