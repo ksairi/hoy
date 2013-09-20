@@ -217,9 +217,14 @@ public class EventListFragment extends ListFragment {
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
             listener.onDateOptionChanged();
-            syncEventList();
+            if (checked) {
+                updateAdapter(todayEventsDTO);
+            } else {
+                syncEventList();
+            }
+
 
         }
     };
