@@ -36,8 +36,6 @@ public class EventDetailFragment extends Fragment {
 
     public void setEventProperties(EventDTO eventDTO) {
 
-        View specialIcon = null;
-        View classIcon = null;
         this.eventDTO = eventDTO;
 
         if (eventDTO.getName() != null) {
@@ -163,7 +161,7 @@ public class EventDetailFragment extends Fragment {
             ((View) getActivity().findViewById(R.id.website_label).getParent()).setVisibility(View.GONE);
         }
 
-        classIcon = getActivity().findViewById(R.id.class_icon);
+        View classIcon = getActivity().findViewById(R.id.class_icon);
         if (eventDTO.getOffersClassFlag() != null && eventDTO.getOffersClassFlag().equals(MilongaHoyConstants.TRUE)) {
 
             getActivity().findViewById(R.id.class_details).setVisibility(View.VISIBLE);
@@ -180,7 +178,7 @@ public class EventDetailFragment extends Fragment {
             classIcon.setVisibility(View.GONE);
         }
 
-        specialIcon = getActivity().findViewById(R.id.special_event_icon);
+        View specialIcon = getActivity().findViewById(R.id.special_event_icon);
         if (eventDTO.getSpecialEventFlag() != null && eventDTO.getSpecialEventFlag().equals(MilongaHoyConstants.FALSE)) {
             specialIcon.setVisibility(View.GONE);
         } else {
