@@ -55,6 +55,7 @@ public class EventDetailFragment extends Fragment {
 
         if (eventDTO.getDetails() != null && !eventDTO.getDetails().equals(MilongaHoyConstants.EMPTY_STRING)) {
 
+            ((View) getActivity().findViewById(R.id.event_details_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventDetails = (TextView) getActivity().findViewById(R.id.event_details_value);
             eventDetails.setText(eventDTO.getDetails());
         } else {
@@ -62,6 +63,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getDateToShow() != null && !eventDTO.getDateToShow().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.event_date_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventDate = (TextView) getActivity().findViewById(R.id.event_date);
             eventDate.setText(eventDTO.getDateToShow());
         } else {
@@ -69,6 +71,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getStartTime() != null && !eventDTO.getStartTime().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.start_time_label).getParent()).setVisibility(View.VISIBLE);
             TextView startTime = (TextView) getActivity().findViewById(R.id.start_time);
             startTime.setText(eventDTO.getStartTime());
         } else {
@@ -76,6 +79,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getEndTime() != null && !eventDTO.getEndDateTime().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.end_time_label).getParent()).setVisibility(View.VISIBLE);
             TextView endTime = (TextView) getActivity().findViewById(R.id.end_time);
             endTime.setText(eventDTO.getEndTime());
         } else {
@@ -83,6 +87,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getGenre() != null && !eventDTO.getGenre().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.event_genre_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventGenre = (TextView) getActivity().findViewById(R.id.event_genre);
             eventGenre.setText(eventDTO.getGenre());
         } else {
@@ -101,6 +106,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getNameOfPlace() != null && !eventDTO.getNameOfPlace().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.name_of_place_label).getParent()).setVisibility(View.VISIBLE);
             TextView nameOfPlace = (TextView) getActivity().findViewById(R.id.name_of_place);
             nameOfPlace.setText(eventDTO.getNameOfPlace());
         } else {
@@ -108,7 +114,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getPrice() != null && !eventDTO.getPrice().equals(MilongaHoyConstants.EMPTY_STRING)) {
-
+            ((View) getActivity().findViewById(R.id.event_price_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventPrice = (TextView) getActivity().findViewById(R.id.event_price);
             eventPrice.setText(eventDTO.getPrice());
 
@@ -117,6 +123,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getHowToGetThere() != null && !eventDTO.getHowToGetThere().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.how_to_get_there).getParent()).setVisibility(View.VISIBLE);
             TextView howToGetThere = (TextView) getActivity().findViewById(R.id.how_to_get_there);
             howToGetThere.setText(eventDTO.getHowToGetThere());
         } else {
@@ -124,6 +131,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getOrganizersNames() != null && !eventDTO.getOrganizersNames().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.event_organizers_label).getParent()).setVisibility(View.VISIBLE);
             TextView organizersName = (TextView) getActivity().findViewById(R.id.event_organizers);
             organizersName.setText(eventDTO.getOrganizersNames());
 
@@ -132,6 +140,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getPhones() != null && !eventDTO.getPhones().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.phone_number_label).getParent()).setVisibility(View.VISIBLE);
             TextView phoneNumber = (TextView) getActivity().findViewById(R.id.phone_number);
             phoneNumber.setText(eventDTO.getPhones());
         } else {
@@ -139,6 +148,7 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getEmailContact() != null && !eventDTO.getEmailContact().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.email_address_label).getParent()).setVisibility(View.VISIBLE);
             TextView emailAddress = (TextView) getActivity().findViewById(R.id.email_address);
             emailAddress.setText(eventDTO.getEmailContact());
         } else {
@@ -146,13 +156,18 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getWebsite() != null && !eventDTO.getWebsite().equals(MilongaHoyConstants.EMPTY_STRING)) {
+            ((View) getActivity().findViewById(R.id.website_label).getParent()).setVisibility(View.VISIBLE);
             TextView website = (TextView) getActivity().findViewById(R.id.website);
             website.setText(eventDTO.getWebsite());
         } else {
             ((View) getActivity().findViewById(R.id.website_label).getParent()).setVisibility(View.GONE);
         }
 
+        classIcon = getActivity().findViewById(R.id.class_icon);
         if (eventDTO.getOffersClassFlag() != null && eventDTO.getOffersClassFlag().equals(MilongaHoyConstants.TRUE)) {
+
+            getActivity().findViewById(R.id.class_details).setVisibility(View.VISIBLE);
+            classIcon.setVisibility(View.VISIBLE);
 
             TextView firstClassStartTime = (TextView) getActivity().findViewById(R.id.first_class_start_time);
             TextView lastClassEndTime = (TextView) getActivity().findViewById(R.id.last_class_end_time);
@@ -162,23 +177,29 @@ public class EventDetailFragment extends Fragment {
             classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails());
         } else {
             getActivity().findViewById(R.id.class_details).setVisibility(View.GONE);
-            classIcon = getActivity().findViewById(R.id.class_icon);
             classIcon.setVisibility(View.GONE);
         }
 
+        specialIcon = getActivity().findViewById(R.id.special_event_icon);
         if (eventDTO.getSpecialEventFlag() != null && eventDTO.getSpecialEventFlag().equals(MilongaHoyConstants.FALSE)) {
-            specialIcon = getActivity().findViewById(R.id.special_event_icon);
             specialIcon.setVisibility(View.GONE);
+        } else {
+            specialIcon.setVisibility(View.VISIBLE);
         }
 
+        TextView reservationAdvised = (TextView) getActivity().findViewById(R.id.reservation_advised);
         if (eventDTO.getReservationAdvicedFlag() != null && eventDTO.getReservationAdvicedFlag().equals(MilongaHoyConstants.TRUE)) {
-            TextView reservationAdvised = (TextView) getActivity().findViewById(R.id.reservation_advised);
+
             ((View) reservationAdvised.getParent()).setVisibility(View.VISIBLE);
+        } else {
+            ((View) reservationAdvised.getParent()).setVisibility(View.GONE);
         }
 
         if (specialIcon != null && specialIcon.getVisibility() == View.GONE && classIcon != null && classIcon.getVisibility() == View.GONE) {
 
             ((View) specialIcon.getParent()).setVisibility(View.GONE);
+        } else {
+            ((View) specialIcon.getParent()).setVisibility(View.VISIBLE);
         }
 
     }
