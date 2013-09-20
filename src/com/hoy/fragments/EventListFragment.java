@@ -99,6 +99,7 @@ public class EventListFragment extends ListFragment {
                 Date now = DateUtils.getTodayCleanTime().getTime();
                 if (now.after(savedLastUpdate) || now.before(savedLastUpdate)) {
                     setTodayDateTextView(DateUtils.getTodayDateToShow());
+                    SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE,DateUtils.getTodayAndTimeString());
                     syncRemoteEvents();
                 }
             } catch (ParseException e) {
