@@ -44,7 +44,8 @@
 	<string name="cant_sync_new_events">Can\'t get updates in milongas. Check your internet connection</string>
 	<string name="sync_local_events">Newest updates</string>
 	<string name="invalid_map_data">Sorry, can\'t show the location</string>
-    <string name="drawer_open"><![CDATA[>]]></string>
-    <string name="drawer_close"><![CDATA[<]]></string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="manually_update_success">Events updated!</string>
 
 </resources>

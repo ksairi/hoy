@@ -72,11 +72,15 @@ public abstract class AbstractAsyncTask<T> extends AsyncTask<String, Void, Strin
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialogFragment = FragmentHelper.showProgressDialog(fragmentManager);
+        if(fragmentManager != null){
+            progressDialogFragment = FragmentHelper.showProgressDialog(fragmentManager);
+        }
     }
 
     protected void onPostExecute(String result) {
-        fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
+        if(fragmentManager != null){
+            fragmentManager.beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
+        }
         if (result != null && result.equals(SUCCESS)) {
             doOnSuccess();
         } else {

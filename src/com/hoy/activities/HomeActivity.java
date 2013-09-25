@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+
 import android.view.*;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.hoy.R;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.fragments.EventDetailFragment;
 import com.hoy.fragments.EventListFragment;
 import com.hoy.fragments.PromoImgFragment;
+import com.hoy.services.EventsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,17 +105,25 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
 
     public void onFragmentMenuOptionSelected(MenuItem item) {
         if (item.getItemId() == R.id.refresh_btn) {
+            if (!EventsService.hasRecentlyManuallyUpdated(this)) {
 
-            EventListFragment eventListFragment = (EventListFragment) getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
-            if (mDualPane) {
+                    EventListFragment eventListFragment = (EventListFragment) getSupportFragmentManager().findFragmentById(R.id.event_list_fragment);
+                if (mDualPane) {
 
-                EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
-                if (eventDetailFragment != null) {
+                    EventDetailFragment eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
+                    if (eventDetailFragment != null) {
 
-                    detailsWrapper.removeAllViewsInLayout();
+                        detailsWrapper.removeAllViewsInLayout();
+                    }
                 }
+                if (!EventsService.hasRecentlyManuallyUpdated(this)) {
+                    setRefreshActionButtonState(true);
+                    eventListFragment.updateManually();
+                }
+            } else {
+                Toast.makeText(this, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
             }
-            eventListFragment.updateManually();
+
         }
     }
 
@@ -208,7 +220,7 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawer,         /* DrawerLayout object */
-                R.drawable.dummy,  /* nav drawer icon to replace 'Up' caret */
+                R.drawable.ic_ab_back_holo_light,  /* nav drawer icon to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
         ) {
@@ -216,28 +228,17 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 //getActionBar().setTitle(mTitle);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeButtonEnabled(true);
+                listPromoImgFragment.cancelPromoImgTimerTask();
+                startDetailPromoImg();
+                menu.getItem(0).setVisible(false);
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawer.setDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
                 if (detailPromoImgFragment != null) {
                     detailPromoImgFragment.cancelPromoImgTimerTask();
                 }
@@ -245,23 +246,37 @@ public class HomeActivity extends GenericActivity implements EventListFragment.E
                     listPromoImgFragment.startPromoImgTimerTask();
                 }
                 menu.getItem(0).setVisible(true);
-
             }
+        };
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                listPromoImgFragment.cancelPromoImgTimerTask();
-                startDetailPromoImg();
-                menu.getItem(0).setVisible(false);
-            }
+        // Set the drawer toggle as the DrawerListener
+        mDrawer.setDrawerListener(mDrawerToggle);
 
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
         listPromoImgFragment = (PromoImgFragment) getSupportFragmentManager().findFragmentById(R.id.promo_img_list);
         eventDetailFragment = (EventDetailFragment) getSupportFragmentManager().findFragmentById(R.id.event_details_fragment);
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (menu != null) {
+            final MenuItem refreshItem = menu
+                    .findItem(R.id.refresh_btn);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    MenuItemCompat.setActionView(refreshItem,R.layout.actionbar_indeterminate_progress);
+                    //refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    //refreshItem.setActionView(null);
+                    MenuItemCompat.setActionView(refreshItem,null);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateManuallyCallBack() {
+        setRefreshActionButtonState(false);
     }
 }

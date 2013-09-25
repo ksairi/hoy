@@ -190,6 +190,8 @@ public class EventListFragment extends ListFragment {
         public void autoSelectFirst(EventDTO eventDTO, Integer index);
 
         public void showEmptyEventList();
+
+        public void updateManuallyCallBack();
     }
 
     @Override
@@ -244,33 +246,27 @@ public class EventListFragment extends ListFragment {
 
     public void updateManually() {
 
-        if (!EventsService.hasRecentlyManuallyUpdated(activityAttached)) {
-
-
-            EventsService.getInstance().synchronizeEventsFromServer(activityAttached, getFragmentManager(), getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
+            EventsService.getInstance().synchronizeEventsFromServer(activityAttached, null, getFilterParams(), new GenericSuccessListHandleable<EventDTO>() {
                 public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
 
                     SharedPreferencesHelper.setValueSharedPreferences(getActivity(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE, DateUtils.getTodayAndTimeString());
                     updateAdapter(eventDTOs);
+                    Toast.makeText(activityAttached, R.string.manually_update_success, Toast.LENGTH_SHORT).show();
+                    listener.updateManuallyCallBack();
 
                 }
 
                 public void handleErrorResult() {
-
+                    listener.updateManuallyCallBack();
                     //Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
 
                 }
 
                 public void handleErrorCallBack(List<EventDTO> eventDTOs) {
-
+                    listener.updateManuallyCallBack();
                     //Toast.makeText(activityAttached, R.string.connection_errors, Toast.LENGTH_SHORT).show();
                 }
             });
-
-        } else {
-            Toast.makeText(activityAttached, R.string.too_many_update_manually, Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private void updateAdapter(List<EventDTO> eventDTOs) {

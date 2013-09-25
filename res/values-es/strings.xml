@@ -40,6 +40,9 @@
 	<string name="cant_sync_new_events">No se pueden obtener novedades en las milongas. Chequea tu conexión a internet</string>
 	<string name="sync_local_events">Novedades recientes</string>
 	<string name="invalid_map_data">Disculpa, no se puede mostrar la ubicación</string>
+    <string name="drawer_open">Abrir menu</string>
+    <string name="drawer_close">Cerrar menu</string>
+    <string name="manually_update_success">Eventos actualizados!</string>
 
 
 </resources>
