@@ -43,4 +43,14 @@ public class MilongaHoyConstants {
     public static final String LAST_FULL_UPDATE_DATE = "lastFullUpdateDate";
     public static final String TODAY_DTOS = "TODAY_DTOS";
     public static final String HAS_CLEANED_VALUES = "HAS_CLEANED_VALUES";
+    public static final String ANALYTICS_SCREEN_EVENTS_CATEGORY ="ANALYTICS_SCREEN_EVENTS_CATEGORY";
+    public static final String ANALYTICS_OPEN_SCREEN_ACTION ="ANALYTICS_OPEN_SCREEN_ACTION";
+    public static final String ANALYTICS_OPEN_LIST_EVENT_LABEL = "Milonga List";
+    public static final String ANALYTICS_OPEN_DETAIL_EVENT_LABEL = "Milonga Detail";
+    public static final String ANALYTICS_OPEN_TODAYS_MAP_LABEL = "Mapa de Hoy";
+    public static final String ANALYTICS_OPEN_MILONGA_MAP_LABEL = "Mapa de Milonga";
+    public static final String ANALYTICS_TRACK_ID = "UA-42599328-2";
+    public static final Boolean DEBUG = false;
+    public static final String LOCALE_SPANISH = "es";
+
 }

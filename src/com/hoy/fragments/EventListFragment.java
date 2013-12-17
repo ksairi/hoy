@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.Tracker;
 import com.hoy.R;
 import com.hoy.adapters.EventListAdapter;
 import com.hoy.asynctasks.SyncLocalEventsAsyncTask;
 import com.hoy.asynctasks.interfaces.GenericSuccessListHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
+import com.hoy.helpers.AnalyticsHelper;
 import com.hoy.helpers.FragmentHelper;
 import com.hoy.helpers.SharedPreferencesHelper;
 import com.hoy.model.FilterParams;
@@ -46,6 +48,7 @@ public class EventListFragment extends ListFragment {
     private TextView todayDateTextView;
     private ScheduledFuture scheduleFutureHourly;
     private ScheduledFuture scheduleFutureDaily;
+    Tracker tracker;
 
 
     @Override
@@ -57,7 +60,11 @@ public class EventListFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
+        tracker = AnalyticsHelper.getDefaultTracker(getActivity().getApplicationContext());
 
+        if(tracker != null && !MilongaHoyConstants.DEBUG){
+            tracker.sendEvent(MilongaHoyConstants.ANALYTICS_SCREEN_EVENTS_CATEGORY, MilongaHoyConstants.ANALYTICS_OPEN_SCREEN_ACTION, MilongaHoyConstants.ANALYTICS_OPEN_LIST_EVENT_LABEL, null);
+        }
         todayEvents = (CheckBox) activityAttached.findViewById(R.id.today_events);
         todayDateTextView = (TextView) activityAttached.findViewById(R.id.today_date);
         setTodayDateTextView(DateUtils.getTodayDateToShow());
@@ -235,7 +242,9 @@ public class EventListFragment extends ListFragment {
     private View.OnClickListener onClickTodaysMap = new View.OnClickListener() {
         public void onClick(View view) {
             if (todayEventsDTO != null && !todayEventsDTO.isEmpty()) {
-
+                if(tracker != null && !MilongaHoyConstants.DEBUG){
+                    tracker.sendEvent(MilongaHoyConstants.ANALYTICS_SCREEN_EVENTS_CATEGORY, MilongaHoyConstants.ANALYTICS_OPEN_SCREEN_ACTION, MilongaHoyConstants.ANALYTICS_OPEN_TODAYS_MAP_LABEL, null);
+                }
                 listener.onClickTodaysMap(todayEventsDTO);
             } else {
                 Toast.makeText(activityAttached, R.string.no_events_to_show, Toast.LENGTH_SHORT).show();

@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.analytics.tracking.android.Tracker;
 import com.hoy.R;
 import com.hoy.activities.GoogleMapActivity;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.helpers.AddressHelper;
+import com.hoy.helpers.AnalyticsHelper;
+
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +29,7 @@ import com.hoy.helpers.AddressHelper;
 public class EventDetailFragment extends Fragment {
 
     private EventDTO eventDTO;
+    Tracker tracker;
 
 
     @Override
@@ -33,10 +38,28 @@ public class EventDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_event_details, container, false);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle arguments = getArguments();
+        ImageButton googleMap = (ImageButton) getActivity().findViewById(R.id.google_map);
+        googleMap.setOnClickListener(googleMapOnClickListener);
+        tracker = AnalyticsHelper.getDefaultTracker(getActivity().getApplicationContext());
+        if (arguments != null) {
+            EventDTO eventDTO = arguments.getParcelable(MilongaHoyConstants.EVENT_DTO);
+            setEventProperties(eventDTO);
+        }
+    }
+
 
     public void setEventProperties(EventDTO eventDTO) {
 
+        if(tracker != null && !MilongaHoyConstants.DEBUG){
+            tracker.sendEvent(MilongaHoyConstants.ANALYTICS_SCREEN_EVENTS_CATEGORY, MilongaHoyConstants.ANALYTICS_OPEN_SCREEN_ACTION, MilongaHoyConstants.ANALYTICS_OPEN_DETAIL_EVENT_LABEL, null);
+        }
+
         this.eventDTO = eventDTO;
+        String currentLocale = Locale.getDefault().getDisplayName();
 
         if (eventDTO.getName() != null) {
             TextView eventName = (TextView) getActivity().findViewById(R.id.event_name_title);
@@ -51,11 +74,21 @@ public class EventDetailFragment extends Fragment {
             getActivity().findViewById(R.id.event_cancelled_detail).setVisibility(View.GONE);
         }
 
-        if (eventDTO.getDetails() != null && !eventDTO.getDetails().equals(MilongaHoyConstants.EMPTY_STRING)) {
+        if ((eventDTO.getDetails() != null && !eventDTO.getDetails().equals(MilongaHoyConstants.EMPTY_STRING)) || (eventDTO.getDetails_en() != null && !eventDTO.getDetails_en().equals(MilongaHoyConstants.EMPTY_STRING))) {
 
             ((View) getActivity().findViewById(R.id.event_details_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventDetails = (TextView) getActivity().findViewById(R.id.event_details_value);
-            eventDetails.setText(eventDTO.getDetails());
+            if(currentLocale.equals(MilongaHoyConstants.LOCALE_SPANISH)){
+                eventDetails.setText(eventDTO.getDetails());
+            }
+            else{
+                    if(eventDTO.getDetails_en() != null){
+                        eventDetails.setText(eventDTO.getDetails_en());
+                    }
+                    else{
+                        eventDetails.setText(eventDTO.getDetails());
+                    }
+                }
         } else {
             ((View) getActivity().findViewById(R.id.event_details_label).getParent()).setVisibility(View.GONE);
         }
@@ -170,9 +203,26 @@ public class EventDetailFragment extends Fragment {
             TextView firstClassStartTime = (TextView) getActivity().findViewById(R.id.first_class_start_time);
             TextView lastClassEndTime = (TextView) getActivity().findViewById(R.id.last_class_end_time);
             TextView classDetailsAndPricing = (TextView) getActivity().findViewById(R.id.class_details_and_pricing);
-            firstClassStartTime.setText(eventDTO.getFirstClassStarts());
-            lastClassEndTime.setText(eventDTO.getLastClassEnds());
-            classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails());
+            if(eventDTO.getFirstClassStarts() != null){
+                firstClassStartTime.setText(eventDTO.getFirstClassStarts());
+            }
+            if(eventDTO.getLastClassEnds() != null){
+                lastClassEndTime.setText(eventDTO.getLastClassEnds());
+            }
+            if(eventDTO.getClassContentAndPricingDetails() != null || eventDTO.getClassContentAndPricingDetails_en() != null){
+                if(currentLocale.equals(MilongaHoyConstants.LOCALE_SPANISH)){
+                    classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails());
+                }
+                else{
+                        if(eventDTO.getClassContentAndPricingDetails_en() != null){
+                            classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails_en());
+                        }
+                        else{
+                            classDetailsAndPricing.setText(eventDTO.getClassContentAndPricingDetails());
+                        }
+                    }
+            }
+
         } else {
             getActivity().findViewById(R.id.class_details).setVisibility(View.GONE);
             classIcon.setVisibility(View.GONE);
@@ -203,40 +253,32 @@ public class EventDetailFragment extends Fragment {
     }
 
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Bundle arguments = getArguments();
-        ImageButton googleMap = (ImageButton) getActivity().findViewById(R.id.google_map);
-        googleMap.setOnClickListener(googleMapOnClickListener);
-        if (arguments != null) {
-            EventDTO eventDTO = arguments.getParcelable(MilongaHoyConstants.EVENT_DTO);
-            setEventProperties(eventDTO);
-        }
-    }
-
     private View.OnClickListener googleMapOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
 
-            Intent intent = new Intent(getActivity(), GoogleMapActivity.class);
-            try {
-                Double latitude = Double.parseDouble(eventDTO.getLatitude());
-                Double longitude = Double.parseDouble(eventDTO.getLongitude());
-                String name = eventDTO.getName();
-                String eventAddress = AddressHelper.getEventAddress(eventDTO);
-                if (name == null) {
-                    name = MilongaHoyConstants.EMPTY_STRING;
-                }
-                intent.putExtra(MilongaHoyConstants.EVENT_NAME, name);
-                intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, latitude);
-                intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, longitude);
-                intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
-                getActivity().startActivity(intent);
+        if(tracker != null && !MilongaHoyConstants.DEBUG){
+            tracker.sendEvent(MilongaHoyConstants.ANALYTICS_SCREEN_EVENTS_CATEGORY, MilongaHoyConstants.ANALYTICS_OPEN_SCREEN_ACTION, MilongaHoyConstants.ANALYTICS_OPEN_MILONGA_MAP_LABEL, null);
+        }
 
-
-            } catch (NumberFormatException e) {
-                Toast.makeText(getActivity(), R.string.invalid_map_data, Toast.LENGTH_SHORT);
+        Intent intent = new Intent(getActivity(), GoogleMapActivity.class);
+        try {
+            Double latitude = Double.parseDouble(eventDTO.getLatitude());
+            Double longitude = Double.parseDouble(eventDTO.getLongitude());
+            String name = eventDTO.getName();
+            String eventAddress = AddressHelper.getEventAddress(eventDTO);
+            if (name == null) {
+                name = MilongaHoyConstants.EMPTY_STRING;
             }
+            intent.putExtra(MilongaHoyConstants.EVENT_NAME, name);
+            intent.putExtra(MilongaHoyConstants.EVENT_LATITUDE, latitude);
+            intent.putExtra(MilongaHoyConstants.EVENT_LONGITUDE, longitude);
+            intent.putExtra(MilongaHoyConstants.EVENT_ADDRESS, eventAddress);
+            getActivity().startActivity(intent);
+
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(getActivity(), R.string.invalid_map_data, Toast.LENGTH_SHORT);
+        }
 
         }
     };

@@ -104,3 +104,6 @@
 
     # Application classes that will be serialized/deserialized over Gson
     -keep class com.hoy.dto.** { *; }
+
+    #keep google analytics
+    -keep public class com.google.analytics.**{ *; }

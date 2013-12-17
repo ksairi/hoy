@@ -10,6 +10,7 @@
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/android.support_compatibility-v7-appcompat_18/assets" />
         <option name="LIBS_FOLDER_RELATIVE_PATH" value="/android.support_compatibility-v7-appcompat_18/libs" />
         <option name="LIBRARY_PROJECT" value="true" />
+        <includeAssetsFromLibraries>true</includeAssetsFromLibraries>
         <resOverlayFolders>
           <path>/android.support_compatibility-v7-appcompat_18/res-overlay</path>
         </resOverlayFolders>
@@ -19,9 +20,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/android.support_compatibility-v7-appcompat_18">
-      <sourceFolder url="file://$MODULE_DIR$/android.support_compatibility-v7-appcompat_18/gen" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/android.support_compatibility-v7-appcompat_18/gen" isTestSource="false" generated="true" />
     </content>
-    <orderEntry type="jdk" jdkName="Maven Android 4.0 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Maven Android API 18 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

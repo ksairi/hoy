@@ -10,6 +10,7 @@
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/com.google.android.gms_google-play-services_7/assets" />
         <option name="LIBS_FOLDER_RELATIVE_PATH" value="/com.google.android.gms_google-play-services_7/libs" />
         <option name="LIBRARY_PROJECT" value="true" />
+        <includeAssetsFromLibraries>true</includeAssetsFromLibraries>
         <resOverlayFolders>
           <path>/com.google.android.gms_google-play-services_7/res-overlay</path>
         </resOverlayFolders>
@@ -20,10 +21,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_7">
       <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_7/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_7/gen" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_7/gen" isTestSource="false" generated="true" />
     </content>
-    <orderEntry type="jdk" jdkName="Maven Android 4.0 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="jdk" jdkName="Maven Android 4.1.2 Platform" jdkType="Android SDK" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.android:android:4.1.1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpclient:4.0.1" level="project" />

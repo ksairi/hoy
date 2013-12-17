@@ -49,6 +49,11 @@
 		  <version>7</version>
 		  <type>apklib</type>
 		</dependency>
+        <dependency>
+            <groupId>com.google.android.analytics</groupId>
+            <artifactId>analytics</artifactId>
+            <version>3</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

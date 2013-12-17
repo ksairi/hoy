@@ -60,6 +60,8 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
     private String serverLastUpdateTime;
     private String dateToShow;
     private String milongaID;
+    private String details_en;
+    private String classContentAndPricingDetails_en;
 
     public String getPk() {
         return pk;
@@ -448,6 +450,22 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
         this.dateToShow = dateToShow;
     }
 
+    public String getDetails_en() {
+        return details_en;
+    }
+
+    public void setDetails_en(String details_en) {
+        this.details_en = details_en;
+    }
+
+    public String getClassContentAndPricingDetails_en() {
+        return classContentAndPricingDetails_en;
+    }
+
+    public void setClassContentAndPricingDetails_en(String classContentAndPricingDetails_en) {
+        this.classContentAndPricingDetails_en = classContentAndPricingDetails_en;
+    }
+
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeString(pk);
@@ -498,6 +516,8 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
         parcel.writeString(serverLastUpdateTime);
         parcel.writeString(dateToShow);
         parcel.writeString(milongaID);
+        parcel.writeString(details_en);
+        parcel.writeString(classContentAndPricingDetails_en);
 
     }
 
@@ -562,6 +582,8 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
         serverLastUpdateTime = parcel.readString();
         dateToShow = parcel.readString();
         milongaID = parcel.readString();
+        details_en = parcel.readString();
+        classContentAndPricingDetails_en = parcel.readString();
     }
 
     @Override
