@@ -20,7 +20,7 @@ public class PromoImgDataSource {
 
     private SQLiteDatabase database;
     private SQLiteMilongaHelper dbMilongaHelper;
-    private String[] allColumns = {SQLiteMilongaHelper.PROMO_IMG_BASE_64_STRING, SQLiteMilongaHelper.PROMO_IMG_URL_DESTINATION};
+    private String[] allColumns = {SQLiteMilongaHelper.COLUMN_IMG_BASE_64_STRING, SQLiteMilongaHelper.PROMO_IMG_URL_DESTINATION};
 
     public PromoImgDataSource(Context context) {
         dbMilongaHelper = new SQLiteMilongaHelper(context);
@@ -37,7 +37,7 @@ public class PromoImgDataSource {
     public synchronized void createData(String base64, String urlDestination, Integer width, Integer height) {
 
         ContentValues values = new ContentValues();
-        values.put(SQLiteMilongaHelper.PROMO_IMG_BASE_64_STRING, base64);
+        values.put(SQLiteMilongaHelper.COLUMN_IMG_BASE_64_STRING, base64);
         values.put(SQLiteMilongaHelper.PROMO_IMG_URL_DESTINATION, urlDestination);
         values.put(SQLiteMilongaHelper.COLUMN_IMG_WIDTH, width);
         values.put(SQLiteMilongaHelper.COLUMN_IMG_HEIGHT, height);

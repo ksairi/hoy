@@ -2,8 +2,10 @@ package com.hoy.services;
 
 import android.content.Context;
 import android.database.SQLException;
+import android.graphics.Bitmap;
 import android.view.Display;
 import com.hoy.constants.MilongaHoyConstants;
+import com.hoy.datasources.MilongaImgDataSource;
 import com.hoy.datasources.PromoImgDataSource;
 import com.hoy.helpers.DeviceHelper;
 import com.hoy.helpers.ImageHelper;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ImageService {
 
     private static PromoImgDataSource promoImgDataSource;
+    private static MilongaImgDataSource milongaImgDataSource;
     private static PromoImg promoImg;
 
 
@@ -30,6 +33,15 @@ public class ImageService {
             promoImgDataSource = new PromoImgDataSource(uiContext);
         }
         return promoImgDataSource;
+
+
+    }
+
+    private static MilongaImgDataSource getMilongaImgDataSource(Context uiContext) {
+        if (milongaImgDataSource == null) {
+            milongaImgDataSource = new MilongaImgDataSource(uiContext);
+        }
+        return milongaImgDataSource;
 
 
     }
@@ -108,4 +120,12 @@ public class ImageService {
     }
 
 
+    public static void saveMilongaImg(Context context, String paramEntity, String imageBase64String) {
+        getMilongaImgDataSource(context).createData(paramEntity,imageBase64String);
+
+    }
+
+    public static Bitmap getLocalMilongaImg(Context context, String paramEntity) {
+        return getMilongaImgDataSource(context).getMilongaImgById(paramEntity,true);
+    }
 }

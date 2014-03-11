@@ -1,6 +1,8 @@
 package com.hoy.activities;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import com.hoy.model.PromoImg;
 import com.hoy.schedulers.EventsScheduler;
 import com.hoy.services.ImageService;
 import com.hoy.utilities.DateUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,27 @@ public class InitialActivity extends GenericActivity {
             SharedPreferencesHelper.removeValueSharedPreferences(getContext(), MilongaHoyConstants.LAST_FULL_UPDATE_DATE);
             SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.HAS_CLEANED_VALUES, MilongaHoyConstants.HAS_CLEANED_VALUES);
         }
+        PackageInfo packageInfo = null;
+        try{
+            packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
+
+            if(packageInfo != null){
+                Integer versionCode = packageInfo.versionCode;
+                try{
+                    Integer lastAppVersionCodeSaved = Integer.decode(SharedPreferencesHelper.getValueInSharedPreferences(getContext(), MilongaHoyConstants.APP_VERSION_CODE));
+                        if(lastAppVersionCodeSaved == null || versionCode > lastAppVersionCodeSaved){
+                            prepareContentForNewAppVersion(versionCode);
+                        }
+
+                }catch (NumberFormatException e){
+                    prepareContentForNewAppVersion(versionCode);
+                }
+            }
+        }catch (PackageManager.NameNotFoundException e){
+
+        }
+
+
 
         new GetInitialContentAsyncTask(getContext(), promoImg, getSupportFragmentManager(), new GenericSuccessListHandleable<EventDTO>() {
             public void handleSuccessCallBack(List<EventDTO> eventDTOs) {
@@ -87,5 +111,11 @@ public class InitialActivity extends GenericActivity {
         super.onConfigurationChanged(newConfig);
         ImageView imageView = (ImageView) findViewById(R.id.init_image);
         imageView.setBackgroundResource(R.drawable.init_image);
+    }
+
+    private void prepareContentForNewAppVersion(Integer versionCode){
+
+        SharedPreferencesHelper.removeValueSharedPreferences(getContext(), MilongaHoyConstants.SERVER_LAST_UPDATE_TIME);
+        SharedPreferencesHelper.setValueSharedPreferences(getContext(), MilongaHoyConstants.APP_VERSION_CODE, String.valueOf(versionCode));
     }
 }

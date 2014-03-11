@@ -39,14 +39,14 @@ public class ProgressDialogFragment extends DialogFragment {
         wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        // Disable the back button
+        // Disable the back and search button
         DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
 
 
             public boolean onKey(DialogInterface dialog, int keyCode,
                                  KeyEvent event) {
 
-                return keyCode == KeyEvent.KEYCODE_BACK;
+                return keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_SEARCH;
             }
 
 

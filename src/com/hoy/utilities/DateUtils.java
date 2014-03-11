@@ -182,4 +182,10 @@ public class DateUtils {
         return result;
 
     }
+
+    public static Date getDateFromString_YYYY_MM_DD(String string) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat(YYYY_MM_DD_PATTERN);
+        Date date = formatter.parse(string);
+        return date;
+    }
 }

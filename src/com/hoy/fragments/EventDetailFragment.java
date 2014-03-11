@@ -1,22 +1,25 @@
 package com.hoy.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.google.analytics.tracking.android.Tracker;
 import com.hoy.R;
 import com.hoy.activities.GoogleMapActivity;
+import com.hoy.asynctasks.GetMilongaImgAsyncTask;
+import com.hoy.asynctasks.interfaces.GenericSuccessImgHandleable;
 import com.hoy.constants.MilongaHoyConstants;
 import com.hoy.dto.EventDTO;
 import com.hoy.helpers.AddressHelper;
 import com.hoy.helpers.AnalyticsHelper;
+import com.hoy.helpers.ImageHelper;
 
+import java.util.BitSet;
 import java.util.Locale;
 
 /**
@@ -51,7 +54,6 @@ public class EventDetailFragment extends Fragment {
         }
     }
 
-
     public void setEventProperties(EventDTO eventDTO) {
 
         if(tracker != null && !MilongaHoyConstants.DEBUG){
@@ -60,6 +62,19 @@ public class EventDetailFragment extends Fragment {
 
         this.eventDTO = eventDTO;
         String currentLocale = Locale.getDefault().getDisplayName();
+        getActivity().findViewById(R.id.milonga_image).setVisibility(View.GONE);
+        new GetMilongaImgAsyncTask(getActivity(),eventDTO.getMilongaID(),new GenericSuccessImgHandleable() {
+            @Override
+            public void handleSuccessCallBack(Bitmap bitmap) {
+                getActivity().findViewById(R.id.milonga_image).setVisibility(View.VISIBLE);
+                ((ImageView)getActivity().findViewById(R.id.milonga_image)).setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void handleErrorResult() {
+
+            }
+        }).execute();
 
         if (eventDTO.getName() != null) {
             TextView eventName = (TextView) getActivity().findViewById(R.id.event_name_title);
@@ -94,19 +109,14 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getDateToShow() != null && !eventDTO.getDateToShow().equals(MilongaHoyConstants.EMPTY_STRING)) {
-            ((View) getActivity().findViewById(R.id.event_date_label).getParent()).setVisibility(View.VISIBLE);
             TextView eventDate = (TextView) getActivity().findViewById(R.id.event_date);
             eventDate.setText(eventDTO.getDateToShow());
-        } else {
-            ((View) getActivity().findViewById(R.id.event_date_label).getParent()).setVisibility(View.GONE);
         }
 
         if (eventDTO.getStartTime() != null && !eventDTO.getStartTime().equals(MilongaHoyConstants.EMPTY_STRING)) {
-            ((View) getActivity().findViewById(R.id.start_time_label).getParent()).setVisibility(View.VISIBLE);
+
             TextView startTime = (TextView) getActivity().findViewById(R.id.start_time);
             startTime.setText(eventDTO.getStartTime());
-        } else {
-            ((View) getActivity().findViewById(R.id.start_time_label).getParent()).setVisibility(View.GONE);
         }
 
         if (eventDTO.getEndTime() != null && !eventDTO.getEndDateTime().equals(MilongaHoyConstants.EMPTY_STRING)) {
@@ -118,11 +128,9 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getGenre() != null && !eventDTO.getGenre().equals(MilongaHoyConstants.EMPTY_STRING)) {
-            ((View) getActivity().findViewById(R.id.event_genre_label).getParent()).setVisibility(View.VISIBLE);
+
             TextView eventGenre = (TextView) getActivity().findViewById(R.id.event_genre);
             eventGenre.setText(eventDTO.getGenre());
-        } else {
-            ((View) getActivity().findViewById(R.id.event_genre_label).getParent()).setVisibility(View.GONE);
         }
 
         if (eventDTO.getStreetLine1() != null && !eventDTO.getStreetLine1().equals(MilongaHoyConstants.EMPTY_STRING)) {
@@ -137,11 +145,8 @@ public class EventDetailFragment extends Fragment {
         }
 
         if (eventDTO.getNameOfPlace() != null && !eventDTO.getNameOfPlace().equals(MilongaHoyConstants.EMPTY_STRING)) {
-            ((View) getActivity().findViewById(R.id.name_of_place_label).getParent()).setVisibility(View.VISIBLE);
             TextView nameOfPlace = (TextView) getActivity().findViewById(R.id.name_of_place);
             nameOfPlace.setText(eventDTO.getNameOfPlace());
-        } else {
-            ((View) getActivity().findViewById(R.id.name_of_place_label).getParent()).setVisibility(View.GONE);
         }
 
         if (eventDTO.getPrice() != null && !eventDTO.getPrice().equals(MilongaHoyConstants.EMPTY_STRING)) {
@@ -249,6 +254,8 @@ public class EventDetailFragment extends Fragment {
         } else {
             ((View) specialIcon.getParent()).setVisibility(View.VISIBLE);
         }
+
+        ((ScrollView)getActivity().findViewById(R.id.event_detail_wrapper)).fullScroll(View.FOCUS_UP);
 
     }
 

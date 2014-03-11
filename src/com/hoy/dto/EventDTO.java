@@ -612,4 +612,12 @@ public class EventDTO implements Parcelable, Comparable<EventDTO> {
         //return compareEventDTO - this.getDate();
 
     }
+
+    public String getMilongaID() {
+        return milongaID;
+    }
+
+    public void setMilongaID(String milongaID) {
+        this.milongaID = milongaID;
+    }
 }

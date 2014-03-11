@@ -11,11 +11,12 @@ public class MilongaHoyConstants {
 //	public static final String IMG_HOST = "http://192.168.1.107";
 
 
-    public static final String PROMO_IMG_URL = IMG_HOST + "/api/convert.php";
-//	public static final String PROMO_IMG_URL = IMG_HOST + "/testImg.php";
+    public static final String PROMO_IMG_URL = IMG_HOST.concat("/api/convert.php");
+//	public static final String PROMO_IMG_URL = IMG_HOST.concat("/testImg.php");
 
-    //	public static final String SYNC_EVENTS_URL = HOST + "/test.php";
-    public static final String SYNC_EVENTS_URL = HOST + "/mp/prod/php/api/CRRetrieve.php";
+    //	public static final String SYNC_EVENTS_URL = HOST.concat("/test.php");
+    public static final String SYNC_EVENTS_URL = HOST.concat("/mp/prod/php/api/CRRetrieve.php");
+    public static final String MILONGA_IMAGE_URL = HOST.concat("/mp/prod/images/");
 
     public static final String SHARED_PREFERENCES = "sharedPreferences";
     public static final String RESPONSE_OK = "0";
@@ -53,4 +54,7 @@ public class MilongaHoyConstants {
     public static final Boolean DEBUG = false;
     public static final String LOCALE_SPANISH = "es";
 
+    public static final String PREFIX_MILONGA_IMAGE = "ML";
+    public static final Integer MILONGA_IMG_DAYS_LIMIT = 5;
+    public static final String APP_VERSION_CODE = "APP_VERSION_CODE";
 }
